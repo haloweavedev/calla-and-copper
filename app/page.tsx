@@ -1,21 +1,13 @@
 'use client';
 import { useState } from 'react';
 import FileDropZone from '@/components/FileDropZone';
+import USDAExtractor from '@/components/USDAExtractor';
 
 export default function Page() {
   const [file, setFile] = useState<File | null>(null);
 
   const handleFile = (selectedFile: File) => {
     setFile(selectedFile);
-    
-    // Handle USD/USDA text files
-    if (selectedFile.name.endsWith('.usda') || selectedFile.name.endsWith('.usd')) {
-      const reader = new FileReader();
-      reader.onload = () => console.log(reader.result);
-      reader.readAsText(selectedFile);
-    }
-    
-    // TODO: unzip .usdz with jszip and extract .usda entry
   };
 
   return (
@@ -29,15 +21,25 @@ export default function Page() {
         </p>
       </div>
       
-      <FileDropZone onFile={handleFile} />
-      
-      {file && (
-        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-green-800">
-            <strong>Loaded:</strong> {file.name} ({(file.size / 1024).toFixed(1)} KB)
-          </p>
-        </div>
-      )}
+      <div className="space-y-6">
+        <FileDropZone onFile={handleFile} />
+        
+        {file && (
+          <div className="space-y-4">
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-800">
+                <strong>Loaded:</strong> {file.name} ({(file.size / 1024).toFixed(1)} KB)
+              </p>
+            </div>
+            
+            {(file.name.endsWith('.usdz') || 
+              file.name.endsWith('.usda') || 
+              file.name.endsWith('.usd')) && (
+              <USDAExtractor file={file} />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
