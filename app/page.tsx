@@ -13,11 +13,11 @@ const USDZViewer = dynamic(() => import('@/components/USDZViewer'), {
   )
 });
 
-const USDAInspector = dynamic(() => import('@/components/USDAInspector'), {
+const USDZRawDataViewer = dynamic(() => import('@/components/USDZRawDataViewer'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-      <p className="text-gray-500">Loading inspector...</p>
+      <p className="text-gray-500">Loading hex viewer...</p>
     </div>
   )
 });
@@ -42,7 +42,7 @@ export default function Page() {
           USD/USDA File Processor
         </h1>
         <p className="text-gray-600">
-          Upload your USDZ, USD, or USDA files to view them in 3D and inspect the raw source code
+          Upload your USDZ, USD, or USDA files to view them in 3D and inspect the raw binary data
         </p>
       </div>
       
@@ -62,9 +62,9 @@ export default function Page() {
               <USDZViewer file={file} />
             )}
             
-            {/* Raw USD Text Inspector for all USD formats */}
+            {/* Raw Binary Data Viewer for all USD formats */}
             {isUsdFile && (
-              <USDAInspector file={file} />
+              <USDZRawDataViewer file={file} />
             )}
           </div>
         )}
