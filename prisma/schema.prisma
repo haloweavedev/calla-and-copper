@@ -1,0 +1,167 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ENUMS
+enum Style {
+  SCANDINAVIAN
+  INDUSTRIAL
+  BOHO
+  MODERN
+  JAPANDI
+  MINIMALIST
+  ECLECTIC
+}
+
+enum RoomType {
+  LIVING_ROOM
+  BEDROOM
+  STUDIO
+  OFFICE
+  DINING_ROOM
+  KITCHEN
+}
+
+enum Budget {
+  LOW
+  MODERATE
+  FLEXIBLE
+}
+
+// MODELS
+
+// This model is a public representation of a user, linked to Supabase Auth.
+model User {
+  id          String        @id @default(uuid()) // This MUST match the UUID from auth.users
+  email       String        @unique
+  role        String        @default("USER") // e.g., "USER" or "ADMIN"
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  profile     UserProfile?
+  roomData    RoomData[]
+  snapshots   Snapshot[]
+  orders      Order[]
+}
+
+model UserProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  preferredStyle Style?
+  budget        Budget?
+  tags          String[] // e.g., ["pet_friendly", "natural_light"]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model RoomData {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roomType      RoomType?
+  layoutPreset  String?  // e.g., "small_studio", "large_living"
+  length        Float?
+  width         Float?
+  height        Float?
+  photoUrl      String?  // URL to image in Supabase Storage
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Product {
+  id              String           @id @default(cuid())
+  name            String
+  description     String
+  price           Float
+  category        String           // e.g., "Sofa", "Lamp", "Rug"
+  styleTags       Style[]
+  dimensions      String           // e.g., "120x80x90cm"
+  imageUrl        String
+  model3dUrl      String?          // URL to GLB/USDZ file
+  isArCompatible  Boolean          @default(false)
+  stripeProductId String?          @unique
+  status          String           @default("ACTIVE") // ACTIVE, OUT_OF_STOCK, HIDDEN
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  bundleProducts  BundleProduct[]
+  snapshotProducts SnapshotProduct[]
+  orderItems      OrderItem[]
+}
+
+model Bundle {
+  id             String          @id @default(cuid())
+  title          String
+  description    String
+  styleTag       Style
+  roomType       RoomType
+  budgetRange    Budget
+  moodboardUrl   String
+  bundleProducts BundleProduct[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model BundleProduct {
+  bundleId  String
+  bundle    Bundle   @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([bundleId, productId])
+}
+
+model Snapshot {
+  id               String            @id @default(cuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String?           // e.g., "My Japandi Bedroom"
+  roomPhotoUrl     String?
+  roomSizeInfo     String?           // e.g., "Preset: Large Living" or "Manual: 10x12ft"
+  aiTags           String[]
+  notes            String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  snapshotProducts SnapshotProduct[]
+}
+
+model SnapshotProduct {
+  snapshotId String
+  snapshot   Snapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([snapshotId, productId])
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  totalAmount Float
+  status      String      // e.g., "PENDING", "COMPLETED", "FAILED"
+  stripePaymentIntentId String @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float   // Price at the time of purchase
+}
