@@ -56,7 +56,10 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
       schema: z.object({
         description: z.string().describe("A brief, one-paragraph description of the room's current state, style, and key features."),
         tags: z.array(z.string()).describe("A list of 5-10 descriptive tags about the room (e.g., 'natural-light', 'wooden-floor', 'white-walls', 'needs-color', 'cluttered')."),
-        colorPalette: z.array(z.string()).describe("A list of the 3-5 dominant colors in the room (e.g., 'beige', 'oak-wood', 'charcoal-gray')."),
+        colorPalette: z
+          .array(z.string())
+          .describe("A list of the 3-5 dominant colors in the room (e.g., 'beige', 'oak-wood', 'charcoal-gray').")
+          .optional(),
       }),
       system: systemPrompt,
       messages: [{ role: 'user', content: [{ type: 'text', text: userPrompt }, { type: 'image', image: publicUrl }] }],

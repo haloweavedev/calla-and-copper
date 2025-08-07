@@ -11,7 +11,7 @@ type DemoState = {
   budget: Budget | null
   lifestyleTags: string[]
   uploadedFile: File | null
-  analysisResult: { description: string; tags: string[]; colorPalette: string[] } | null
+  analysisResult: { description: string; tags: string[]; colorPalette?: string[] } | null
   recommendations: Array<{
     id: number
     name: string
