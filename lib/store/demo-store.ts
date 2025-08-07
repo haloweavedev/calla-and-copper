@@ -16,6 +16,8 @@ type DemoState = {
     id: number
     name: string
     style: string
+    category?: string
+    description?: string
     tags: string[]
     price: number
     imageUrl: string

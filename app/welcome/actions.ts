@@ -5,17 +5,7 @@ import { openai } from '@ai-sdk/openai'
 import { generateObject } from 'ai'
 import { z } from 'zod'
 import type { StyleSelection, RoomType, Budget } from '@/lib/store/demo-store'
-
-// Mock Product Catalog
-const productCatalog = [
-    { id: 1, name: 'Oakwood Minimalist Chair', style: 'SCANDINAVIAN', tags: ['wood', 'minimal', 'light-tone'], price: 250, imageUrl: '/images/products/chair1.jpg' },
-    { id: 2, name: 'Steel Frame Coffee Table', style: 'INDUSTRIAL', tags: ['metal', 'urban', 'raw-finish'], price: 350, imageUrl: '/images/products/table1.jpg' },
-    { id: 3, name: 'Macrame Wall Hanging', style: 'BOHO', tags: ['textured', 'natural-fiber', 'eclectic'], price: 80, imageUrl: '/images/products/wall-art1.jpg' },
-    { id: 4, name: 'Gloss White Sideboard', style: 'MODERN', tags: ['sleek', 'contemporary', 'storage'], price: 600, imageUrl: '/images/products/sideboard1.jpg' },
-    { id: 5, name: 'Velvet Chesterfield Sofa', style: 'VINTAGE', tags: ['classic', 'cozy', 'upholstered'], price: 1200, imageUrl: '/images/products/sofa1.jpg' },
-    { id: 6, name: 'Edison Bulb Pendant Light', style: 'INDUSTRIAL', tags: ['lighting', 'metal', 'exposed-bulb'], price: 120, imageUrl: '/images/products/light1.jpg' },
-    { id: 7, name: 'Linen Blend Throw Pillow', style: 'SCANDINAVIAN', tags: ['cozy', 'natural-fiber', 'minimal'], price: 50, imageUrl: '/images/products/pillow1.jpg' },
-];
+import { productCatalog } from '@/lib/mock-data/products'
 
 interface AnalyzeRoomParams {
   style: StyleSelection;
@@ -73,18 +63,43 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     });
     console.log('[SERVER] OpenAI analysis successful:', analysis);
 
-    // 4. Match products from catalog
-    console.log('[SERVER] Matching products from catalog based on AI tags...');
-    const recommendedProducts = productCatalog.filter(product => {
-      if (product.style !== params.style) return false;
-      const matchingTags = product.tags.filter(tag => analysis.tags.includes(tag));
-      return matchingTags.length > 0;
-    });
-    console.log(`[SERVER] Found ${recommendedProducts.length} matching products.`);
+    // 4. Match products from catalog using a scoring system
+    console.log('[SERVER] Matching products from catalog with scoring system...');
+    const scoredProducts = productCatalog.map((product) => {
+      let score = 0
+      // Major score for matching the desired style
+      if (product.style === params.style) {
+        score += 10
+      }
+      // Score for overlapping tags between product and AI analysis
+      const matchingTags = product.tags.filter((tag) => analysis.tags.includes(tag))
+      score += matchingTags.length * 2
+      // Bonus points if product category seems relevant to room type
+      if (params.roomType === 'Living Room' && ['Chairs', 'Sofas', 'Tables', 'Rugs'].includes(product.category)) {
+        score += 3
+      }
+      if (params.roomType === 'Bedroom' && ['Beds', 'Storage', 'Rugs'].includes(product.category)) {
+        score += 3
+      }
+      if (params.roomType === 'Home Office' && ['Chairs', 'Storage', 'Lighting'].includes(product.category)) {
+        score += 3
+      }
+      if (params.roomType === 'Kitchen' && ['Tables', 'Lighting', 'Storage'].includes(product.category)) {
+        score += 3
+      }
+      return { ...product, score }
+    })
 
-    const finalRecommendations = recommendedProducts.length > 0 
-      ? recommendedProducts 
-      : productCatalog.filter(p => p.style === params.style).slice(0, 3); // Fallback
+    const recommendedProducts = scoredProducts
+      .filter((p) => p.score > 0)
+      .sort((a, b) => b.score - a.score)
+
+    console.log(`[SERVER] Found ${recommendedProducts.length} products with a score > 0.`)
+    console.log('[SERVER] Top 5 scored products:', recommendedProducts.slice(0, 5).map((p) => ({ name: p.name, score: p.score })))
+
+    const finalRecommendations = recommendedProducts.length > 0
+      ? recommendedProducts.slice(0, 6)
+      : productCatalog.filter((p) => p.style === params.style).slice(0, 3)
 
     console.log('[SERVER] Analysis and matching complete. Returning results.');
     return { analysis, recommendations: finalRecommendations, error: null };

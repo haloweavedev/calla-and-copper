@@ -1,6 +1,7 @@
 'use client'
 import { useDemoStore } from '@/lib/store/demo-store'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export function Step4Results() {
   const { analysisResult, recommendations, reset } = useDemoStore()
@@ -33,15 +34,22 @@ export function Step4Results() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {recommendations.map((product) => (
-          <div key={product.id} className="border-2 border-black p-2 bg-white">
-            <div className="w-full h-64 bg-gray-200 border-2 border-black relative">
-              <Image src={product.imageUrl} alt={product.name} fill style={{ objectFit: 'cover' }} />
+          <Link href={`/demo/product/${product.id}`} key={product.id}>
+            <div className="border-2 border-black p-2 bg-white h-full flex flex-col cursor-pointer transition-all duration-200 hover:shadow-[4px_4px_0px_#000]">
+              <div className="w-full h-64 bg-gray-200 border-2 border-black relative">
+                <Image src={product.imageUrl} alt={product.name} fill style={{ objectFit: 'cover' }} />
+              </div>
+              <div className="text-left mt-2 flex-grow flex flex-col justify-between">
+                <div>
+                  <h3 className="font-bold text-lg">{product.name}</h3>
+                  {product.category ? (
+                    <p className="text-sm text-gray-600">{product.category}</p>
+                  ) : null}
+                </div>
+                <p className="font-bold text-xl mt-2">${product.price}</p>
+              </div>
             </div>
-            <div className="text-left mt-2">
-              <h3 className="font-bold text-lg">{product.name}</h3>
-              <p className="font-bold text-md">${product.price}</p>
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
       <div className="text-center mt-12">
