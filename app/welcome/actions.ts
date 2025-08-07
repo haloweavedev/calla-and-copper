@@ -26,69 +26,71 @@ interface AnalyzeRoomParams {
 }
 
 export async function analyzeAndMatch(params: AnalyzeRoomParams) {
-  const supabase = await createClient()
+  console.log('[SERVER] Received request to analyze room.');
+  try {
+    const supabase = await createClient();
+    console.log('[SERVER] Supabase client created.');
 
-  // 1. Upload image to Supabase Storage
-  const filePath = `room-uploads/${Date.now()}-${params.image.name}`
-  const { error: uploadError } = await supabase.storage
-    .from('product_assets') // Ensure this bucket exists and is public
-    .upload(filePath, params.image)
+    // 1. Upload image to Supabase Storage
+    const filePath = `room-uploads/${Date.now()}-${params.image.name}`;
+    console.log(`[SERVER] Attempting to upload to Supabase Storage at path: ${filePath}`);
+    
+    const { error: uploadError } = await supabase.storage
+      .from('product-assets')
+      .upload(filePath, params.image);
 
-  if (uploadError) {
-    console.error('Supabase Upload Error:', uploadError)
-    throw new Error('Failed to upload room photo.')
-  }
-
-  // 2. Get public URL of the uploaded image
-  const { data: { publicUrl } } = supabase.storage
-    .from('product_assets')
-    .getPublicUrl(filePath)
-
-  // 3. Call OpenAI Vision API
-  const systemPrompt = `You are an expert interior design assistant. Your task is to analyze an image of a user's room in the context of their stated style preferences. Based on ALL the information, provide a structured analysis of the room. Identify key visual elements, materials, lighting conditions, and overall current vibe. Generate a list of descriptive tags that can be used to match products. The user's desired style is the most important factor.`
-
-  const userPrompt = `
-    User Preferences:
-    - Desired Style: ${params.style}
-    - Room Type: ${params.roomType}
-    - Budget: ${params.budget}
-    - Lifestyle Needs: ${params.lifestyleTags.join(', ')}
-
-    Analyze the room in the provided image and generate a description and tags.
-  `
-
-  const { object: analysis } = await generateObject({
-    model: openai('gpt-4o-mini'),
-    schema: z.object({
-      description: z.string().describe("A brief, one-paragraph description of the room's current state, style, and key features."),
-      tags: z.array(z.string()).describe("A list of 5-10 descriptive tags about the room (e.g., 'natural-light', 'wooden-floor', 'white-walls', 'needs-color', 'cluttered')."),
-      colorPalette: z.array(z.string()).describe("A list of the 3-5 dominant colors in the room (e.g., 'beige', 'oak-wood', 'charcoal-gray')."),
-    }),
-    system: systemPrompt,
-    messages: [
-      {
-        role: 'user',
-        content: [
-          { type: 'text', text: userPrompt },
-          { type: 'image', image: publicUrl },
-        ],
-      },
-    ],
-  })
-
-  // 4. Match products from catalog
-  const recommendedProducts = productCatalog.filter(product => {
-    // Primary filter: must match the user's chosen style
-    if (product.style !== params.style) {
-      return false
+    if (uploadError) {
+      console.error('[SERVER] Supabase Upload Error:', uploadError.message);
+      return { error: `Storage Error: ${uploadError.message}` };
     }
-    // Secondary filter: check for tag overlap
-    const matchingTags = product.tags.filter(tag => analysis.tags.includes(tag))
-    return matchingTags.length > 0
-  })
+    console.log('[SERVER] Image upload successful.');
 
-  return {
-    analysis,
-    recommendations: recommendedProducts.length > 0 ? recommendedProducts : productCatalog.filter(p => p.style === params.style).slice(0, 3) // Fallback to style match
+    // 2. Get public URL of the uploaded image
+    const { data: { publicUrl } } = supabase.storage
+      .from('product-assets')
+      .getPublicUrl(filePath);
+    console.log(`[SERVER] Got public URL for image: ${publicUrl}`);
+
+    if (!publicUrl) {
+      console.error('[SERVER] Failed to get public URL.');
+      return { error: 'Could not retrieve image URL after upload.' };
+    }
+
+    // 3. Call OpenAI Vision API
+    const systemPrompt = `You are an expert interior design assistant. Your task is to analyze an image of a user's room in the context of their stated style preferences. Based on ALL the information, provide a structured analysis of the room. Identify key visual elements, materials, lighting conditions, and overall current vibe. Generate a list of descriptive tags that can be used to match products. The user's desired style is the most important factor.`;
+    const userPrompt = `User Preferences:\n- Desired Style: ${params.style}\n- Room Type: ${params.roomType}\n- Budget: ${params.budget}\n- Lifestyle Needs: ${params.lifestyleTags.join(', ')}\n\nAnalyze the room in the provided image and generate a description and tags.`;
+    
+    console.log('[SERVER] Calling OpenAI Vision API...');
+    const { object: analysis } = await generateObject({
+      model: openai('gpt-4o-mini'),
+      schema: z.object({
+        description: z.string().describe("A brief, one-paragraph description of the room's current state, style, and key features."),
+        tags: z.array(z.string()).describe("A list of 5-10 descriptive tags about the room (e.g., 'natural-light', 'wooden-floor', 'white-walls', 'needs-color', 'cluttered')."),
+        colorPalette: z.array(z.string()).describe("A list of the 3-5 dominant colors in the room (e.g., 'beige', 'oak-wood', 'charcoal-gray')."),
+      }),
+      system: systemPrompt,
+      messages: [{ role: 'user', content: [{ type: 'text', text: userPrompt }, { type: 'image', image: publicUrl }] }],
+    });
+    console.log('[SERVER] OpenAI analysis successful:', analysis);
+
+    // 4. Match products from catalog
+    console.log('[SERVER] Matching products from catalog based on AI tags...');
+    const recommendedProducts = productCatalog.filter(product => {
+      if (product.style !== params.style) return false;
+      const matchingTags = product.tags.filter(tag => analysis.tags.includes(tag));
+      return matchingTags.length > 0;
+    });
+    console.log(`[SERVER] Found ${recommendedProducts.length} matching products.`);
+
+    const finalRecommendations = recommendedProducts.length > 0 
+      ? recommendedProducts 
+      : productCatalog.filter(p => p.style === params.style).slice(0, 3); // Fallback
+
+    console.log('[SERVER] Analysis and matching complete. Returning results.');
+    return { analysis, recommendations: finalRecommendations, error: null };
+
+  } catch (e: unknown) {
+    console.error('[SERVER] A critical error occurred in analyzeAndMatch:', e);
+    return { error: e instanceof Error ? e.message : 'An unexpected server error occurred.' };
   }
 }
