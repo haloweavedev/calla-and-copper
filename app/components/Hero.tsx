@@ -1,10 +1,18 @@
+'use client'
+
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 export default function Hero() {
   return (
     <>
       <div className="w-full text-center flex flex-col items-center justify-between py-16">
-        <div className="w-full flex items-start justify-between px-8">
+        <motion.div 
+          className="w-full flex items-start justify-between px-8"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           <div className="w-1/2">
             <h1 className="text-5xl font-medium text-gray-800 mb-4 text-left">See your space <br /> transformed <br /> instantly</h1>
           </div>
@@ -17,10 +25,15 @@ export default function Hero() {
                 Design my space now →
               </Link>
           </div>
-        </div>
+        </motion.div>
         
         {/* Showcase Feature Video */}
-        <div className="w-full py-8">
+        <motion.div 
+          className="w-full py-8"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+        >
           <video
             className="w-full h-auto"
             autoPlay
@@ -32,7 +45,7 @@ export default function Hero() {
             <source src="/landing/showcase-feature.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-        </div>
+        </motion.div>
         
       </div>
     </>
