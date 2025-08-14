@@ -99,7 +99,7 @@ export default function HowItWorks() {
               className="text-base font-normal text-black/80"
               variants={itemVariants}
             >
-              Share the basics: <br /> What room you're designing, your comfort budget, and how you live. <br /> We'll match products that fit your lifestyle.
+              Share the basics: <br /> What room you&apos;re designing, your comfort budget, and how you live. <br /> We&apos;ll match products that fit your lifestyle.
             </motion.p>
         </motion.div>
       </motion.div>
