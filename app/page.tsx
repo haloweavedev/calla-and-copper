@@ -4,6 +4,7 @@ import Hero from '@/app/components/Hero'
 import HowItWorks from './components/HowItWorks'
 import FAQs from './components/FAQs'
 import Footer from './components/Footer'
+import LandingCTA from './components/LandingCTA'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -18,6 +19,7 @@ export default async function HomePage() {
       <Hero />
       <HowItWorks />
       <FAQs />
+      <LandingCTA />
       <Footer />
     </>   
   )
