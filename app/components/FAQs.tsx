@@ -56,7 +56,7 @@ export default function FAQs() {
                 FAQs
             </motion.h1>
             <motion.div 
-                className="w-3/5 flex flex-col items-center justify-center gap-8"
+                className="w-full md:w-3/5 px-4 flex flex-col items-center justify-center gap-8"
                 variants={staggerContainerVariants}
             >
                 {faqItems.map((item, index) => (

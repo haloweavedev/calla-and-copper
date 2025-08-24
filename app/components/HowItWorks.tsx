@@ -18,17 +18,17 @@ export default function HowItWorks() {
       animate={isInView ? "visible" : "hidden"}
     >
       <motion.h1 
-        className="text-5xl font-medium text-gray-800 mb-4 text-left px-8"
+        className="text-3xl sm:text-4xl md:text-5xl font-medium text-gray-800 mb-4 text-center sm:text-left px-8"
         variants={itemVariants}
       >
         Transform any room in 3 simple steps
       </motion.h1>
       
       <motion.div 
-        className="w-full flex items-start justify-between px-8 py-16"
+        className="w-full flex flex-col md:flex-row items-start justify-between px-8 py-16"
         variants={itemVariants}
       >
-        <div className="flex flex-col justify-between pr-24">
+        <div className="flex flex-col justify-between pr-0 md:pr-24">
             <p className="uppercase font-medium text-2xl mb-16">1. Pick the style that makes you feel at home</p>
             <p className="text-base font-normal text-black/80">Browse visual style inspiration and choose what speaks to you. No design experience needed - just pick what feels right.</p>
         </div>
@@ -102,6 +102,44 @@ export default function HowItWorks() {
               Share the basics: <br /> What room you&apos;re designing, your comfort budget, and how you live. <br /> We&apos;ll match products that fit your lifestyle.
             </motion.p>
         </motion.div>
+      </motion.div>
+      <motion.div 
+        className="w-full flex flex-col md:flex-row items-start justify-between px-8 py-16"
+        variants={itemVariants}
+      >
+        <div className="flex flex-col justify-between pr-0 md:pr-24">
+            <p className="uppercase font-medium text-2xl mb-16">3. Get smart product recommendations</p>
+            <p className="text-base font-normal text-black/80">Our AI analyzes your style preferences and space details to suggest furniture and decor that perfectly match your vision and budget.</p>
+        </div>
+        <div className="flex items-center justify-end gap-8">
+            <motion.div 
+              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
+              variants={cardVariants}
+            >
+                <Image src="/landing/console.png" alt="oak-console" width={300} height={300} />
+                <div className="pt-2">
+                    <span className="text-xl font-medium uppercase">Nordic Console</span>
+                </div>
+            </motion.div>
+            <motion.div 
+              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
+              variants={cardVariants}
+            >
+                <Image src="/landing/lamp.png" alt="loveseat" width={300} height={300} />
+                <div className="pt-2">
+                    <span className="text-xl font-medium uppercase">Skyline Lamp</span>
+                </div>
+            </motion.div>
+            <motion.div 
+              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
+              variants={cardVariants}
+            >
+                <Image src="/landing/loveseat.png" alt="floor-lamp" width={300} height={300} />
+                <div className="pt-2">
+                    <span className="text-xl font-medium uppercase">Grove Loveseat</span>
+                </div>
+            </motion.div>
+        </div>
       </motion.div>
     </motion.div>
   )
