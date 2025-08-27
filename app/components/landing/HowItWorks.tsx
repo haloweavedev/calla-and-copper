@@ -4,6 +4,7 @@ import Image from "next/image"
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { containerVariants, itemVariants, cardVariants } from '@/lib/animations/variants'
+import { StyleCard } from '@/components/cards'
 
 export default function HowItWorks() {
   const ref = useRef(null)
@@ -33,36 +34,24 @@ export default function HowItWorks() {
             <p className="text-base font-normal text-black/80">Browse visual style inspiration and choose what speaks to you. No design experience needed - just pick what feels right.</p>
         </div>
         <div className="flex items-center justify-end gap-8">
-            <motion.div 
-              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
-              variants={cardVariants}
-            >
-                <Image src="/landing/style-scandinavian.png" alt="scandinavian-style" width={300} height={450} />
-                <div className="py-1">
-                    <p className="font-light text-sm mb-8">Clean | Warm | Minimal</p>
-                    <span className="text-xl font-medium uppercase">scandinavian</span>
-                </div>
-            </motion.div>
-            <motion.div 
-              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
-              variants={cardVariants}
-            >
-                <Image src="/landing/style-industrial.png" alt="industrial-style" width={300} height={450} />
-                <div className="py-1">
-                    <p className="font-light text-sm mb-8">Raw | Urban</p>
-                    <span className="text-xl font-medium uppercase">industrial</span>
-                </div>
-            </motion.div>
-            <motion.div 
-              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
-              variants={cardVariants}
-            >
-                <Image src="/landing/style-modern.png" alt="modern-style" width={300} height={450} />
-                <div className="py-1">
-                    <p className="font-light text-sm mb-8">Sleek | Contemporary</p>
-                    <span className="text-xl font-medium uppercase">modern</span>
-                </div>
-            </motion.div>
+            <StyleCard 
+              imageSrc="/style-quiz/style-scandinavian.png"
+              imageAlt="scandinavian-style"
+              tags={['Clean', 'Warm', 'Minimal']}
+              title="scandinavian"
+            />
+            <StyleCard 
+              imageSrc="/style-quiz/style-industrial.png"
+              imageAlt="industrial-style"
+              tags={['Raw', 'Urban']}
+              title="industrial"
+            />
+            <StyleCard 
+              imageSrc="/style-quiz/style-modern.png"
+              imageAlt="modern-style"
+              tags={['Sleek', 'Contemporary']}
+              title="modern"
+            />
         </div>
       </motion.div>
       

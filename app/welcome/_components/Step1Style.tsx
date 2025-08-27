@@ -1,13 +1,13 @@
 'use client'
 import { useDemoStore, StyleSelection } from '@/lib/store/demo-store'
-import Image from 'next/image'
+import { StyleCard } from '@/components/cards'
 
-const styles: { name: StyleSelection; title: string; tags: string; image: string }[] = [
-  { name: 'SCANDINAVIAN', title: 'SCANDINAVIAN', tags: 'Clean | Warm | Minimal', image: '/images/styles/scandinavian.jpg' },
-  { name: 'INDUSTRIAL', title: 'INDUSTRIAL', tags: 'Raw | Urban', image: '/images/styles/industrial.jpg' },
-  { name: 'BOHO', title: 'BOHO', tags: 'Textured | Eclectic', image: '/images/styles/boho.jpg' },
-  { name: 'MODERN', title: 'MODERN', tags: 'Sleek | Contemporary', image: '/images/styles/modern.jpg' },
-  { name: 'VINTAGE', title: 'VINTAGE', tags: 'Classic | Cozy', image: '/images/styles/vintage.jpg' },
+const styles: { name: StyleSelection; title: string; tags: string[]; image: string }[] = [
+  { name: 'SCANDINAVIAN', title: 'SCANDINAVIAN', tags: ['Clean', 'Warm', 'Minimal'], image: '/style-quiz/style-scandinavian.png' },
+  { name: 'INDUSTRIAL', title: 'INDUSTRIAL', tags: ['Raw', 'Urban'], image: '/style-quiz/style-industrial.png' },
+  { name: 'BOHO', title: 'BOHO', tags: ['Textured', 'Eclectic'], image: '/style-quiz/style-boho.png' },
+  { name: 'MODERN', title: 'MODERN', tags: ['Sleek', 'Contemporary'], image: '/style-quiz/style-modern.png' },
+  { name: 'VINTAGE', title: 'VINTAGE', tags: ['Classic', 'Cozy'], image: '/style-quiz/style-vintage.png' },
 ]
 
 export function Step1Style() {
@@ -24,20 +24,16 @@ export function Step1Style() {
       <p className="text-md mb-8">Pick the style that makes you feel at home.</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {styles.map((style) => (
-          <div
+          <StyleCard
             key={style.name}
+            imageSrc={style.image}
+            imageAlt={style.title}
+            tags={style.tags}
+            title={style.title}
+            variant="selectable"
+            selected={selectedStyle === style.name}
             onClick={() => handleSelect(style.name)}
-            className={`border-2 border-black p-2 bg-white cursor-pointer transition-all duration-200 hover:bg-gray-100 hover:shadow-[4px_4px_0px_#000] ${selectedStyle === style.name ? 'bg-gray-200 shadow-[4px_4px_0px_#000]' : ''}`}
-          >
-            <div className="w-full h-64 bg-gray-200 border-2 border-black relative">
-               {/* You will add images to public/images/styles/ later */}
-               <Image src={style.image} alt={style.title} fill style={{ objectFit: 'cover' }} />
-            </div>
-            <div className="text-left mt-2">
-              <h3 className="font-bold text-lg">{style.title}</h3>
-              <p className="text-sm">{style.tags}</p>
-            </div>
-          </div>
+          />
         ))}
       </div>
     </div>
