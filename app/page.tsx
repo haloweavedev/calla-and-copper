@@ -1,10 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import Hero from '@/app/components/Hero'
-import HowItWorks from './components/HowItWorks'
-import FAQs from './components/FAQs'
+import Hero from '@/app/components/landing/Hero'
+import HowItWorks from './components/landing/HowItWorks'
+import FAQs from './components/landing/FAQs'
 import Footer from './components/Footer'
-import LandingCTA from './components/LandingCTA'
+import LandingCTA from './components/landing/LandingCTA'
 
 export default async function HomePage() {
   const supabase = await createClient()
