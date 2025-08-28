@@ -48,6 +48,7 @@ export function Step3Upload() {
 
       console.log('[CLIENT] Analysis successful. Setting data and moving to step 4.')
       setData({ analysisResult: result.analysis, recommendations: result.recommendations })
+      useDemoStore.getState().setUploadedFileUrl(result.publicUrl!)
       setStep(4)
 
     } catch (e: unknown) {

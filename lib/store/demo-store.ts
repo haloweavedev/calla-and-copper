@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export type StyleSelection = 'SCANDINAVIAN' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE'
 export type RoomType = 'Living Room' | 'Bedroom' | 'Studio/Open Plan' | 'Kitchen' | 'Home Office'
@@ -11,6 +12,7 @@ type DemoState = {
   budget: Budget | null
   lifestyleTags: string[]
   uploadedFile: File | null
+  uploadedFileUrl: string | null
   analysisResult: { description: string; tags: string[]; colorPalette?: string[] } | null
   recommendations: Array<{
     id: number
@@ -27,6 +29,7 @@ type DemoState = {
 type DemoActions = {
   setStep: (step: number) => void
   setData: (data: Partial<Omit<DemoState, 'step'>>) => void
+  setUploadedFileUrl: (url: string) => void
   reset: () => void
 }
 
@@ -37,13 +40,20 @@ const initialState: DemoState = {
   budget: null,
   lifestyleTags: [],
   uploadedFile: null,
+  uploadedFileUrl: null,
   analysisResult: null,
   recommendations: null,
 }
 
-export const useDemoStore = create<DemoState & DemoActions>()((set) => ({
-  ...initialState,
-  setStep: (step) => set({ step }),
-  setData: (data) => set((state) => ({ ...state, ...data })),
-  reset: () => set({ ...initialState }),
-}))
+export const useDemoStore = create<DemoState & DemoActions>()(
+  persist(
+    (set) => ({
+      ...initialState,
+      setStep: (step) => set({ step }),
+      setData: (data) => set((state) => ({ ...state, ...data })),
+      setUploadedFileUrl: (url) => set({ uploadedFileUrl: url }),
+      reset: () => set({ ...initialState }),
+    }),
+    { name: 'calla-copper-demo-storage' }
+  )
+)
