@@ -2,7 +2,6 @@
 import { useParams, notFound } from 'next/navigation'
 import { productCatalog } from '@/lib/mock-data/products'
 import Image from 'next/image'
-import { GeistMono } from 'geist/font/mono'
 import Link from 'next/link'
 import { useState } from 'react'
 import { ARViewer } from '@/app/demo/_components/ARViewer'
@@ -20,7 +19,7 @@ export default function DemoProductPage() {
 
   return (
     <>
-      <div className={`${GeistMono.className} w-full min-h-screen bg-white text-black flex flex-col items-center p-4 sm:p-8`}>
+      <div className={`w-full min-h-screen bg-white text-black flex flex-col items-center p-4 sm:p-8`}>
         <div className="w-full max-w-4xl">
           <div className="mb-8">
             <Link href="/welcome" className="font-bold border-2 border-black px-4 py-2 bg-white hover:bg-gray-100 shadow-[4px_4px_0px_#000]">
