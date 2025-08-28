@@ -26,8 +26,8 @@ export default function WelcomePage() {
   }
 
   return (
-    <div className={`w-full min-h-screen bg-white text-black flex flex-col items-center justify-center p-4 sm:p-8`}>
-      <div className="w-full max-w-5xl">
+    <div className={`w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8`}>
+      <div className="w-full">
         {renderStep()}
       </div>
     </div>

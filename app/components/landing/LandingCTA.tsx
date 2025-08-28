@@ -2,7 +2,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import Image from 'next/image'
-import { containerVariants, itemVariants, cardVariants } from '@/lib/animations/variants'
+import { containerVariants, itemVariants } from '@/lib/animations/variants'
 
 export default function LandingCTA() {
     const ref = useRef(null)

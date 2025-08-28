@@ -47,9 +47,15 @@ export function StyleCard({
   if (variant === 'default') {
     return (
       <motion.div 
-        className={baseClasses}
+        className={`${baseClasses} relative`}
         variants={cardVariants}
       >
+        <span
+          className="absolute -top-0.5 left-4 text-base font-medium uppercase text-left text-brand-cream"
+          style={{ transform: 'rotate(90deg)', transformOrigin: 'left top' }}
+        >
+          {title}
+        </span>
         <Image 
           src={imageSrc} 
           alt={imageAlt} 
@@ -67,12 +73,18 @@ export function StyleCard({
   // Selectable style (same styling, but clickable)
   return (
     <motion.div 
-      className={baseClasses}
+      className={`${baseClasses} relative`}
       onClick={onClick}
       variants={cardVariants}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
+      <span
+        className="absolute -top-0.5 left-4 text-base font-medium uppercase text-left text-brand-cream"
+        style={{ transform: 'rotate(90deg)', transformOrigin: 'left top' }}
+      >
+        {title}
+      </span>
       <Image 
         src={imageSrc} 
         alt={imageAlt} 
@@ -80,7 +92,7 @@ export function StyleCard({
         height={height} 
       />
       <div className="py-1 flex flex-col">
-        <p className="font-light text-sm mb-8 text-left">{renderTags()}</p>
+        <p className="font-light text-sm mb-8 text-left capitalize">{renderTags()}</p>
         <span className="text-xl font-medium uppercase text-left">{title}</span>
       </div>
     </motion.div>
