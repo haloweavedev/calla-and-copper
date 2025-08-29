@@ -15,7 +15,7 @@ export const productCatalog: Product[] = [
     id: 1,
     name: 'Asgeir Oak Chair',
     style: 'SCANDINAVIAN',
-    category: 'chair',
+    category: 'chairs',
     description:
       'A minimalist chair with clean lines and a natural oak finish, perfect for light and airy rooms.',
     tags: ['wood', 'minimal', 'light-tone', 'seating', 'living-room'],
@@ -26,7 +26,7 @@ export const productCatalog: Product[] = [
     id: 7,
     name: 'Fjord Linen Pillow',
     style: 'SCANDINAVIAN',
-    category: 'pillow',
+    category: 'pillows',
     description:
       'A cozy, neutral-toned linen pillow that adds texture and comfort to sofas and beds.',
     tags: ['cozy', 'natural-fiber', 'minimal', 'textiles', 'beige'],
@@ -37,7 +37,7 @@ export const productCatalog: Product[] = [
     id: 8,
     name: 'Hygge Wool Rug',
     style: 'SCANDINAVIAN',
-    category: 'rug',
+    category: 'rugs',
     description:
       'A soft, high-pile wool rug in a cream color to anchor your space in warmth.',
     tags: ['cozy', 'soft', 'light-tone', 'flooring', 'white-walls'],
