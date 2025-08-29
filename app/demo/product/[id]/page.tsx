@@ -79,7 +79,7 @@ export default function DemoProductPage() {
         </div>
       )}
       
-      <ProductVisualization product={{ imageUrl: product.imageUrl, category: product.category }} />
+      <ProductVisualization product={{ imageUrl: product.imageUrl, category: product.category, name: product.name }} />
     </>
   )
 }

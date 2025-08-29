@@ -46,7 +46,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </button>
         </div>
       </div>
-      <ProductVisualization product={{ imageUrl: product.imageUrl, category: product.category }} />
+      <ProductVisualization product={{ imageUrl: product.imageUrl, category: product.category, name: product.name }} />
     </div>
   )
 } 

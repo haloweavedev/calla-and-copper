@@ -8,6 +8,7 @@ interface ProductVisualizationProps {
   product: {
     imageUrl: string
     category: string
+    name: string
   }
 }
 
@@ -41,27 +42,8 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
     const absoluteProductImageUrl = `${window.location.origin}${product.imageUrl}`
 
     try {
-      // Step 1: Describe the room
-      console.log('[CLIENT] Calling describe-room API...')
-      const describeResponse = await fetch('/api/visualize/describe-room', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          imageUrl: uploadedFileUrl,
-        }),
-      })
-
-      if (!describeResponse.ok) {
-        throw new Error('Failed to describe room')
-      }
-
-      const { description, mainFurnitureItem } = await describeResponse.json()
-      console.log('[CLIENT] Room description received:', { description, mainFurnitureItem })
-
-      // Step 2: Generate the visualization
-      console.log('[CLIENT] Calling generate-image API...')
+      // Generate the visualization with high-precision replacement prompt
+      console.log('[CLIENT] Calling generate-image API with precision prompt...')
       const generateResponse = await fetch('/api/visualize/generate-image', {
         method: 'POST',
         headers: {
@@ -71,8 +53,7 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
           roomImageUrl: uploadedFileUrl,
           productImageUrl: absoluteProductImageUrl,
           productCategory: product.category,
-          roomDescription: description,
-          mainFurnitureItem,
+          productName: product.name,
         }),
       })
 

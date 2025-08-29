@@ -5,12 +5,12 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { roomImageUrl, productImageUrl, productCategory, roomDescription, mainFurnitureItem } = body
+    const { roomImageUrl, productImageUrl, productCategory, productName } = body
 
     // Validate all required fields are present
-    if (!roomImageUrl || !productImageUrl || !productCategory || !roomDescription || !mainFurnitureItem) {
+    if (!roomImageUrl || !productImageUrl || !productCategory || !productName) {
       return NextResponse.json(
-        { error: 'Missing required fields: roomImageUrl, productImageUrl, productCategory, roomDescription, mainFurnitureItem' },
+        { error: 'Missing required fields: roomImageUrl, productImageUrl, productCategory, productName' },
         { status: 400 }
       )
     }
@@ -19,30 +19,21 @@ export async function POST(request: NextRequest) {
 
     const gemini = google('gemini-2.5-flash-image-preview')
 
-    // Construct detailed prompt for image generation
-    const prompt = `You are an expert interior designer and photo editor. Your task is to seamlessly integrate a product into a real room photo to create a photorealistic visualization.
+    // Construct high-precision replacement prompt
+    const prompt = `You are an expert photo editor specializing in photorealistic interior design mockups.
+Your task is to seamlessly integrate a new product into a user's room photo.
 
-CONTEXT:
-- Room Description: ${roomDescription}
-- Current Main Furniture: ${mainFurnitureItem}
-- Product Category: ${productCategory}
+- User's Room: Provided in the first image.
+- New Product: A '${productName}' which is a type of '${productCategory}', provided in the second image.
 
-INSTRUCTIONS:
-1. Analyze the first image (the room) to understand the lighting, perspective, and spatial layout
-2. Analyze the second image (the product) to understand its design, materials, and proportions
-3. Seamlessly replace or add the product into the room in a natural, realistic way
-4. Ensure the product fits the room's scale, lighting conditions, and perspective
-5. Maintain photorealistic quality with proper shadows, reflections, and lighting
-6. The final result should look like a professional interior design photo
+Instructions:
+1. Identify the existing '${productCategory}' in the user's room photo.
+2. **Replace** it with the new product from the second image.
+3. The final image must be a single, coherent, photorealistic scene.
+4. Perfectly match the lighting, shadows, perspective, and scale of the original room photo.
+5. Do not add any text, watermarks, or annotations. The output must be only the final edited image.`
 
-TECHNICAL REQUIREMENTS:
-- Match lighting direction and intensity from the room
-- Maintain proper perspective and scale
-- Add realistic shadows and reflections
-- Ensure color harmony with the existing room palette
-- Generate only the final composite image, no text overlays or explanations
-
-Create a single, high-quality, photorealistic image showing the product naturally integrated into the room.`
+    console.log('[API] Sending high-precision prompt to Gemini:', prompt)
 
     const result = await generateText({
       model: gemini,
