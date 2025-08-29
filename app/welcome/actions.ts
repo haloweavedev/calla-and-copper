@@ -105,7 +105,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
       : productCatalog.filter((p) => p.style === params.style).slice(0, 3)
 
     console.log('[SERVER] Analysis and matching complete. Returning results.');
-    return { analysis, recommendations: finalRecommendations, error: null };
+    return { analysis, recommendations: finalRecommendations, publicUrl, error: null };
 
   } catch (e: unknown) {
     console.error('[SERVER] A critical error occurred in analyzeAndMatch:', e);

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { ARViewer } from '@/app/demo/_components/ARViewer'
+import { ProductVisualization } from '@/app/product/[id]/_components/ProductVisualization'
 
 export default function DemoProductPage() {
   const params = useParams()
@@ -77,6 +78,8 @@ export default function DemoProductPage() {
           </div>
         </div>
       )}
+      
+      <ProductVisualization product={{ imageUrl: product.imageUrl, category: product.category, name: product.name }} />
     </>
   )
 }

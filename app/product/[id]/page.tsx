@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import { ProductVisualization } from './_components/ProductVisualization'
 
 const prisma = new PrismaClient()
 
@@ -45,6 +46,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </button>
         </div>
       </div>
+      <ProductVisualization product={{ imageUrl: product.imageUrl, category: product.category, name: product.name }} />
     </div>
   )
 } 
