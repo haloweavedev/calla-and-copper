@@ -1,4 +1,5 @@
 'use client'
+import { useEffect } from 'react'
 import { useDemoStore } from '@/lib/store/demo-store'
 
 // We will create these components in the following subphases
@@ -8,7 +9,11 @@ import { Step3Upload } from './_components/Step3Upload'
 import { Step4Results } from './_components/Step4Results'
 
 export default function WelcomePage() {
-  const { step } = useDemoStore()
+  const { step, reset } = useDemoStore()
+
+  useEffect(() => {
+    reset()
+  }, [reset])
 
   const renderStep = () => {
     switch (step) {

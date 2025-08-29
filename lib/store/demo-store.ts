@@ -52,7 +52,7 @@ export const useDemoStore = create<DemoState & DemoActions>()(
       setStep: (step) => set({ step }),
       setData: (data) => set((state) => ({ ...state, ...data })),
       setUploadedFileUrl: (url) => set({ uploadedFileUrl: url }),
-      reset: () => set({ ...initialState }),
+      reset: () => set(initialState),
     }),
     { name: 'calla-copper-demo-storage' }
   )
