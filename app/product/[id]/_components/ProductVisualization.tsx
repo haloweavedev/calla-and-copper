@@ -37,6 +37,9 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
     setIsLoading(true)
     setError(null)
 
+    // Construct absolute URL for product image
+    const absoluteProductImageUrl = `${window.location.origin}${product.imageUrl}`
+
     try {
       // Step 1: Describe the room
       console.log('[CLIENT] Calling describe-room API...')
@@ -66,7 +69,7 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
         },
         body: JSON.stringify({
           roomImageUrl: uploadedFileUrl,
-          productImageUrl: product.imageUrl,
+          productImageUrl: absoluteProductImageUrl,
           productCategory: product.category,
           roomDescription: description,
           mainFurnitureItem,
