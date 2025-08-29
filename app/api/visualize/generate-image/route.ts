@@ -20,18 +20,7 @@ export async function POST(request: NextRequest) {
     const gemini = google('gemini-2.5-flash-image-preview')
 
     // Construct high-precision replacement prompt
-    const prompt = `You are an expert photo editor specializing in photorealistic interior design mockups.
-Your task is to seamlessly integrate a new product into a user's room photo.
-
-- User's Room: Provided in the first image.
-- New Product: A '${productName}' which is a type of '${productCategory}', provided in the second image.
-
-Instructions:
-1. Identify the existing '${productCategory}' in the user's room photo.
-2. **Replace** it with the new product from the second image.
-3. The final image must be a single, coherent, photorealistic scene.
-4. Perfectly match the lighting, shadows, perspective, and scale of the original room photo.
-5. Do not add any text, watermarks, or annotations. The output must be only the final edited image.`
+    const prompt = `Replace the ${productCategory} in the room picture with the ${productCategory} from the second product image.`
 
     console.log('[API] Sending high-precision prompt to Gemini:', prompt)
 
