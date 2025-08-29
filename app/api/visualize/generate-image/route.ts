@@ -77,6 +77,7 @@ Create a single, high-quality, photorealistic image showing the product naturall
     // The file object provides base64 data directly
     const dataUrl = imageFile.base64
 
+    console.log('[API] Constructed Data URL (first 100 chars):', dataUrl.substring(0, 100))
     console.log('[API] Image generation successful, returning data URL')
 
     return NextResponse.json({ imageUrl: dataUrl }, { status: 200 })
