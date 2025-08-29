@@ -33,7 +33,7 @@ export function Header() {
 
   if (isLoading) {
     return (
-      <nav className="px-4 sm:px-8 py-3 flex justify-between items-center w-full">
+      <nav className="px-4 sm:px-8 py-4 flex justify-between items-center w-full">
         <div className="w-12 h-12 bg-gray-200 animate-pulse rounded"></div>
         <div className="w-8 h-8 bg-gray-200 animate-pulse rounded"></div>
       </nav>
@@ -41,7 +41,7 @@ export function Header() {
   }
 
   return (
-    <nav className="px-4 sm:px-8 py-3 flex justify-between items-center w-full relative">
+    <nav className="px-4 sm:px-8 py-4 flex justify-between items-center w-full relative">
       {/* Logo */}
       <Link href="/" className="text-xl font-bold text-gray-800" onClick={closeMenu}>
         <Image src="/cnc-logomark.png" alt="Calla & Copper" width={50} height={50} />
