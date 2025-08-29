@@ -72,12 +72,22 @@ Create a single, high-quality, photorealistic image showing the product naturall
 
     // Get the first generated image file
     const imageFile = result.files[0]
-    console.log('[API] Image file received, type:', imageFile.mediaType)
+    // --- Start of new block ---
 
-    // The file object provides base64 data directly
-    const dataUrl = imageFile.base64
+    console.log(`[API] Image file received, type: ${imageFile.mediaType}`);
+    console.log(`[API] imageFile.base64 is of type: ${typeof imageFile.base64}`);
+    console.log(`[API] imageFile.base64 length: ${imageFile.base64?.length || 'undefined'}`);
 
-    console.log('[API] Constructed Data URL (first 100 chars):', dataUrl.substring(0, 100))
+    // Get the raw base64 string (which was missing the data URL prefix)
+    const rawBase64 = imageFile.base64;
+    
+    // Construct the proper Data URL with prefix
+    const dataUrl = `data:${imageFile.mediaType || 'image/png'};base64,${rawBase64}`;
+
+    console.log('[API] Constructed Data URL (first 100 chars):', dataUrl.substring(0, 100));
+    
+    // --- End of new block ---
+
     console.log('[API] Image generation successful, returning data URL')
 
     return NextResponse.json({ imageUrl: dataUrl }, { status: 200 })
