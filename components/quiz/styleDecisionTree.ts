@@ -2,7 +2,7 @@ import { StyleOption, StyleProfile, StyleDecisionTree, StyleDecisionNode } from 
 
 // Calla & Copper Style Decision Tree - Complete Data Structure
 
-const styleDecisionTree = {
+const styleDecisionTree: StyleDecisionTree = {
   // Round 1: Core Style Foundations
   "Modern Clean": {
     description: "Clean, simple, uncluttered spaces with contemporary appeal",
@@ -125,68 +125,81 @@ const styleDecisionTree = {
       "Urban Loft": {
         description: "Exposed brick, metal, leather accents, city living",
         keywords: ["exposed-brick", "metal-accents", "leather", "city-living"],
-        imageSrc: "/style-quiz/style-urban-loft.png"
+        imageSrc: "/style-quiz/urban-loft.png"
       },
       "Refined Industrial": {
         description: "Softened edges, warmer tones, approachable industrial",
         keywords: ["softened-edges", "warmer-tones", "approachable", "luxury-industrial"],
-        imageSrc: "/style-quiz/style-refined-industrial.png"
+        imageSrc: "/style-quiz/refined-industrial.png"
       },
       "Modern Industrial": {
         description: "Clean industrial, contemporary twist, minimalist approach",
         keywords: ["clean-industrial", "contemporary-twist", "minimalist", "tech-integration"],
-        imageSrc: "/style-quiz/style-modern-industrial.png"
+        imageSrc: "/style-quiz/modern-industrial.png"
       },
       "Vintage Industrial": {
         description: "Reclaimed materials, authentic patina, historical elements",
         keywords: ["reclaimed-materials", "authentic-patina", "historical", "vintage-industrial"],
-        imageSrc: "/style-quiz/style-vintage-industrial.png"
+        imageSrc: "/style-quiz/vintage-industrial.png"
       }
     }
   }
 };
 
+// Type guards to narrow between a root decision tree map and a node
+function isDecisionTree(value: unknown): value is StyleDecisionTree {
+  return typeof value === 'object' && value !== null && !('description' in (value as Record<string, unknown>));
+}
+
+// (no isDecisionNode needed currently)
+
 // Helper function to get options for next round based on current selection
 function getNextOptions(tree: StyleDecisionTree, currentPath: string[]): StyleOption[] | null {
-  let current: any = tree;
+  let current: StyleDecisionTree | StyleDecisionNode = tree;
   
   // Navigate to current position in tree
   for (const step of currentPath) {
-    if (current.children && current.children[step]) {
-      current = current.children[step];
-    } else if (current[step]) {
-      current = current[step];
-    } else {
-      console.error(`Path not found: ${currentPath.join(' → ')}`);
-      return null; // Path not found
+    if (isDecisionTree(current)) {
+      const next: StyleDecisionNode = current[step];
+      if (!next) {
+        console.error(`Path not found: ${currentPath.join(' → ')}`);
+        return null;
+      }
+      current = next;
+      continue;
     }
+
+    // current is StyleDecisionNode here
+    const nextFromChildren: StyleDecisionNode | undefined = current.children?.[step];
+    if (!nextFromChildren) {
+      console.error(`Path not found: ${currentPath.join(' → ')}`);
+      return null;
+    }
+    current = nextFromChildren;
   }
   
   // Return next level options
-  if (current.children) {
-    return Object.entries(current.children).map(([key, value]) => {
-      const node = value as StyleDecisionNode;
-      return {
-        id: key,
-        title: key,
-        description: node.description,
-        keywords: node.keywords || [],
-        imageSrc: node.imageSrc
-      };
-    });
+  if ('children' in current && current.children) {
+    return (Object.entries(current.children) as Array<[string, StyleDecisionNode]>).map(([key, node]) => ({
+      id: key,
+      title: key,
+      description: node.description,
+      keywords: node.keywords || [],
+      imageSrc: node.imageSrc
+    }));
   }
   
   return null; // No more options available
 }
 
 // Helper function to get all possible style paths
-function getAllStylePaths(tree: any): string[][] {
+function getAllStylePaths(tree: StyleDecisionTree): string[][] {
   const paths: string[][] = [];
   
-  function traverse(node: any, currentPath: string[] = []) {
+  function traverse(node: StyleDecisionNode, currentPath: string[] = []) {
     if (node.children) {
       // This is not a leaf node, continue traversing
-      Object.entries(node.children).forEach(([key, child]: [string, any]) => {
+      (Object.entries(node.children) as Array<[string, StyleDecisionNode]>).forEach(([key, child]) => {
         traverse(child, [...currentPath, key]);
       });
     } else {
@@ -195,7 +208,7 @@ function getAllStylePaths(tree: any): string[][] {
     }
   }
   
-  Object.entries(tree).forEach(([rootKey, rootNode]: [string, any]) => {
+  (Object.entries(tree) as Array<[string, StyleDecisionNode]>).forEach(([rootKey, rootNode]) => {
     traverse(rootNode, [rootKey]);
   });
   
@@ -203,7 +216,7 @@ function getAllStylePaths(tree: any): string[][] {
 }
 
 // Helper function to generate style profile from selected path
-function generateStyleProfile(stylePath: string[], styleTree: any): StyleProfile {
+function generateStyleProfile(stylePath: string[], styleTree: StyleDecisionTree): StyleProfile {
   if (stylePath.length !== 2) {
     console.error('Style path must have exactly 2 levels');
     throw new Error('Invalid style path length');
@@ -213,7 +226,7 @@ function generateStyleProfile(stylePath: string[], styleTree: any): StyleProfile
   
   // Navigate to get all keywords and descriptions
   const foundationNode = styleTree[foundation];
-  const refinementNode = foundationNode.children[refinement];
+  const refinementNode = foundationNode?.children?.[refinement];
   
   if (!foundationNode || !refinementNode) {
     console.error('Invalid style path in tree');

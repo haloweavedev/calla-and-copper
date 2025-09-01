@@ -16,7 +16,9 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
     availableOptions,
     isComplete,
     finalStyleProfile,
-    selectOption
+    selectOption,
+    goBack,
+    canGoBack,
   } = useStyleProfile()
 
   // Handle option selection
@@ -72,9 +74,9 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
                 style selection
             </motion.h1>
             <div className='bg-brand-forest text-white text-xs px-6 py-0 flex flex-row items-center justify-center gap-2'>
-                <span>1</span>
+                <span>{currentRound}</span>
                 <span>of</span>
-                <span>4</span>
+                <span>3</span>
             </div>
         </div>
       </div>
@@ -113,6 +115,22 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {/* Navigation */}
+      <div className="flex items-center justify-between mt-6">
+        <button
+          onClick={goBack}
+          disabled={!canGoBack}
+          className={`px-6 py-2 font-medium transition-all duration-200 ${
+            canGoBack
+              ? 'bg-white text-black border-2 border-black hover:bg-black hover:text-white cursor-pointer'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+          }`}
+        >
+          ← Back
+        </button>
+        <div className="w-[96px]" />
+      </div>
 
     </motion.div>
   )
