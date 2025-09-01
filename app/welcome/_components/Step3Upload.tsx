@@ -108,14 +108,41 @@ export function Step3Upload() {
     maxFiles: 1,
   })
 
+  const [currentProgress, setCurrentProgress] = useState(0)
+  const [progressText, setProgressText] = useState("")
+
   const handleAnalyze = async () => {
     if (!uploadedFile || !style || !roomType || !budget) return
     
     setIsLoading(true)
     setError(null)
+    setCurrentProgress(0)
+    setProgressText("")
     console.log('[CLIENT] Starting analysis...')
 
     try {
+      // Start with initial stage
+      setCurrentProgress(5)
+      setProgressText("Received request to analyze room")
+
+      // Simulate realistic timing based on server actions
+      const progressTimeline = [
+        { delay: 1000, progress: 15, text: "Uploading Image to database..." },
+        { delay: 3000, progress: 25, text: "Image upload successful!" },
+        { delay: 5000, progress: 45, text: "Getting insights from our AI stylist..." },
+        { delay: 8000, progress: 55, text: "AI analysis successful!" },
+        { delay: 10000, progress: 75, text: "Matching products from our catalog..." },
+        { delay: 12000, progress: 95, text: "Analysis and matching complete! Returning results." }
+      ]
+
+      // Set up progress timeline
+      const progressTimeouts = progressTimeline.map(({ delay, progress, text }) => 
+        setTimeout(() => {
+          setCurrentProgress(progress)
+          setProgressText(text)
+        }, delay)
+      )
+
       const result = await analyzeAndMatch({
         image: uploadedFile,
         style,
@@ -123,6 +150,13 @@ export function Step3Upload() {
         budget,
         lifestyleTags,
       })
+
+      // Clear all timeouts
+      progressTimeouts.forEach(timeout => clearTimeout(timeout))
+      
+      // Set to completion
+      setCurrentProgress(100)
+      setProgressText("Complete!")
 
       if (result.error) {
         throw new Error(result.error)
@@ -143,7 +177,10 @@ export function Step3Upload() {
   }
 
   return (
-    <div className="text-center">
+    isLoading ? (
+      <Step3Loading currentProgress={currentProgress} progressText={progressText} />
+    ) : (
+      <div className="text-center">
       <div className="text-center mb-12 flex flex-row justify-between">
         <div className='flex flex-col items-start justify-start'>
             <motion.h1 
@@ -246,6 +283,32 @@ export function Step3Upload() {
           }`}>
           Analyze & Get Matches
         </button>
+      </div>
+    </div>
+    )
+  )
+}
+
+export function Step3Loading({ currentProgress, progressText }: { currentProgress: number; progressText: string }) {
+  return (
+    <div className="text-center py-16">
+      <h2 className="text-2xl font-base uppercase">Finding your perfect matches</h2>
+      <div className="flex justify-center mt-8">
+        <video
+          src="/seat-loading.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-46 h-46 object-contain opacity-90"
+          aria-label="Loading animation"
+        />
+      </div>
+      <div className="mt-8 px-8 max-w-md mx-auto">
+        <div className="w-full bg-gray-200 rounded-full h-3 border border-gray-300">
+          <div className="bg-brand-forest h-full rounded-full transition-all duration-300" style={{ width: `${currentProgress}%` }}></div>
+        </div>
+        <span className="block mt-4 text-sm text-black/60">{progressText}</span>
       </div>
     </div>
   )
