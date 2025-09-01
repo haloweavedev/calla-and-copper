@@ -1,12 +1,35 @@
 'use client'
 import { useDemoStore, RoomType, Budget } from '@/lib/store/demo-store'
+import { motion } from 'framer-motion'
+import { StyleProfile, StyleOption } from '@/components/quiz'
+import { StyleCard } from '@/components/cards'
+import { styleDecisionTree } from '@/components/quiz/styleDecisionTree'
 
 const roomTypes: RoomType[] = ['Living Room', 'Bedroom', 'Studio/Open Plan', 'Kitchen', 'Home Office']
 const budgets: Budget[] = ['$500', '$1500', '$3500+']
 const lifestyleOptions = ['Pet-friendly', 'Lots of natural light', 'Need storage solutions', 'Frequently entertain']
 
+// Helper function to get StyleOption from stylePath
+function getSelectedStyleOption(styleProfile: StyleProfile): StyleOption | null {
+  const [foundation, refinement] = styleProfile.stylePath
+  
+  const foundationNode = styleDecisionTree[foundation]
+  const refinementNode = foundationNode?.children?.[refinement]
+  
+  if (!refinementNode) return null
+  
+  return {
+    id: refinement,
+    title: refinement,
+    description: refinementNode.description,
+    keywords: refinementNode.keywords || [],
+    imageSrc: refinementNode.imageSrc
+  }
+}
+
 export function Step2Details() {
-  const { setStep, setData, roomType, budget, lifestyleTags } = useDemoStore()
+
+  const { setStep, setData, roomType, budget, lifestyleTags, styleProfile } = useDemoStore()
 
   const handleTagToggle = (tag: string) => {
     const newTags = lifestyleTags.includes(tag)
@@ -17,42 +40,119 @@ export function Step2Details() {
 
   const canProceed = roomType && budget
 
+  // Get the selected style option for display
+  const selectedStyleOption = styleProfile ? getSelectedStyleOption(styleProfile) : null
+
   return (
-    <div className="max-w-2xl mx-auto text-center">
-      <h1 className="text-3xl font-bold mb-2">Tell us about your space.</h1>
-      <p className="text-md mb-8">Help us create designs that fit your life.</p>
-      <div className="space-y-6 text-left p-6 border-2 border-black bg-white shadow-[8px_8px_0px_#000]">
-        <div>
-          <label className="block font-bold mb-2">Room Type Selection:</label>
-          <div className="flex flex-wrap gap-2">
-            {roomTypes.map((type) => (
-              <button key={type} onClick={() => setData({ roomType: type })} className={`px-4 py-2 border-2 border-black font-bold transition-all ${roomType === type ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
-                {type}
-              </button>
-            ))}
+    <div className="text-center">
+      <div className="text-center mb-12 flex flex-row justify-between">
+        <div className='flex flex-col items-start justify-start'>
+            <motion.h1 
+            className="text-3xl mb-2"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            >
+            Tell us about your space
+            </motion.h1>
+            
+            <motion.p 
+            className="text-lg uppercase font-light"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            >
+             help us create the design that fit your life
+            </motion.p>
+        </div>
+        <div className='flex flex-col items-end justify-end'>
+            <motion.h1 
+            className="text-2xl mb-2 uppercase font-medium"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            >
+                room details
+            </motion.h1>
+            <div className='bg-brand-forest text-white text-xs px-6 py-0 flex flex-row items-center justify-center gap-2'>
+                <span>2</span>
+                <span>of</span>
+                <span>3</span>
+            </div>
+        </div>
+      </div>
+      <div className='flex items-start justify-center'>
+        {/* Display Selected Style Card */}
+        {selectedStyleOption && (
+          <motion.div 
+            className="mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <h3 className="font-base text-lg mb-4 text-left">Your Selected Style:</h3>
+            <div className="flex justify-center">
+              <StyleCard
+                imageSrc={selectedStyleOption.imageSrc}
+                imageAlt={selectedStyleOption.title}
+                tags={selectedStyleOption.keywords}
+                title={selectedStyleOption.title}
+                variant="default"
+              />
+            </div>
+          </motion.div>
+        )}
+        <div className="space-y-6 text-left px-6 flex flex-col w-1/2">
+          <div className=''>
+            <label className="block font-light uppercase mb-6 text-black/60">Room Type</label>
+            <div className="flex flex-wrap gap-2">
+              {roomTypes.map((type) => (
+                <button key={type} onClick={() => setData({ roomType: type })} className={`px-4 py-2 border-2 border-black font-bold transition-all ${roomType === type ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
+                  {type}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
-          <label htmlFor="budget" className="block font-bold mb-2">Budget range:</label>
-          <select id="budget" value={budget ?? ''} onChange={(e) => setData({ budget: e.target.value as Budget })} className="w-full p-2 border-2 border-black bg-white font-bold">
-            <option value="" disabled>Select a budget</option>
-            {budgets.map((b) => <option key={b} value={b}>{b}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="block font-bold mb-2">Optional lifestyle tags:</label>
-          <div className="flex flex-wrap gap-2">
-            {lifestyleOptions.map((tag) => (
-              <button key={tag} onClick={() => handleTagToggle(tag)} className={`px-4 py-2 border-2 border-black font-bold transition-all ${lifestyleTags.includes(tag) ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
-                {tag}
-              </button>
-            ))}
+          <div>
+            <label htmlFor="budget" className="block font-bold mb-2">Budget range:</label>
+            <select id="budget" value={budget ?? ''} onChange={(e) => setData({ budget: e.target.value as Budget })} className="w-full p-2 border-2 border-black bg-white font-bold">
+              <option value="" disabled>Select a budget</option>
+              {budgets.map((b) => <option key={b} value={b}>{b}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block font-bold mb-2">Optional lifestyle tags:</label>
+            <div className="flex flex-wrap gap-2">
+              {lifestyleOptions.map((tag) => (
+                <button key={tag} onClick={() => handleTagToggle(tag)} className={`px-4 py-2 border-2 border-black font-bold transition-all ${lifestyleTags.includes(tag) ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
+                  {tag}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
+
+
       <div className="mt-8 flex gap-4 justify-center">
-        <button onClick={() => setStep(1)} className="px-8 py-3 border-2 border-black bg-white font-bold hover:bg-gray-100 shadow-[4px_4px_0px_#000]">Back</button>
-        <button onClick={() => setStep(3)} disabled={!canProceed} className="px-8 py-3 border-2 border-black bg-black text-white font-bold disabled:bg-gray-400 disabled:text-gray-600 disabled:shadow-none hover:bg-gray-800 shadow-[4px_4px_0px_#000]">Next</button>
+        <button 
+          onClick={() => setStep(1)} 
+          className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer"
+        >
+          ← Back
+        </button>
+        <button 
+          onClick={() => setStep(3)} 
+          disabled={!canProceed} 
+          className={`px-6 py-2 font-medium transition-all duration-200 ${
+            canProceed
+              ? 'bg-brand-gold text-white border-2 border-brand-gold hover:bg-brand-gold/90 hover:text-white cursor-pointer'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+          }`}
+        >
+          Almost Done →
+        </button>
       </div>
     </div>
   )

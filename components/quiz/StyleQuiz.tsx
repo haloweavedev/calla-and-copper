@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { StyleCard } from '@/components/cards'
 import { useStyleProfile } from './hooks/useStyleProfile'
 import { StyleProfile } from './types'
+import { useDemoStore } from '@/lib/store/demo-store'
 
 interface StyleQuizProps {
   onComplete?: (styleProfile: StyleProfile) => void
@@ -21,17 +22,25 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
     canGoBack,
   } = useStyleProfile()
 
+  const { setData } = useDemoStore()
+
   // Handle option selection
   const handleOptionSelect = (optionId: string) => {
     selectOption(optionId)
   }
 
-  // Call onComplete callback when quiz completes
+  // Call onComplete callback when quiz completes and save to global store
   useEffect(() => {
-    if (isComplete && finalStyleProfile && onComplete) {
-      onComplete(finalStyleProfile)
+    if (isComplete && finalStyleProfile) {
+      // Save to global store
+      setData({ styleProfile: finalStyleProfile })
+      
+      // Call the original onComplete callback if provided
+      if (onComplete) {
+        onComplete(finalStyleProfile)
+      }
     }
-  }, [isComplete, finalStyleProfile, onComplete])
+  }, [isComplete, finalStyleProfile, onComplete, setData])
 
   return (
     <motion.div 
@@ -74,7 +83,7 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
                 style selection
             </motion.h1>
             <div className='bg-brand-forest text-white text-xs px-6 py-0 flex flex-row items-center justify-center gap-2'>
-                <span>{currentRound}</span>
+                <span>1</span>
                 <span>of</span>
                 <span>3</span>
             </div>
@@ -117,13 +126,13 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
       </motion.div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between mt-6">
+      <div className="flex items-center justify-center mt-6">
         <button
           onClick={goBack}
           disabled={!canGoBack}
           className={`px-6 py-2 font-medium transition-all duration-200 ${
             canGoBack
-              ? 'bg-white text-black border-2 border-black hover:bg-black hover:text-white cursor-pointer'
+              ? 'bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
           }`}
         >

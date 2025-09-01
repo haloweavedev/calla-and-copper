@@ -23,8 +23,8 @@ export function StyleCard({
   imageAlt, 
   tags, 
   title, 
-  width = 300, 
-  height = 450,
+  width = 240,
+  height = 550,
   variant = 'default',
   selected = false,
   onClick,
@@ -48,6 +48,7 @@ export function StyleCard({
     return (
       <motion.div 
         className={`${baseClasses} relative`}
+        style={{ width: `${width + 16}px` }}
         variants={cardVariants}
       >
         <span
@@ -63,7 +64,7 @@ export function StyleCard({
           height={height} 
         />
         <div className="py-1 flex flex-col">
-          <p className="font-light text-sm mb-8 text-left">{renderTags()}</p>
+          <p className="font-light text-sm mb-8 text-left break-words capitalize">{renderTags()}</p>
           <span className="text-xl font-medium uppercase text-left">{title}</span>
         </div>
       </motion.div>
@@ -74,6 +75,7 @@ export function StyleCard({
   return (
     <motion.div 
       className={`${baseClasses} relative`}
+      style={{ width: `${width + 16}px` }} 
       onClick={onClick}
       variants={cardVariants}
       whileHover={{ scale: 1.02 }}
@@ -92,7 +94,7 @@ export function StyleCard({
         height={height} 
       />
       <div className="py-1 flex flex-col">
-        <p className="font-light text-sm mb-8 text-left capitalize">{renderTags()}</p>
+        <p className="font-light text-sm mb-8 text-left capitalize break-words">{renderTags()}</p>
         <span className="text-xl font-medium uppercase text-left">{title}</span>
       </div>
     </motion.div>

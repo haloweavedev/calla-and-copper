@@ -106,7 +106,7 @@ const styleDecisionTree: StyleDecisionTree = {
       },
       "Soft Minimalism": {
         description: "Gentle colors, comfortable simplicity, approachable minimal",
-        keywords: ["gentle-colors", "comfortable-simplicity", "approachable", "soft-textures"],
+        keywords: ["gentle-colors", "comfortable-simplicity", "soft-textures"],
         imageSrc: "/style-quiz/soft-minimalism.png"
       },
       "Nordic Hygge": {

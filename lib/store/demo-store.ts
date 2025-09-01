@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { StyleProfile } from '@/components/quiz/types'
 
 export type StyleSelection = 'SCANDINAVIAN' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE'
 export type RoomType = 'Living Room' | 'Bedroom' | 'Studio/Open Plan' | 'Kitchen' | 'Home Office'
@@ -8,6 +9,7 @@ export type Budget = '$500' | '$1500' | '$3500+'
 type DemoState = {
   step: number
   style: StyleSelection | null
+  styleProfile: StyleProfile | null
   roomType: RoomType | null
   budget: Budget | null
   lifestyleTags: string[]
@@ -36,6 +38,7 @@ type DemoActions = {
 const initialState: DemoState = {
   step: 1,
   style: null,
+  styleProfile: null,
   roomType: null,
   budget: null,
   lifestyleTags: [],
