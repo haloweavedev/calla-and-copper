@@ -60,7 +60,7 @@ export default function HowItWorks() {
         variants={itemVariants}
       >
         <motion.div 
-          className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
+          className="relative bg-brand-cream border border-brand-cream border-8"
           variants={cardVariants}
         >
             <div className="relative">
@@ -102,7 +102,7 @@ export default function HowItWorks() {
         </div>
         <div className="flex items-center justify-end gap-8">
             <motion.div 
-              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
+              className="relative bg-brand-cream border border-brand-cream border-8"
               variants={cardVariants}
             >
                 <Image src="/landing/console.png" alt="oak-console" width={300} height={300} />
@@ -111,7 +111,7 @@ export default function HowItWorks() {
                 </div>
             </motion.div>
             <motion.div 
-              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
+              className="relative bg-brand-cream border border-brand-cream border-8"
               variants={cardVariants}
             >
                 <Image src="/landing/lamp.png" alt="loveseat" width={300} height={300} />
@@ -120,7 +120,7 @@ export default function HowItWorks() {
                 </div>
             </motion.div>
             <motion.div 
-              className="relative bg-[#F4F1E8] border border-[#F4F1E8] border-8"
+              className="relative bg-brand-cream border border-brand-cream border-8"
               variants={cardVariants}
             >
                 <Image src="/landing/loveseat.png" alt="floor-lamp" width={300} height={300} />

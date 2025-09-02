@@ -68,7 +68,7 @@ export default function LandingCTA() {
             className="w-full flex justify-center mt-8"
             variants={itemVariants}
         >
-            <button className="bg-[#2D5016] hover:bg-[#2D5016]/80 text-white font-medium py-4 px-8 text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+            <button className="bg-brand-forest hover:bg-brand-forest/80 text-white font-medium py-4 px-8 text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
                 Design My Room Now
             </button>
         </motion.div>
