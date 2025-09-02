@@ -20,7 +20,7 @@ export const productCatalog: Product[] = [
       'A minimalist chair with clean lines and a natural oak finish, perfect for light and airy rooms.',
     tags: ['wood', 'minimal', 'light-tone', 'seating', 'living-room'],
     price: 250,
-    imageUrl: '/images/products/scandi-chair.jpg',
+    imageUrl: '/images/products/scandi-chair.png',
   },
   {
     id: 7,
@@ -31,7 +31,7 @@ export const productCatalog: Product[] = [
       'A cozy, neutral-toned linen pillow that adds texture and comfort to sofas and beds.',
     tags: ['cozy', 'natural-fiber', 'minimal', 'textiles', 'beige'],
     price: 50,
-    imageUrl: '/images/products/scandi-pillow.jpg',
+    imageUrl: '/images/products/scandi-pillow.png',
   },
   {
     id: 8,
@@ -42,7 +42,7 @@ export const productCatalog: Product[] = [
       'A soft, high-pile wool rug in a cream color to anchor your space in warmth.',
     tags: ['cozy', 'soft', 'light-tone', 'flooring', 'white-walls'],
     price: 450,
-    imageUrl: '/images/products/scandi-rug.jpg',
+    imageUrl: '/images/products/scandi-rug.png',
   },
 
   // Industrial
@@ -55,7 +55,7 @@ export const productCatalog: Product[] = [
       'A raw, sturdy coffee table with a reclaimed wood top and forged steel legs.',
     tags: ['metal', 'urban', 'raw-finish', 'wood', 'living-room'],
     price: 350,
-    imageUrl: '/images/products/industrial-table.jpg',
+    imageUrl: '/images/products/industrial-table.png',
   },
   {
     id: 6,
@@ -66,7 +66,7 @@ export const productCatalog: Product[] = [
       'An exposed Edison bulb in a black metal cage, perfect for moody, focused lighting.',
     tags: ['lighting', 'metal', 'exposed-bulb', 'dark-tone', 'urban'],
     price: 120,
-    imageUrl: '/images/products/industrial-light.jpg',
+    imageUrl: '/images/products/industrial-light.png',
   },
   {
     id: 9,
@@ -77,7 +77,7 @@ export const productCatalog: Product[] = [
       'A tall, open-back bookshelf made from riveted iron and distressed wood planks.',
     tags: ['metal', 'storage', 'raw-finish', 'urban', 'bookshelf'],
     price: 750,
-    imageUrl: '/images/products/industrial-shelf.jpg',
+    imageUrl: '/images/products/industrial-shelf.png',
   },
 
   // Boho
@@ -90,7 +90,7 @@ export const productCatalog: Product[] = [
       'A large, hand-woven macrame piece that adds texture and an eclectic feel to any wall.',
     tags: ['textured', 'natural-fiber', 'eclectic', 'wall-art', 'handmade'],
     price: 80,
-    imageUrl: '/images/products/boho-macrame.jpg',
+    imageUrl: '/images/products/boho-macrame.png',
   },
   {
     id: 10,
@@ -101,7 +101,7 @@ export const productCatalog: Product[] = [
       'An iconic, high-backed peacock chair made from natural rattan as a statement piece.',
     tags: ['rattan', 'natural-fiber', 'seating', 'eclectic', 'statement-piece'],
     price: 400,
-    imageUrl: '/images/products/boho-chair.jpg',
+    imageUrl: '/images/products/boho-chair.png',
   },
   {
     id: 13,
@@ -112,7 +112,7 @@ export const productCatalog: Product[] = [
       'A durable jute rug that adds earthy texture and warmth to floors.',
     tags: ['natural-fiber', 'textured', 'flooring', 'earthy'],
     price: 220,
-    imageUrl: '/images/products/boho-rug.jpg',
+    imageUrl: '/images/products/boho-rug.png',
   },
 
   // Modern
@@ -125,7 +125,7 @@ export const productCatalog: Product[] = [
       'A sleek, handleless sideboard with a high-gloss finish for a contemporary space.',
     tags: ['sleek', 'contemporary', 'storage', 'minimal', 'white-walls'],
     price: 600,
-    imageUrl: '/images/products/modern-sideboard.jpg',
+    imageUrl: '/images/products/modern-sideboard.png',
   },
   {
     id: 11,
@@ -136,7 +136,7 @@ export const productCatalog: Product[] = [
       'A sculptural floor lamp with a chrome finish and an abstract form.',
     tags: ['lighting', 'metal', 'sleek', 'contemporary', 'statement-piece'],
     price: 320,
-    imageUrl: '/images/products/modern-lamp.jpg',
+    imageUrl: '/images/products/modern-lamp.png',
   },
   {
     id: 14,
@@ -147,7 +147,7 @@ export const productCatalog: Product[] = [
       'A modular, low-profile sofa with clean geometry and performance fabric.',
     tags: ['seating', 'minimal', 'sleek', 'modular'],
     price: 1400,
-    imageUrl: '/images/products/modern-sofa.jpg',
+    imageUrl: '/images/products/modern-sofa.png',
   },
 
   // Vintage
@@ -160,7 +160,7 @@ export const productCatalog: Product[] = [
       'A classic Chesterfield sofa upholstered in rich, emerald green velvet.',
     tags: ['classic', 'cozy', 'upholstered', 'velvet', 'dark-tone'],
     price: 1200,
-    imageUrl: '/images/products/vintage-sofa.jpg',
+    imageUrl: '/images/products/vintage-sofa.png',
   },
   {
     id: 12,
@@ -171,7 +171,7 @@ export const productCatalog: Product[] = [
       'A large, rectangular mirror with an ornate, gold-gilt frame for a touch of classic elegance.',
     tags: ['classic', 'wall-art', 'statement-piece', 'gold-accent'],
     price: 280,
-    imageUrl: '/images/products/vintage-mirror.jpg',
+    imageUrl: '/images/products/vintage-mirror.png',
   },
   {
     id: 15,
@@ -182,7 +182,7 @@ export const productCatalog: Product[] = [
       'A mid-century inspired walnut console perfect for records and media.',
     tags: ['wood', 'storage', 'mid-century', 'classic'],
     price: 680,
-    imageUrl: '/images/products/vintage-console.jpg',
+    imageUrl: '/images/products/vintage-console.png',
   },
 ]
 

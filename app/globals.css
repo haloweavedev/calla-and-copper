@@ -69,6 +69,7 @@
   --color-brand-cream: var(--brand-cream);
   --color-brand-rich-cream: var(--brand-rich-cream);
   --color-brand-forest: var(--brand-forest);
+  --color-brand-warm-brown: var(--brand-warm-brown);
 }
 
 :root {
@@ -110,6 +111,7 @@
   --brand-cream: #F4F1E8;
   --brand-rich-cream: #EDE6D7;
   --brand-forest: #2D5016;
+  --brand-warm-brown: #A69580;
 }
 
 .dark {
@@ -150,6 +152,7 @@
   --brand-cream: #2A261F;
   --brand-rich-cream: #1F1C17;
   --brand-forest: #4A7A2A;
+  --brand-warm-brown: #8B7A6B;
 }
 
 @layer base {
