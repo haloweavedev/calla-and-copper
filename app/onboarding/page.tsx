@@ -27,11 +27,14 @@ export default function OnboardingPage() {
   }
 
   return (
+    <>
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="w-full max-w-4xl">
         {step === 1 && <Step1Style onNext={nextStep} />}
         {step === 2 && <Step2Room onBack={prevStep} onFinish={handleFinish} />}
       </div>
     </div>
+    </>
+
   )
 } 

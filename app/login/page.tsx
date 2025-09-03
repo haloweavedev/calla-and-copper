@@ -4,8 +4,8 @@ import Image from 'next/image'
 
 export default function LoginPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen w-full relative overflow-hidden gap-12">
-      <div className="w-96 p-8 space-y-6 bg-white flex items-center justify-center flex-col border border-gray-200 rounded-lg shadow-md">
+    <div className="flex items-center justify-center min-h-screen w-full gap-12">
+      <div className="w-96 p-8 space-y-6 bg-white flex items-center justify-center flex-col border border-gray-200 rounded-lg shadow-md relative overflow-hidden">
       <Link href="/" className=""> 
         <Image src="/images/cnc-logo-dark.png" alt="Calla & Copper" width={150} height={150} /> 
       </Link>

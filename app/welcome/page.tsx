@@ -1,6 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 import { useDemoStore } from '@/lib/store/demo-store'
+import { Header } from '../components/Header'
 
 // We will create these components in the following subphases
 import { Step1Style } from './_components/Step1Style'
@@ -31,10 +32,13 @@ export default function WelcomePage() {
   }
 
   return (
+    <>
+    <Header />
     <div className={`w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8`}>
       <div className="w-full">
         {renderStep()}
       </div>
     </div>
+    </>
   )
 }
