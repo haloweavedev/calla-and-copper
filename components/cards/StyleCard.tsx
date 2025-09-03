@@ -63,7 +63,7 @@ export function StyleCard({
           width={width} 
           height={height} 
         />
-        <div className="py-1 flex flex-col">
+        <div className="py-1 flex flex-col min-h-[110px] justify-between">
           <p className="font-light text-sm mb-8 text-left break-words capitalize">{renderTags()}</p>
           <span className="text-xl font-medium uppercase text-left">{title}</span>
         </div>
@@ -93,7 +93,7 @@ export function StyleCard({
         width={width} 
         height={height} 
       />
-      <div className="py-1 flex flex-col">
+      <div className="py-1 flex flex-col min-h-[110px] justify-between">
         <p className="font-light text-sm mb-8 text-left capitalize break-words">{renderTags()}</p>
         <span className="text-xl font-medium uppercase text-left">{title}</span>
       </div>
