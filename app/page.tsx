@@ -5,6 +5,7 @@ import HowItWorks from './components/landing/HowItWorks'
 import FAQs from './components/landing/FAQs'
 import Footer from './components/Footer'
 import LandingCTA from './components/landing/LandingCTA'
+import { Header } from './components/Header'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -16,6 +17,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <Header />
       <Hero />
       <HowItWorks />
       <FAQs />
