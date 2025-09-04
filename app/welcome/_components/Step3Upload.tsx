@@ -271,7 +271,7 @@ export function Step3Upload() {
           </motion.span>
         </AnimatePresence>
       </div>
-      <div className="mt-8 flex gap-4 justify-center">
+      <div className="mt-8 flex gap-4 justify-between items-center">
         <button onClick={() => setStep(2)} className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">← Back</button>
         <button 
           onClick={handleAnalyze} 
@@ -304,7 +304,7 @@ export function Step3Loading({ currentProgress, progressText }: { currentProgres
           aria-label="Loading animation"
         />
       </div>
-      <div className="mt-8 px-8 max-w-md mx-auto">
+      <div className="mt-8 px-8 max-w-md">
         <div className="w-full bg-gray-200 rounded-full h-3 border border-gray-300">
           <div className="bg-brand-forest h-full rounded-full transition-all duration-300" style={{ width: `${currentProgress}%` }}></div>
         </div>

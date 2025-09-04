@@ -273,7 +273,7 @@ export function Step2Details() {
 
 
 
-      <div className="mt-8 flex gap-4 justify-center">
+      <div className="mt-8 flex gap-4 justify-between items-center">
         <button 
           onClick={() => setStep(1)} 
           className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer"
