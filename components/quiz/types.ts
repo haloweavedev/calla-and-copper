@@ -9,8 +9,8 @@ export interface StyleOption {
 }
 
 export interface QuizState {
-  currentRound: 1 | 2
   selectedPath: string[]
+  selectedStyle: string | null
   availableOptions: StyleOption[]
   isComplete: boolean
   finalStyleProfile?: StyleProfile
@@ -18,18 +18,18 @@ export interface QuizState {
 
 export interface StyleProfile {
   // Raw selection path
-  stylePath: string[]  // ["Modern Clean", "Scandinavian"]
+  stylePath: string[]  // ["Modern Clean"]
   
   // Aggregated data for AI
-  combinedKeywords: string[]  // ["white", "bright", "minimal", "clean", "wood", "cozy"]
+  combinedKeywords: string[]  // ["contemporary", "minimal", "sleek", "clean-lines"]
   styleHierarchy: {
     foundation: string      // "Modern Clean"
-    refinement: string      // "Scandinavian" 
+    refinement: string      // "" - empty for single round
   }
   
   // AI-friendly metadata
-  styleDescription: string  // "A clean, minimalist Scandinavian space with light woods..."
-  dominantThemes: string[] // ["minimalism", "scandinavian", "clean"]
+  styleDescription: string  // "Clean, simple, uncluttered spaces with contemporary appeal"
+  dominantThemes: string[] // ["contemporary", "minimal", "sleek"]
   
   // Product matching hints (for structured filtering)
   preferredMaterials: string[]  // ["light-wood", "white-metal", "natural-textiles"]
@@ -40,7 +40,6 @@ export interface StyleProfile {
 export interface StyleDecisionNode {
   description: string
   imageSrc: string
-  children?: Record<string, StyleDecisionNode>
   keywords?: string[]
 }
 

@@ -6,20 +6,20 @@ import { StyleCard } from '@/components/cards'
 import { useStyleProfile } from './hooks/useStyleProfile'
 import { StyleProfile } from './types'
 import { useDemoStore } from '@/lib/store/demo-store'
+import Link from 'next/link'
 
 interface StyleQuizProps {
-  onComplete?: (styleProfile: StyleProfile) => void
+  onComplete?: (styleProfile: StyleProfile | undefined) => void
 }
 
 export function StyleQuiz({ onComplete }: StyleQuizProps) {
   const {
-    currentRound,
     availableOptions,
+    selectedStyle,
     isComplete,
     finalStyleProfile,
     selectOption,
-    goBack,
-    canGoBack,
+    skipQuiz,
   } = useStyleProfile()
 
   const { setData } = useDemoStore()
@@ -31,9 +31,11 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
 
   // Call onComplete callback when quiz completes and save to global store
   useEffect(() => {
-    if (isComplete && finalStyleProfile) {
-      // Save to global store
-      setData({ styleProfile: finalStyleProfile })
+    if (isComplete) {
+      // Save to global store (only if we have a style profile)
+      if (finalStyleProfile) {
+        setData({ styleProfile: finalStyleProfile })
+      }
       
       // Call the original onComplete callback if provided
       if (onComplete) {
@@ -59,8 +61,7 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             >
-            {currentRound === 1 && "What's your style foundation?"}
-            {currentRound === 2 && "How would you refine that style?"}
+            What&apos;s your style foundation?
             </motion.h1>
             
             <motion.p 
@@ -69,13 +70,20 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             >
-            {currentRound === 1 && "Choose the base style that speaks to you most"}
-            {currentRound === 2 && "Select how you'd like to refine your chosen foundation"}
+            Choose the base style that speaks to you most
+            </motion.p>
+            
+            <motion.p 
+            className="text-md text-black/60 mt-2"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            >or press skip if uncertain
             </motion.p>
         </div>
-        <div className='flex flex-col items-end justify-end'>
+        <div className='flex flex-col items-end justify-end gap-2'>
             <motion.h1 
-            className="text-2xl mb-2 uppercase font-medium"
+            className="text-2xl uppercase font-medium"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -87,6 +95,13 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
                 <span>of</span>
                 <span>3</span>
             </div>
+                  {/* Navigation */}      
+              <button
+                onClick={skipQuiz}
+                className="cursor-pointer hover:bg-gray-200 px-4 py-1 rounded-md flex items-center justify-center"
+              >
+                Skip →
+              </button>
         </div>
       </div>
 
@@ -117,28 +132,20 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
                 tags={option.keywords}
                 title={option.title}
                 variant="selectable"
-                selected={false}
+                selected={selectedStyle === option.id}
                 onClick={() => handleOptionSelect(option.id)}
               />
             </motion.div>
           ))}
         </AnimatePresence>
       </motion.div>
-
-      {/* Navigation */}
-      <div className="flex items-center justify-center mt-6">
-        <button
-          onClick={goBack}
-          disabled={!canGoBack}
-          className={`px-6 py-2 font-medium transition-all duration-200 ${
-            canGoBack
-              ? 'bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-          }`}
+      <div className="flex items-center justify-start"> 
+        <Link
+          href="/"
+          className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer"
         >
-          ← Back
-        </button>
-        <div className="w-[96px]" />
+          ← Back to Home
+        </Link>
       </div>
 
     </motion.div>

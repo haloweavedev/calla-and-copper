@@ -13,15 +13,31 @@ export function Step1Style() {
   //   setTimeout(() => setStep(2), 200)
   // }
 
-  const handleStyleQuizComplete = (styleProfile: StyleProfile) => {
+  const handleStyleQuizComplete = (styleProfile: StyleProfile | undefined) => {
     // Store the style profile data
     console.log('Style Quiz Complete:', styleProfile)
     
-    // Use the refinement as the selected style
-    const selectedStyle = styleProfile.styleHierarchy.refinement as StyleSelection
+    if (styleProfile) {
+      // Map foundation style names to StyleSelection values
+      const styleMapping: Record<string, StyleSelection> = {
+        'Modern Clean': 'MODERN',
+        'Cozy Traditional': 'VINTAGE',
+        'Boho Eclectic': 'BOHO',
+        'Warm Minimalist': 'SCANDINAVIAN',
+        'Industrial Chic': 'INDUSTRIAL'
+      }
+      
+      const foundationStyle = styleProfile.styleHierarchy.foundation
+      const selectedStyle = styleMapping[foundationStyle] || 'MODERN' // Default fallback
+      
+      // Store the style and move to next step immediately
+      setData({ style: selectedStyle })
+    } else {
+      // User skipped, no style selected
+      setData({ style: null })
+    }
     
-    // Store the style and move to next step immediately
-    setData({ style: selectedStyle })
+    // Move to next step regardless of whether style was selected or skipped
     setStep(2)
   }
 

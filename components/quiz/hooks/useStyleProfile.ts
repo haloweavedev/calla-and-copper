@@ -1,101 +1,74 @@
 import { useState, useCallback } from 'react'
 import { QuizState, StyleOption } from '../types'
-import { styleDecisionTree, getNextOptions, generateStyleProfile } from '../styleDecisionTree'
+import { styleDecisionTree, getAllStyleOptions, generateStyleProfile } from '../styleDecisionTree'
 
 export function useStyleProfile() {
   const [quizState, setQuizState] = useState<QuizState>({
-    currentRound: 1,
     selectedPath: [],
+    selectedStyle: null,
     availableOptions: getInitialOptions(),
     isComplete: false,
     finalStyleProfile: undefined
   })
 
-  // Get initial options for Round 1
+  // Get initial options (all available styles)
   function getInitialOptions(): StyleOption[] {
-    return Object.entries(styleDecisionTree).map(([key, value]) => ({
-      id: key,
-      title: key,
-      description: value.description,
-      keywords: value.keywords || [],
-      imageSrc: value.imageSrc
-    }))
+    return getAllStyleOptions(styleDecisionTree)
   }
 
-  // Select an option and progress to next round
+  // Select an option and auto-proceed to next step
   const selectOption = useCallback((optionId: string) => {
     setQuizState(prevState => {
-      const newPath = [...prevState.selectedPath, optionId]
-      const nextRound = prevState.currentRound + 1
+      const newPath = [optionId]
       
-      // Get options for next round
-      const nextOptions = getNextOptions(styleDecisionTree, newPath)
-      
-      // Check if quiz is complete
-      if (nextRound > 2 || !nextOptions) {
-        // Generate final style profile
-        try {
-          const finalProfile = generateStyleProfile(newPath, styleDecisionTree)
-          return {
-            ...prevState,
-            selectedPath: newPath,
-            currentRound: 2,
-            isComplete: true,
-            finalStyleProfile: finalProfile
-          }
-        } catch (error) {
-          console.error('Error generating style profile:', error)
-          return prevState
+      try {
+        const finalProfile = generateStyleProfile(newPath, styleDecisionTree)
+        return {
+          ...prevState,
+          selectedPath: newPath,
+          selectedStyle: optionId,
+          isComplete: true,
+          finalStyleProfile: finalProfile
         }
-      }
-      
-      // Progress to next round
-      return {
-        ...prevState,
-        selectedPath: newPath,
-        currentRound: nextRound as 1 | 2,
-        availableOptions: nextOptions
+      } catch (error) {
+        console.error('Error generating style profile:', error)
+        return prevState
       }
     })
   }, [])
 
-  // Go back to previous round
+
+  // Skip quiz (complete without selection)
+  const skipQuiz = useCallback(() => {
+    setQuizState(prevState => ({
+      ...prevState,
+      isComplete: true,
+      finalStyleProfile: undefined // No style profile for skipped quiz
+    }))
+  }, [])
+
+  // Reset quiz state (go back to home)
   const goBack = useCallback(() => {
-    setQuizState(prevState => {
-      if (prevState.currentRound <= 1) return prevState
-
-      const newRound = (prevState.currentRound - 1) as 1 | 2
-      const newPath = prevState.selectedPath.slice(0, Math.max(0, prevState.selectedPath.length - 1))
-
-      // Determine options for the round we're returning to
-      const options = newRound === 1
-        ? getInitialOptions()
-        : (getNextOptions(styleDecisionTree, newPath) || [])
-
-      return {
-        ...prevState,
-        currentRound: newRound,
-        selectedPath: newPath,
-        availableOptions: options,
-        isComplete: false,
-        finalStyleProfile: undefined,
-      }
+    setQuizState({
+      selectedPath: [],
+      selectedStyle: null,
+      availableOptions: getInitialOptions(),
+      isComplete: false,
+      finalStyleProfile: undefined
     })
   }, [])
 
   return {
     // State
-    currentRound: quizState.currentRound,
     selectedPath: quizState.selectedPath,
+    selectedStyle: quizState.selectedStyle,
     availableOptions: quizState.availableOptions,
     isComplete: quizState.isComplete,
     finalStyleProfile: quizState.finalStyleProfile,
     
     // Actions
     selectOption,
+    skipQuiz,
     goBack,
-
-    // Computed
-    canGoBack: quizState.currentRound > 1,
   }
 }
