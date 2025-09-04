@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import { StyleProfile } from '@/components/quiz/types'
 
 export type StyleSelection = 'SCANDINAVIAN' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE'
-export type RoomType = 'Living Room' | 'Bedroom' | 'Home Office' | 'Kitchen' | 'Dining Room' | 'Guest Room' | 'Bathroom' | 'Entryway/Foyer' | 'Patio/Deck' | 'Master/Primary Suite'
+export type RoomType = 'Living Room' | 'Bedroom' | 'Home Office' | 'Kitchen' | 'Dining Room' | 'Dining Area' | 'Guest Room' | 'Bathroom' | 'Kid\'s Room' | 'Entryway/Foyer' | 'Patio/Deck' | 'Master/Primary Suite'
 export type Budget = '$500-1,500' | '$1,500-4,000' | '$4,000-8,000' | '$8,000+'
 
 type DemoState = {

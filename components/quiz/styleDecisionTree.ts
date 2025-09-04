@@ -32,6 +32,12 @@ const styleDecisionTree: StyleDecisionTree = {
     description: "Raw, edgy, metropolitan style with urban appeal",
     keywords: ["urban", "edgy", "metropolitan"],
     imageSrc: "/style-quiz/industrial-chic.png"
+  },
+
+  "AI-Powered Discovery": {
+    description: "Let our AI analyze your space and recommend the perfect style and products tailored to your room",
+    keywords: ["adaptive", "intelligent", "personalized"],
+    imageSrc: "/style-quiz/nostyle-placeholder.png"
   }
 };
 
@@ -39,13 +45,15 @@ const styleDecisionTree: StyleDecisionTree = {
 
 // Helper function to get all available style options (for single round)
 function getAllStyleOptions(tree: StyleDecisionTree): StyleOption[] {
-  return Object.entries(tree).map(([key, node]) => ({
-    id: key,
-    title: key,
-    description: node.description,
-    keywords: node.keywords || [],
-    imageSrc: node.imageSrc
-  }));
+  return Object.entries(tree)
+    .filter(([key]) => key !== "AI-Powered Discovery") // Exclude AI option from quiz
+    .map(([key, node]) => ({
+      id: key,
+      title: key,
+      description: node.description,
+      keywords: node.keywords || [],
+      imageSrc: node.imageSrc
+    }));
 }
 
 // Helper function to get all possible style paths (single level now)

@@ -5,8 +5,8 @@ import { StyleProfile, StyleOption } from '@/components/quiz'
 import { StyleCard } from '@/components/cards'
 import { styleDecisionTree } from '@/components/quiz/styleDecisionTree'
 
-const primarySpaces: RoomType[] = ['Living Room', 'Bedroom', 'Home Office', 'Kitchen', 'Dining Room']
-const secondarySpaces: RoomType[] = ['Guest Room', 'Bathroom', 'Entryway/Foyer', 'Patio/Deck', 'Master/Primary Suite']
+const primarySpaces: RoomType[] = ['Living Room', 'Bedroom', 'Home Office', 'Kitchen']
+const secondarySpaces: RoomType[] = ['Dining Area', 'Bathroom', 'Kid\'s Room', 'Patio/Deck']
 const budgetOptions = [
   {
     value: '$500-1,500' as Budget,
@@ -52,21 +52,32 @@ const lifestyleSections = [
   }
 ]
 
-// Helper function to get StyleOption from stylePath
-function getSelectedStyleOption(styleProfile: StyleProfile): StyleOption | null {
-  const [foundation, refinement] = styleProfile.stylePath
+// Helper function to get StyleOption from stylePath (single level now)
+function getSelectedStyleOption(styleProfile: StyleProfile | null): StyleOption | null {
+  // If no style profile (user skipped), return AI-powered discovery option
+  if (!styleProfile) {
+    const aiNode = styleDecisionTree["AI-Powered Discovery"]
+    return {
+      id: "AI-Powered Discovery",
+      title: "AI-Powered Discovery",
+      description: aiNode.description,
+      keywords: aiNode.keywords || [],
+      imageSrc: aiNode.imageSrc
+    }
+  }
+  
+  const [foundation] = styleProfile.stylePath
   
   const foundationNode = styleDecisionTree[foundation]
-  const refinementNode = foundationNode?.children?.[refinement]
   
-  if (!refinementNode) return null
+  if (!foundationNode) return null
   
   return {
-    id: refinement,
-    title: refinement,
-    description: refinementNode.description,
-    keywords: refinementNode.keywords || [],
-    imageSrc: refinementNode.imageSrc
+    id: foundation,
+    title: foundation,
+    description: foundationNode.description,
+    keywords: foundationNode.keywords || [],
+    imageSrc: foundationNode.imageSrc
   }
 }
 
@@ -114,8 +125,8 @@ export function Step2Details() {
 
   const canProceed = roomType && budget
 
-  // Get the selected style option for display
-  const selectedStyleOption = styleProfile ? getSelectedStyleOption(styleProfile) : null
+  // Get the selected style option for display (handles both selected and skipped cases)
+  const selectedStyleOption = getSelectedStyleOption(styleProfile)
 
   return (
     <div className="text-center">
@@ -164,7 +175,9 @@ export function Step2Details() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <h3 className="block font-medium uppercase mb-6 text-black text-left">Your Selected Style:</h3>
+            <h3 className="block font-medium uppercase mb-6 text-black text-left">
+              {styleProfile ? "Your Selected Style:" : "No Style Selected:"}
+            </h3>
             <div className="flex justify-center">
               <StyleCard
                 imageSrc={selectedStyleOption.imageSrc}
@@ -172,6 +185,7 @@ export function Step2Details() {
                 tags={selectedStyleOption.keywords}
                 title={selectedStyleOption.title}
                 variant="default"
+                showLabel={false}
               />
             </div>
           </motion.div>

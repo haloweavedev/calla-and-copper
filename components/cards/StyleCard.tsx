@@ -16,6 +16,7 @@ interface StyleCardProps {
   selected?: boolean
   onClick?: () => void
   className?: string
+  showLabel?: boolean
 }
 
 export function StyleCard({ 
@@ -28,7 +29,8 @@ export function StyleCard({
   variant = 'default',
   selected = false,
   onClick,
-  className
+  className,
+  showLabel = true
 }: StyleCardProps) {
   // Both variants use the same styling - warm cream background, brand colors
   const baseClasses = cn(
@@ -51,12 +53,14 @@ export function StyleCard({
         style={{ width: `${width + 16}px` }}
         variants={cardVariants}
       >
-        <span
-          className="absolute -top-0.5 left-4 text-base font-medium uppercase text-left text-brand-cream"
-          style={{ transform: 'rotate(90deg)', transformOrigin: 'left top' }}
-        >
-          {title}
-        </span>
+        {showLabel && (
+          <span
+            className="absolute -top-0.5 left-4 text-base font-medium uppercase text-left text-brand-cream"
+            style={{ transform: 'rotate(90deg)', transformOrigin: 'left top' }}
+          >
+            {title}
+          </span>
+        )}
         <Image 
           src={imageSrc} 
           alt={imageAlt} 
@@ -81,12 +85,14 @@ export function StyleCard({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      <span
-        className="absolute -top-0.5 left-4 text-base font-medium uppercase text-left text-brand-cream"
-        style={{ transform: 'rotate(90deg)', transformOrigin: 'left top' }}
-      >
-        {title}
-      </span>
+      {showLabel && (
+        <span
+          className="absolute -top-0.5 left-4 text-base font-medium uppercase text-left text-brand-cream"
+          style={{ transform: 'rotate(90deg)', transformOrigin: 'left top' }}
+        >
+          {title}
+        </span>
+      )}
       <Image 
         src={imageSrc} 
         alt={imageAlt} 
