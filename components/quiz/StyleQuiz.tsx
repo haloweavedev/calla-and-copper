@@ -94,8 +94,7 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
                 <span>1</span>
                 <span>of</span>
                 <span>3</span>
-            </div>
-                  {/* Navigation */}      
+            </div>  
               <button
                 onClick={skipQuiz}
                 className="cursor-pointer hover:bg-gray-200 px-4 py-1 rounded-md flex items-center justify-center"

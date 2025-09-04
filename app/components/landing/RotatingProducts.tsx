@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import ProductCard from './ProductCard'
 import { productCatalog } from '@/lib/mock-data/products'
 
@@ -16,11 +16,11 @@ export default function RotatingProducts() {
   }
 
   // Update products with transition
-  const updateProducts = () => {
+  const updateProducts = useCallback(() => {
     const newProducts = generateRandomProductSet()
     setCurrentProducts(newProducts)
     setRotationKey(prev => prev + 1)
-  }
+  }, [])
 
   // Initialize with first set of products
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function RotatingProducts() {
   useEffect(() => {
     const interval = setInterval(updateProducts, 5000) // Rotate every 5 seconds
     return () => clearInterval(interval)
-  }, [])
+  }, [updateProducts])
 
   // Handle fade out/in cycle
   useEffect(() => {

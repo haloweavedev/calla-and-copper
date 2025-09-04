@@ -13,30 +13,19 @@ export function useRotatingStyles(intervalMs: number = 3000) {
   const [currentStyles, setCurrentStyles] = useState<RotatingStyleSet[]>([])
   const [rotationKey, setRotationKey] = useState(0)
 
-  // Generate a random set of 3 different style combinations from anywhere in the tree
+  // Generate a random set of 3 different style combinations from the available styles
   const generateRandomStyleSet = useCallback((): RotatingStyleSet[] => {
     const allOptions: RotatingStyleSet[] = []
     
-    // Collect all foundations
+    // Collect all foundation styles (excluding AI-Powered Discovery)
     Object.entries(styleDecisionTree).forEach(([foundationKey, foundationNode]) => {
-      allOptions.push({
-        id: foundationKey,
-        title: foundationKey.toLowerCase(),
-        description: foundationNode.description,
-        keywords: foundationNode.keywords || [],
-        imageSrc: foundationNode.imageSrc
-      })
-      
-      // Collect all refinements
-      if (foundationNode.children) {
-        Object.entries(foundationNode.children).forEach(([refinementKey, refinementNode]) => {
-          allOptions.push({
-            id: `${foundationKey}-${refinementKey}`,
-            title: refinementKey.toLowerCase(),
-            description: refinementNode.description,
-            keywords: refinementNode.keywords || [],
-            imageSrc: refinementNode.imageSrc
-          })
+      if (foundationKey !== "AI-Powered Discovery") {
+        allOptions.push({
+          id: foundationKey,
+          title: foundationKey.toLowerCase(),
+          description: foundationNode.description,
+          keywords: foundationNode.keywords || [],
+          imageSrc: foundationNode.imageSrc
         })
       }
     })

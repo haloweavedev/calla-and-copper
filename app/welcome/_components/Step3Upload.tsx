@@ -1,13 +1,13 @@
 'use client'
 import { useDemoStore } from '@/lib/store/demo-store'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
 import { analyzeAndMatch } from '../actions'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function Step3Upload() {
-  const photoGuidelines = {
+  const photoGuidelines = useMemo(() => ({
     "whatToPhotograph": {
       title: "📸 What Should I Photograph?",
       guidelines: [
@@ -57,7 +57,7 @@ export function Step3Upload() {
         "We see the potential in every space"
       ]
     }
-  };
+  }), []);
 
   const { setStep, setData, uploadedFile, style, roomType, budget, lifestyleTags } = useDemoStore()
   const [isLoading, setIsLoading] = useState(false)
@@ -88,7 +88,7 @@ export function Step3Upload() {
     }, 4000)
 
     return () => clearInterval(interval)
-  }, [currentGuidelineIndex, guidelineKeys])
+  }, [currentGuidelineIndex, guidelineKeys, photoGuidelines])
 
   const currentGuideline = photoGuidelines[guidelineKeys[currentGuidelineIndex]]
   const currentTip = currentGuideline.guidelines[currentTipIndex]
@@ -112,7 +112,7 @@ export function Step3Upload() {
   const [progressText, setProgressText] = useState("")
 
   const handleAnalyze = async () => {
-    if (!uploadedFile || !style || !roomType || !budget) return
+    if (!uploadedFile) return
     
     setIsLoading(true)
     setError(null)
@@ -146,8 +146,8 @@ export function Step3Upload() {
       const result = await analyzeAndMatch({
         image: uploadedFile,
         style,
-        roomType,
-        budget,
+        roomType: roomType || 'Living Room', // Default fallback
+        budget: budget || '$1,500-4,000', // Default fallback
         lifestyleTags,
       })
 

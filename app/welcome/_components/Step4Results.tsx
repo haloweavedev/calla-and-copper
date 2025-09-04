@@ -22,16 +22,6 @@ export function Step4Results() {
         <p className="text-lg uppercase font-light">Each recommendation is scored based on your style, space, and budget</p>
       </div>
 
-      <div className="p-6 border-1 border-black bg-white mb-12">
-        <h2 className="font-bold text-xl mb-2">AI Room Analysis:</h2>
-        <p className="mb-4">{analysisResult.description}</p>
-        <div className="flex flex-wrap gap-2">
-          {analysisResult.tags.map(tag => (
-            <span key={tag} className="px-3 py-1 bg-brand-warm-brown font-medium text-sm rounded-sm text-white">{tag}</span>
-          ))}
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {recommendations.map((product) => (
           <Link href={`/demo/product/${product.id}`} key={product.id}>
