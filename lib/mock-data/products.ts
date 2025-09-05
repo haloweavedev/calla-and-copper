@@ -48,14 +48,14 @@ export const productCatalog: Product[] = [
   // Industrial
   {
     id: 2,
-    name: 'Forged Steel Coffee Table',
+    name: 'Artisan Coffee Table',
     style: 'INDUSTRIAL',
     category: 'Tables',
     description:
       'A raw, sturdy coffee table with a reclaimed wood top and forged steel legs.',
     tags: ['metal', 'urban', 'raw-finish', 'wood', 'living-room'],
     price: 350,
-    imageUrl: '/images/products/industrial-table.png',
+    imageUrl: '/images/products/industrial-table-2.png',
   },
   {
     id: 6,

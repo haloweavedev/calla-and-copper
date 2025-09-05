@@ -24,26 +24,28 @@ export default function RotatingStyleCards() {
   }, [rotationKey])
 
   return (
-    <div className="flex items-center justify-end gap-8">
-      <div key={`rotation-${rotationKey}`} className="flex items-center justify-end gap-8">
-        {currentStyles.map((style, index) => (
-          <div 
-            key={`${rotationKey}-${style.id}-${index}`}
-            className={`transition-all duration-800 ease-in-out ${
-              isVisible ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{
-              transitionDelay: isVisible ? `${index * 300}ms` : '0ms'
-            }}
-          >
-            <StyleCard 
-              imageSrc={style.imageSrc}
-              imageAlt={`${style.title}-style`}
-              tags={style.keywords.slice(0, 3)} // Limit to 3 tags for display
-              title={style.title}
-            />
-          </div>
-        ))}
+    <div className="w-full overflow-hidden">
+      <div className="flex items-center justify-center lg:justify-end gap-8 overflow-x-auto scrollbar-hide">
+        <div key={`rotation-${rotationKey}`} className="flex items-center justify-center lg:justify-end gap-8">
+          {currentStyles.map((style, index) => (
+            <div 
+              key={`${rotationKey}-${style.id}-${index}`}
+              className={`transition-all duration-800 ease-in-out flex-shrink-0 flex${
+                isVisible ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{
+                transitionDelay: isVisible ? `${index * 300}ms` : '0ms'
+              }}
+            >
+              <StyleCard 
+                imageSrc={style.imageSrc}
+                imageAlt={`${style.title}-style`}
+                tags={style.keywords.slice(0, 3)} // Limit to 3 tags for display
+                title={style.title}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

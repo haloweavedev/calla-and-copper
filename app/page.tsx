@@ -20,9 +20,9 @@ export default async function HomePage() {
       <Header />
       <Hero />
       <HowItWorks />
-      <FAQs />
-      <LandingCTA />
-      <Footer />
+      {/* <FAQs /> */}
+      {/* <LandingCTA /> */}
+      {/* <Footer /> */}
     </>   
   )
 }
