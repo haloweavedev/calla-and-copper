@@ -181,10 +181,10 @@ export function Step3Upload() {
       <Step3Loading currentProgress={currentProgress} progressText={progressText} />
     ) : (
       <div className="text-center">
-      <div className="text-center mb-12 flex flex-row justify-between">
-        <div className='flex flex-col items-start justify-start'>
+      <div className="text-center mb-12 flex flex-col lg:flex-row items-center lg:items-start justify-between">
+        <div className='flex flex-col items-center lg:items-start justify-center lg:justify-start mb-4 lg:mb-0'>
             <motion.h1 
-            className="text-3xl mb-2"
+            className="text-3xl mb-2 text-center lg:text-left"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -201,7 +201,7 @@ export function Step3Upload() {
              We&apos;ll match recommendations to your existing style and lighting
             </motion.p>
         </div>
-        <div className='flex flex-col items-end justify-end'>
+        <div className='flex flex-col items-center lg:items-end justify-center lg:justify-end'>
             <motion.h1 
             className="text-2xl mb-2 uppercase font-medium"
             initial={{ opacity: 0, y: -20 }}
@@ -291,11 +291,11 @@ export function Step3Upload() {
 
 export function Step3Loading({ currentProgress, progressText }: { currentProgress: number; progressText: string }) {
   return (
-    <div className="text-center py-16">
+    <div className="text-center py-16 flex flex-col items-center justify-center px-12">
       <h2 className="text-2xl font-base uppercase">Finding your perfect matches</h2>
       <div className="flex justify-center mt-8">
         <video
-          src="/seat-loading.mp4"
+          src="/logo-loading.mp4"
           autoPlay
           loop
           muted
@@ -304,7 +304,7 @@ export function Step3Loading({ currentProgress, progressText }: { currentProgres
           aria-label="Loading animation"
         />
       </div>
-      <div className="mt-8 px-8 max-w-md">
+      <div className="mt-8 px-8 max-w-md w-md">
         <div className="w-full bg-gray-200 rounded-full h-3 border border-gray-300">
           <div className="bg-brand-forest h-full rounded-full transition-all duration-300" style={{ width: `${currentProgress}%` }}></div>
         </div>
