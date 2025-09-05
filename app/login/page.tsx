@@ -20,7 +20,7 @@ export default function LoginPage() {
               name="email"
               type="email"
               required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-gold focus:border-brand-gold"
             />
           </div>
           <div>
@@ -32,19 +32,19 @@ export default function LoginPage() {
               name="password"
               type="password"
               required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-gold focus:border-brand-gold"
             />
           </div>
           <div className="flex items-center justify-between gap-4">
             <button
               formAction={login}
-              className="w-full px-4 py-2 font-medium text-white bg-brand-forest rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 font-medium text-white bg-brand-dark-brown rounded-md hover:bg-brand-gold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold cursor-pointer"
             >
               Log in
             </button>
             <button
               formAction={signup}
-              className="w-full px-4 py-2 font-medium text-brand-forest bg-white border border-brand-forest rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 font-medium text-brand-dark-brown bg-white border border-brand-dark-brown rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold cursor-pointer"
             >
               Sign up
             </button>
@@ -56,7 +56,7 @@ export default function LoginPage() {
           <hr className="w-full border-gray-200" />
         </div>
         <div className='w-full flex items-center justify-center gap-4'>
-          <button className='w-full px-4 py-2 font-medium text-black border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center gap-2'>
+          <button className='w-full px-4 py-2 font-medium text-black border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold flex items-center justify-center gap-2 cursor-pointer'>
             <Image src="/images/google.png" alt="Google" width={20} height={20} />
             <span>Log in with Google</span>
           </button>
