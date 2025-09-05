@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="p-4 w-full">
         <footer id="footer-section" className="bg-brand-dark-brown pt-12 px-12 flex flex-col items-center w-full rounded-md">
             {/* <hr className="w-full border-white/10 border-[.5px] mt-8 mb-12" /> */}
-            <div className="flex flex-col items-start md:flex-row md:justify-between w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col-reverse lg:flex-row items-start lg:justify-between w-full px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col gap-6">
                     <Link href="/" className="text-xl font-bold text-gray-800">
                         <Image src="/images/cnc-logo.png" alt="Calla & Copper" width={150} height={150} />
@@ -32,7 +32,7 @@ export default function Footer() {
                     </div>
                 </div>
                 
-                <div className="flex gap-24">
+                <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 mb-12 lg:mb-0">
                     <div className="flex flex-col items-start gap-4 text-white">
                         <span className="text-white/80 uppercase font-light">menu</span>
                         <Link href="/" className="text-white text-sm font-light tracking-wide mb-0 md:mb-4">
@@ -64,7 +64,7 @@ export default function Footer() {
 
             </div>
             <hr className="w-full border-white/10 border-[.5px] mt-12 mb-4" />
-            <div className="flex justify-center w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-start lg:justify-center w-full px-4 sm:px-6 lg:px-8 pb-4 lg:pb-0">
                 <p className="text-white/60 text-xs font-geist-sans uppercase font-base tracking-wide mb-0 md:mb-4">
                     © {new Date().getFullYear()} Calla & Copper. All rights reserved.
                 </p>
