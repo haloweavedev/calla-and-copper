@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useDemoStore } from '@/lib/store/demo-store'
+import { EyeIcon } from '@heroicons/react/24/solid'
 
 interface ProductVisualizationProps {
   product: {
@@ -76,10 +77,11 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
   return (
     <>
       <button
-        className="fixed bottom-8 left-8 bg-black text-white font-bold py-3 px-6 shadow-[4px_4px_0px_#000] border-2 border-black hover:bg-gray-800 transition-all z-40"
+        className="fixed bottom-8 left-8 bg-gray-800 text-white font-medium py-3 px-6 hover:bg-gray-700 transition-all z-40 flex items-center justify-center"
         onClick={handleVisualize}
         disabled={isLoading}
       >
+        <EyeIcon className="w-4 h-4 mr-2" />
         {isLoading ? 'Visualizing...' : 'Visualize in My Room'}
       </button>
 
