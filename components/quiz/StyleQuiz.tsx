@@ -53,10 +53,10 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
     >
 
       {/* Quiz Content */}
-      <div className="text-center mb-12 flex flex-row justify-between">
-        <div className='flex flex-col items-start justify-start'>
+      <div className="text-center mb-12 flex flex-col lg:flex-row justify-between">
+        <div className='flex flex-col items-start justify-start mb-8 lg:mb-0'>
             <motion.h1 
-            className="text-3xl mb-2"
+            className="text-3xl mb-4"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -74,39 +74,52 @@ export function StyleQuiz({ onComplete }: StyleQuizProps) {
             </motion.p>
             
             <motion.p 
-            className="text-md text-black/60 mt-2"
+            className="text-md text-black/60 mt-2 hidden lg:block"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             >or press skip if uncertain
             </motion.p>
         </div>
-        <div className='flex flex-col items-end justify-end gap-2'>
+        <div className='flex flex-row lg:flex-col justify-between items-start lg:items-end gap-2'>
+          <div className='flex flex-col gap-4 lg:gap-2 items-start lg:items-end '>
             <motion.h1 
-            className="text-2xl uppercase font-medium"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-xl uppercase font-medium text-left"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
             >
                 style selection
             </motion.h1>
-            <div className='bg-brand-forest text-white text-xs px-6 py-0 flex flex-row items-center justify-center gap-2'>
+            <div className='bg-brand-forest w-min text-white text-xs px-6 py-0 flex flex-row items-center justify-center gap-2'>
                 <span>1</span>
                 <span>of</span>
                 <span>3</span>
-            </div>  
+            </div>
+          </div>
+
+            <div className='flex flex-col items-end justify-end gap-2'>
+              <motion.p 
+                className="text-base text-black/60 mt-0 lg:mt-2 visible lg:hidden text-right"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                or press skip if uncertain
+              </motion.p>
               <button
                 onClick={skipQuiz}
                 className="cursor-pointer hover:bg-gray-200 px-4 py-1 rounded-md flex items-center justify-center"
               >
                 Skip →
               </button>
+            </div>  
         </div>
       </div>
 
       {/* Style Options Grid */}
       <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8"
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
