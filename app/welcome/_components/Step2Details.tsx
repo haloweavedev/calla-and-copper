@@ -5,6 +5,98 @@ import { StyleProfile, StyleOption } from '@/components/quiz'
 import { StyleCard } from '@/components/cards'
 import { styleDecisionTree } from '@/components/quiz/styleDecisionTree'
 
+// Desktop/Tablet Room Type Button Grid Component
+interface RoomTypeButtonGridProps {
+  primarySpaces: RoomType[]
+  secondarySpaces: RoomType[]
+  selectedRoomType: RoomType | null
+  onRoomTypeSelect: (type: RoomType) => void
+}
+
+function RoomTypeButtonGrid({ primarySpaces, secondarySpaces, selectedRoomType, onRoomTypeSelect }: RoomTypeButtonGridProps) {
+  return (
+    <>
+      {/* Primary Spaces */}
+      <div className="mb-6">
+        <h4 className="text-sm font-medium text-black/60 mb-3 text-left">Primary Spaces</h4>
+        <div className="flex flex-wrap gap-2">
+          {primarySpaces.map((type) => (
+            <button 
+              key={type} 
+              onClick={() => onRoomTypeSelect(type)} 
+              className={`px-4 py-2 border-2 border-brand-dark-brown font-bold transition-all ${
+                selectedRoomType === type 
+                  ? 'bg-brand-dark-brown text-white' 
+                  : 'bg-white text-black hover:bg-gray-100'
+              }`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Secondary Spaces */}
+      <div className="mb-6">
+        <h4 className="text-sm font-medium text-black/60 mb-3 text-left">Secondary Spaces</h4>
+        <div className="flex flex-wrap gap-2">
+          {secondarySpaces.map((type) => (
+            <button 
+              key={type} 
+              onClick={() => onRoomTypeSelect(type)} 
+              className={`px-4 py-2 border-2 border-brand-dark-brown font-bold transition-all ${
+                selectedRoomType === type 
+                  ? 'bg-brand-dark-brown text-white' 
+                  : 'bg-white text-black hover:bg-gray-100'
+              }`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}
+
+// Mobile Room Type Dropdown Component
+interface RoomTypeDropdownProps {
+  primarySpaces: RoomType[]
+  secondarySpaces: RoomType[]
+  selectedRoomType: RoomType | null
+  onRoomTypeSelect: (type: RoomType) => void
+}
+
+function RoomTypeDropdown({ primarySpaces, secondarySpaces, selectedRoomType, onRoomTypeSelect }: RoomTypeDropdownProps) {
+  return (
+    <select 
+      value={selectedRoomType || ''} 
+      onChange={(e) => onRoomTypeSelect(e.target.value as RoomType)}
+      className="w-full p-3 border-2 border-brand-dark-brown bg-white font-bold text-black"
+    >
+      <option value="" disabled>Select a room type</option>
+      
+      {/* Primary Spaces Group */}
+      <optgroup label="Primary Spaces">
+        {primarySpaces.map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </optgroup>
+      
+      {/* Secondary Spaces Group */}
+      <optgroup label="Secondary Spaces">
+        {secondarySpaces.map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </optgroup>
+    </select>
+  )
+}
+
 const primarySpaces: RoomType[] = ['Living Room', 'Bedroom', 'Home Office', 'Kitchen']
 const secondarySpaces: RoomType[] = ['Dining Area', 'Bathroom', 'Kid\'s Room', 'Patio/Deck']
 const budgetOptions = [
@@ -142,10 +234,10 @@ export function Step2Details() {
 
   return (
     <div className="text-center">
-      <div className="text-center mb-12 flex flex-row justify-between">
-        <div className='flex flex-col items-start justify-start'>
+      <div className="text-center mb-12 flex flex-col lg:flex-row justify-between">
+        <div className='flex flex-col items-center lg:items-start justify-start mb-8 lg:mb-0'>
             <motion.h1 
-            className="text-3xl mb-2"
+            className="text-3xl mb-2 text-center lg:text-left"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -161,101 +253,114 @@ export function Step2Details() {
             >
              Share the basics so we can personalize your recommendations
             </motion.p>
+            
             <motion.p 
-            className="text-md text-black/60 mt-2"
+            className="text-md text-black/60 mt-2 hidden lg:block"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             >or press skip to move ahead
             </motion.p>
         </div>
-        <div className='flex flex-col items-end justify-end gap-2'>
+        <div className='flex flex-row lg:flex-col justify-between items-start lg:items-end gap-2'>
+          <div className='flex flex-col gap-4 lg:gap-2 items-start lg:items-end '>
             <motion.h1 
-            className="text-2xl uppercase font-medium"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-xl uppercase font-medium text-left"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
             >
                 room details
             </motion.h1>
-            <div className='bg-brand-forest text-white text-xs px-6 py-0 flex flex-row items-center justify-center gap-2'>
+            <div className='bg-brand-forest w-min text-white text-xs px-6 py-0 flex flex-row items-center justify-center gap-2'>
                 <span>2</span>
                 <span>of</span>
                 <span>3</span>
             </div>
-              {/* skip button */}      
+          </div>
+
+            <div className='flex flex-col items-end justify-end gap-2'>
+              <motion.p 
+                className="text-base text-black/60 mt-0 lg:mt-2 visible lg:hidden text-right"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                or press skip to move ahead
+              </motion.p>
               <button
                 onClick={handleSkip}
                 className="cursor-pointer hover:bg-gray-200 px-4 py-1 rounded-md flex items-center justify-center"
               >
                 Skip →
               </button>
+            </div>  
         </div>
       </div>
-      <div className='flex items-start justify-center'>
+      <div className='flex flex-col lg:flex-row items-start justify-center'>
+        <div className='flex gap-4'>
         {/* Display Selected Style Card */}
-        {selectedStyleOption && (
-          <motion.div 
-            className="mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <h3 className="block font-medium uppercase mb-6 text-black text-left">
-              {styleProfile ? "Your Selected Style:" : "No Style Selected:"}
-            </h3>
-            <div className="flex justify-center">
-              <StyleCard
-                imageSrc={selectedStyleOption.imageSrc}
-                imageAlt={selectedStyleOption.title}
-                tags={selectedStyleOption.keywords}
-                title={selectedStyleOption.title}
-                variant="default"
-                showLabel={false}
-              />
-            </div>
-          </motion.div>
-        )}
-        <div className="space-y-6 text-left px-6 flex flex-col w-1/2">
-          <div className=''>
-            <label className="block font-medium uppercase mb-6 text-black">Room Type:</label>
-            
-            {/* Primary Spaces */}
-            <div className="mb-6">
-              <h4 className="text-sm font-medium text-black/60 mb-3 text-left">Primary Spaces</h4>
-              <div className="flex flex-wrap gap-2">
-                {primarySpaces.map((type) => (
-                  <button key={type} onClick={() => setData({ roomType: type })} className={`px-4 py-2 border-2 border-brand-dark-brown font-bold transition-all ${roomType === type ? 'bg-brand-dark-brown text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
-                    {type}
-                  </button>
-                ))}
+          {selectedStyleOption && (
+            <motion.div 
+              className="mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <h3 className="block font-medium uppercase mb-6 text-black text-left">
+                {styleProfile ? "Your Selected Style:" : "No Style Selected:"}
+              </h3>
+              <div className="flex justify-center">
+                <StyleCard
+                  imageSrc={selectedStyleOption.imageSrc}
+                  imageAlt={selectedStyleOption.title}
+                  tags={selectedStyleOption.keywords}
+                  title={selectedStyleOption.title}
+                  variant="default"
+                  showLabel={false}
+                />
               </div>
-            </div>
+            </motion.div>
+          )}
+          <div className="space-y-6 text-left px-6 flex flex-col w-1/2">
+            <div className=''>
+              <label className="block font-medium uppercase mb-6 text-black">Room Type:</label>
+              
+              {/* Desktop/Tablet: Button Grid */}
+              <div className="hidden md:block">
+                <RoomTypeButtonGrid 
+                  primarySpaces={primarySpaces}
+                  secondarySpaces={secondarySpaces}
+                  selectedRoomType={roomType}
+                  onRoomTypeSelect={(type) => setData({ roomType: type })}
+                />
+              </div>
 
-            {/* Secondary Spaces */}
-            <div className="mb-6">
-              <h4 className="text-sm font-medium text-black/60 mb-3 text-left">Secondary Spaces</h4>
-              <div className="flex flex-wrap gap-2">
-                {secondarySpaces.map((type) => (
-                  <button key={type} onClick={() => setData({ roomType: type })} className={`px-4 py-2 border-2 border-brand-dark-brown font-bold transition-all ${roomType === type ? 'bg-brand-dark-brown text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
-                    {type}
-                  </button>
-                ))}
+              {/* Mobile: Dropdown Menu */}
+              <div className="block md:hidden">
+                <RoomTypeDropdown
+                  primarySpaces={primarySpaces}
+                  secondarySpaces={secondarySpaces}
+                  selectedRoomType={roomType}
+                  onRoomTypeSelect={(type) => setData({ roomType: type })}
+                />
               </div>
             </div>
-          </div>
-          <div className=''>
-            <label htmlFor="budget" className="block font-light uppercase mb-6 text-black/60">Budget range:</label>
-            <select id="budget" value={budget ?? ''} onChange={(e) => setData({ budget: e.target.value as Budget })} className="w-full p-2 border-2 border-black bg-white font-bold">
-              <option value="" disabled>Select a budget</option>
-              {budgetOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}: {option.price} - {option.description}
-                </option>
-              ))}
-            </select>
+            <div className=''>
+              <label htmlFor="budget" className="block font-medium uppercase mb-6 text-black">Budget range:</label>
+              <select id="budget" value={budget ?? ''} onChange={(e) => setData({ budget: e.target.value as Budget })} className="w-full p-2 border-2 border-black bg-white font-bold">
+                <option value="" disabled>Select a budget</option>
+                {budgetOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}: {option.price} - {option.description}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
+
+ 
           <div>
            <label className="block font-medium uppercase mb-6 text-black text-left">Optional Lifestyle Tags:</label>
            
