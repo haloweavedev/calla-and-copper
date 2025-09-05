@@ -35,10 +35,10 @@ export default function Footer() {
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 mb-12 lg:mb-0">
                     <div className="flex flex-col items-start gap-4 text-white">
                         <span className="text-white/80 uppercase font-light">menu</span>
-                        <Link href="/" className="text-white text-sm font-light tracking-wide mb-0 md:mb-4">
+                        <Link href="/#how-it-works" className="text-white text-sm font-light tracking-wide mb-0 md:mb-4">
                             How it works
                         </Link>
-                        <Link href="/terms-of-service" className="text-white text-sm font-light tracking-wide mb-0 md:mb-4">
+                        <Link href="/#faq" className="text-white text-sm font-light tracking-wide mb-0 md:mb-4">
                             FAQ
                         </Link>
                         <Link href="/terms-of-service" className="text-white text-sm font-light tracking-wide mb-0 md:mb-4">

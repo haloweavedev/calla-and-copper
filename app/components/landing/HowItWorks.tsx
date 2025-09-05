@@ -8,6 +8,7 @@ export default function HowItWorks() {
 
   return (
     <div 
+      id="how-it-works"
       className="w-full flex flex-col items-center justify-center py-4"
     >
       <h2 

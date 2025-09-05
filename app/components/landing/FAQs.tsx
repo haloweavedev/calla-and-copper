@@ -43,6 +43,7 @@ export default function FAQs() {
 
     return (
         <motion.div 
+            id="faq"
             ref={ref}
             className="w-full flex flex-col items-center justify-center py-16"
             variants={fadeInVariants}
