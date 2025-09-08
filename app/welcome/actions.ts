@@ -21,7 +21,13 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     const supabase = await createClient();
     console.log('[SERVER] Supabase client created.');
 
-    // 1. Upload image to Supabase Storage
+    // 1. Convert image to base64 for Gemini usage later
+    const arrayBuffer = await params.image.arrayBuffer();
+    const base64String = Buffer.from(arrayBuffer).toString('base64');
+    const mimeType = params.image.type;
+    console.log('[SERVER] Image converted to base64 for Gemini usage.');
+
+    // 2. Upload image to Supabase Storage for OpenAI Vision
     const filePath = `room-uploads/${Date.now()}-${params.image.name}`;
     console.log(`[SERVER] Attempting to upload to Supabase Storage at path: ${filePath}`);
     
@@ -35,7 +41,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     }
     console.log('[SERVER] Image upload successful.');
 
-    // 2. Get public URL of the uploaded image
+    // 3. Get public URL of the uploaded image for OpenAI Vision
     const { data: { publicUrl } } = supabase.storage
       .from('product-assets')
       .getPublicUrl(filePath);
@@ -46,7 +52,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
       return { error: 'Could not retrieve image URL after upload.' };
     }
 
-    // 3. Call OpenAI Vision API
+    // 4. Call OpenAI Vision API
     const systemPrompt = `You are an expert interior design assistant. Your task is to analyze an image of a user's room in the context of their stated style preferences. Based on ALL the information, provide a structured analysis of the room. Identify key visual elements, materials, lighting conditions, and overall current vibe. Generate a list of descriptive tags that can be used to match products. The user's desired style is the most important factor.`;
     const userPrompt = `User Preferences:\n- Desired Style: ${params.style || 'AI-Powered Discovery (let AI determine best style)'}\n- Room Type: ${params.roomType}\n- Budget: ${params.budget}\n- Lifestyle Needs: ${params.lifestyleTags.join(', ')}\n\nAnalyze the room in the provided image and generate a description and tags.`;
     
@@ -66,7 +72,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     });
     console.log('[SERVER] OpenAI analysis successful:', analysis);
 
-    // 4. Match products from catalog using a scoring system
+    // 5. Match products from catalog using a scoring system
     console.log('[SERVER] Matching products from catalog with scoring system...');
     const scoredProducts = productCatalog.map((product) => {
       let score = 0
@@ -107,7 +113,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
         : productCatalog.slice(0, 3) // If no style, return top 3 products
 
     console.log('[SERVER] Analysis and matching complete. Returning results.');
-    return { analysis, recommendations: finalRecommendations, publicUrl, error: null };
+    return { analysis, recommendations: finalRecommendations, publicUrl, base64String, mimeType, error: null };
 
   } catch (e: unknown) {
     console.error('[SERVER] A critical error occurred in analyzeAndMatch:', e);

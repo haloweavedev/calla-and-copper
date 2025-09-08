@@ -1,16 +1,15 @@
-import { google } from '@ai-sdk/google'
-import { generateText } from 'ai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { roomImageUrl, products, userContext } = body
+    const { roomImageBase64, roomImageMimeType, products, userContext } = body
 
     // Validate all required fields are present
-    if (!roomImageUrl || !products || !Array.isArray(products) || products.length === 0) {
+    if (!roomImageBase64 || !roomImageMimeType || !products || !Array.isArray(products) || products.length === 0) {
       return NextResponse.json(
-        { error: 'Missing required fields: roomImageUrl, products (array)' },
+        { error: 'Missing required fields: roomImageBase64, roomImageMimeType, products (array)' },
         { status: 400 }
       )
     }
@@ -18,59 +17,71 @@ export async function POST(request: NextRequest) {
     console.log('[API] Generating complete room with', products.length, 'products')
     console.log('[API] User context provided:', !!userContext)
 
-    const gemini = google('gemini-2.5-flash-image-preview')
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
 
-    // Ultra-simple nano banana style prompt
-    const productDescriptions = products.map(p => `${p.name}`).join(', ')
+    // Create specific replacement instructions for each furniture category
+    const sofaProduct = products.find(p => p.category === 'Sofas')
+    const tableProduct = products.find(p => p.category === 'Tables')  
+    const chairProduct = products.find(p => p.category === 'Chairs')
+    const storageProduct = products.find(p => p.category === 'Storage')
+    const rugProduct = products.find(p => p.category === 'Rugs')
+    const decorProduct = products.find(p => p.category === 'Decor')
+
+    let replacementInstructions = []
+    if (sofaProduct) replacementInstructions.push(`place the ${sofaProduct.name} in the center of the room facing the existing sideboard`)
+    if (tableProduct) replacementInstructions.push(`put the ${tableProduct.name} in front of the sofa as a coffee table`)
+    if (chairProduct) replacementInstructions.push(`position the ${chairProduct.name} to the side of the room as an accent chair`)
+    if (storageProduct && storageProduct.name !== 'Walnut Record Console') replacementInstructions.push(`replace the existing sideboard with the ${storageProduct.name}`)
+    if (rugProduct) replacementInstructions.push(`add the ${rugProduct.name} under the seating area`)
+    if (decorProduct && decorProduct.name !== 'Ornate Gilt Mirror') replacementInstructions.push(`replace the round mirror with the ${decorProduct.name}`)
     
-    let prompt = `Replace any existing furniture with these items: ${productDescriptions}. Keep the room structure identical.`
+    // Much more specific placement instructions following docs examples
+    let promptText = `Using the provided image of the room, make these specific changes: ${replacementInstructions.join(', ')}. Keep the walls, flooring, lighting, windows, and architectural details exactly the same. Arrange the furniture in a natural, livable way that makes sense for the room's layout and proportions.`
 
-    console.log('[API] Sending comprehensive room prompt to Gemini:', prompt)
+    console.log('[API] Sending room editing prompt to Gemini:', promptText)
+    console.log('[API] Room image data - MIME type:', roomImageMimeType)
+    console.log('[API] Room image data - Base64 length:', roomImageBase64?.length)
+    console.log('[API] Room image data - First 50 chars:', roomImageBase64?.substring(0, 50))
 
-    // Prepare messages with room image and all product images
-    const messageContent = [
-      { type: 'text', text: prompt },
-      { type: 'image', image: roomImageUrl }
+    // Following docs EXACTLY - only the room image, then text prompt
+    const contentParts = [
+      {
+        inlineData: {
+          mimeType: roomImageMimeType,
+          data: roomImageBase64,
+        },
+      },
+      { text: promptText }
     ]
 
-    // Add all product images
-    products.forEach(product => {
-      messageContent.push({ type: 'image', image: product.imageUrl })
-    })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-image-preview' })
+    const result = await model.generateContent(contentParts)
 
-    const result = await generateText({
-      model: gemini,
-      messages: [
-        {
-          role: 'user',
-          content: messageContent
-        }
-      ],
-      providerOptions: {
-        google: {
-          responseModalities: ['IMAGE']
-        }
-      }
-    })
+    console.log('[API] Gemini generation completed, checking for image parts...')
 
-    console.log('[API] Gemini generation completed, checking for image files...')
+    // Check if result contains image parts
+    const response = await result.response
+    const parts = response.candidates?.[0]?.content?.parts
 
-    // Check if result contains image files
-    if (!result.files || result.files.length === 0) {
+    if (!parts || parts.length === 0) {
+      throw new Error('No content parts generated by Gemini')
+    }
+
+    // Find the first image part
+    const imagePart = parts.find((part: any) => part.inlineData)
+    
+    if (!imagePart || !imagePart.inlineData) {
       throw new Error('No image was generated by Gemini')
     }
 
-    // Get the first generated image file
-    const imageFile = result.files[0]
-
-    console.log(`[API] Image file received, type: ${imageFile.mediaType}`)
-    console.log(`[API] imageFile.base64 length: ${imageFile.base64?.length || 'undefined'}`)
+    console.log(`[API] Image file received, type: ${imagePart.inlineData.mimeType}`)
+    console.log(`[API] Generated image file received successfully`)
 
     // Get the raw base64 string
-    const rawBase64 = imageFile.base64
+    const rawBase64 = imagePart.inlineData.data
     
     // Construct the proper Data URL with prefix
-    const dataUrl = `data:${imageFile.mediaType || 'image/png'};base64,${rawBase64}`
+    const dataUrl = `data:${imagePart.inlineData.mimeType || 'image/png'};base64,${rawBase64}`
 
     console.log('[API] Complete room generation successful, returning data URL')
 

@@ -16,6 +16,8 @@ interface ProductVisualizationProps {
 export function ProductVisualization({ product }: ProductVisualizationProps) {
   const { 
     uploadedFileUrl,
+    uploadedFileBase64,
+    uploadedFileMimeType,
     styleProfile,
     analysisResult,
     lifestyleTags,
@@ -38,7 +40,7 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
   }, [error])
 
   // Don't render if no room photo is available
-  if (!uploadedFileUrl) {
+  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType) {
     return null
   }
 
@@ -67,7 +69,8 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          roomImageUrl: uploadedFileUrl,
+          roomImageBase64: uploadedFileBase64,
+          roomImageMimeType: uploadedFileMimeType,
           productImageUrl: absoluteProductImageUrl,
           productCategory: product.category,
           productName: product.name,

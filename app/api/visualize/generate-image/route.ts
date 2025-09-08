@@ -5,12 +5,12 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { roomImageUrl, productImageUrl, productCategory, productName, userContext } = body
+    const { roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName, userContext } = body
 
     // Validate all required fields are present
-    if (!roomImageUrl || !productImageUrl || !productCategory || !productName) {
+    if (!roomImageBase64 || !roomImageMimeType || !productImageUrl || !productCategory || !productName) {
       return NextResponse.json(
-        { error: 'Missing required fields: roomImageUrl, productImageUrl, productCategory, productName' },
+        { error: 'Missing required fields: roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName' },
         { status: 400 }
       )
     }
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const gemini = google('gemini-2.5-flash-image-preview')
 
     // Simple, effective prompt like nano banana
-    let prompt = `Add the ${productName} to the room. Keep the room walls, windows, flooring, and architecture exactly the same. Only add the furniture item.`
+    let prompt = `Using the exact room shown in the first uploaded image, add the ${productName} from the second image to the room. Keep the walls, flooring, lighting, windows, and architectural details exactly the same as in the first room image. Only add the furniture - do not change the room structure, colors, or layout.`
     
     // Add style context if available
     if (userContext?.styleProfile?.styleHierarchy?.foundation) {
@@ -36,9 +36,9 @@ export async function POST(request: NextRequest) {
         {
           role: 'user',
           content: [
-            { type: 'text', text: prompt },
-            { type: 'image', image: roomImageUrl },
-            { type: 'image', image: productImageUrl }
+            { type: 'image', image: `data:${roomImageMimeType};base64,${roomImageBase64}` },
+            { type: 'image', image: productImageUrl },
+            { type: 'text', text: prompt }
           ]
         }
       ],
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     // Construct the proper Data URL with prefix
     const dataUrl = `data:${imageFile.mediaType || 'image/png'};base64,${rawBase64}`;
 
-    console.log('[API] Constructed Data URL (first 100 chars):', dataUrl.substring(0, 100));
+    console.log('[API] Constructed Data URL successfully');
     
     // --- End of new block ---
 

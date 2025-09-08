@@ -23,6 +23,8 @@ interface CompleteRoomVisualizationProps {
 export function CompleteRoomVisualization({ products }: CompleteRoomVisualizationProps) {
   const { 
     uploadedFileUrl, 
+    uploadedFileBase64,
+    uploadedFileMimeType,
     styleProfile, 
     analysisResult, 
     lifestyleTags, 
@@ -53,7 +55,7 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
   }, [error])
 
   // Don't render if no room photo is available
-  if (!uploadedFileUrl || products.length === 0) {
+  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType || products.length === 0) {
     return null
   }
 
@@ -84,7 +86,8 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          roomImageUrl: uploadedFileUrl,
+          roomImageBase64: uploadedFileBase64,
+          roomImageMimeType: uploadedFileMimeType,
           products: productsWithAbsoluteUrls,
           userContext,
         }),
