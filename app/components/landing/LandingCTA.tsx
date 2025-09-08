@@ -2,7 +2,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import Image from 'next/image'
-import { containerVariants, itemVariants, cardVariants } from '@/lib/animations/variants'
+import { containerVariants, itemVariants } from '@/lib/animations/variants'
 
 export default function LandingCTA() {
     const ref = useRef(null)
@@ -68,7 +68,7 @@ export default function LandingCTA() {
             className="w-full flex justify-center mt-8"
             variants={itemVariants}
         >
-            <button className="bg-[#2D5016] hover:bg-[#2D5016]/80 text-white font-medium py-4 px-8 text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+            <button className="bg-brand-gold rounded-full text-white font-medium py-4 px-8 text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer">
                 Design My Room Now
             </button>
         </motion.div>

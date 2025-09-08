@@ -33,7 +33,7 @@ export function Header() {
 
   if (isLoading) {
     return (
-      <nav className="px-4 sm:px-8 py-3 flex justify-between items-center w-full">
+      <nav className="px-4 sm:px-8 py-4 flex justify-between items-center w-full">
         <div className="w-12 h-12 bg-gray-200 animate-pulse rounded"></div>
         <div className="w-8 h-8 bg-gray-200 animate-pulse rounded"></div>
       </nav>
@@ -41,10 +41,10 @@ export function Header() {
   }
 
   return (
-    <nav className="px-4 sm:px-8 py-3 flex justify-between items-center w-full relative">
+    <nav className="px-4 sm:px-8 py-4 flex justify-between items-center w-full relative">
       {/* Logo */}
       <Link href="/" className="text-xl font-bold text-gray-800" onClick={closeMenu}>
-        <Image src="/cnc-logomark.png" alt="Calla & Copper" width={50} height={50} />
+        <Image src="/images/cnc-logo-dark.png" alt="Calla & Copper" width={100} height={100} />
       </Link>
 
       {/* Desktop Menu */}
@@ -74,7 +74,7 @@ export function Header() {
             </Link>
             <Link
               href="/register"
-              className="px-4 py-2 text-md font-medium text-white bg-[#2D5016] rounded-full hover:bg-[#2D5016]/80 transition-colors"
+              className="px-4 py-2 text-md font-medium text-white bg-brand-gold rounded-full hover:bg-brand-dark-brown transition-colors"
             >
               Register
             </Link>
@@ -153,7 +153,7 @@ export function Header() {
                 </Link>
                 <Link
                   href="/register"
-                  className="block w-full px-4 py-2 text-center text-md font-medium text-white bg-[#2D5016] rounded-full hover:bg-[#2D5016]/80 transition-colors"
+                  className="block w-full px-4 py-2 text-center text-md font-medium text-white bg-brand-gold rounded-full hover:bg-brand-dark-brown transition-colors"
                   onClick={closeMenu}
                 >
                   Register

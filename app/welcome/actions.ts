@@ -8,7 +8,7 @@ import type { StyleSelection, RoomType, Budget } from '@/lib/store/demo-store'
 import { productCatalog } from '@/lib/mock-data/products'
 
 interface AnalyzeRoomParams {
-  style: StyleSelection;
+  style: StyleSelection | null;
   roomType: RoomType;
   budget: Budget;
   lifestyleTags: string[];
@@ -48,7 +48,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
 
     // 3. Call OpenAI Vision API
     const systemPrompt = `You are an expert interior design assistant. Your task is to analyze an image of a user's room in the context of their stated style preferences. Based on ALL the information, provide a structured analysis of the room. Identify key visual elements, materials, lighting conditions, and overall current vibe. Generate a list of descriptive tags that can be used to match products. The user's desired style is the most important factor.`;
-    const userPrompt = `User Preferences:\n- Desired Style: ${params.style}\n- Room Type: ${params.roomType}\n- Budget: ${params.budget}\n- Lifestyle Needs: ${params.lifestyleTags.join(', ')}\n\nAnalyze the room in the provided image and generate a description and tags.`;
+    const userPrompt = `User Preferences:\n- Desired Style: ${params.style || 'AI-Powered Discovery (let AI determine best style)'}\n- Room Type: ${params.roomType}\n- Budget: ${params.budget}\n- Lifestyle Needs: ${params.lifestyleTags.join(', ')}\n\nAnalyze the room in the provided image and generate a description and tags.`;
     
     console.log('[SERVER] Calling OpenAI Vision API...');
     const { object: analysis } = await generateObject({
@@ -70,8 +70,8 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     console.log('[SERVER] Matching products from catalog with scoring system...');
     const scoredProducts = productCatalog.map((product) => {
       let score = 0
-      // Major score for matching the desired style
-      if (product.style === params.style) {
+      // Major score for matching the desired style (skip if no style selected)
+      if (params.style && product.style === params.style) {
         score += 10
       }
       // Score for overlapping tags between product and AI analysis
@@ -102,7 +102,9 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
 
     const finalRecommendations = recommendedProducts.length > 0
       ? recommendedProducts.slice(0, 6)
-      : productCatalog.filter((p) => p.style === params.style).slice(0, 3)
+      : params.style 
+        ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
+        : productCatalog.slice(0, 3) // If no style, return top 3 products
 
     console.log('[SERVER] Analysis and matching complete. Returning results.');
     return { analysis, recommendations: finalRecommendations, publicUrl, error: null };

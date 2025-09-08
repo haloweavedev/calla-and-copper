@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { ARViewer } from '@/app/demo/_components/ARViewer'
 import { ProductVisualization } from '@/app/product/[id]/_components/ProductVisualization'
+import { Header } from '@/app/components/Header'
 
 export default function DemoProductPage() {
   const params = useParams()
@@ -20,16 +21,17 @@ export default function DemoProductPage() {
 
   return (
     <>
-      <div className={`w-full min-h-screen bg-white text-black flex flex-col items-center p-4 sm:p-8`}>
+      <Header />
+      <div className={`w-full min-h-screen bg-white text-black flex flex-col items-center py-4 sm:py-8 px-8`}>
         <div className="w-full max-w-4xl">
           <div className="mb-8">
-            <Link href="/welcome" className="font-bold border-2 border-black px-4 py-2 bg-white hover:bg-gray-100 shadow-[4px_4px_0px_#000]">
+            <Link href="/welcome" className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">
               &larr; Back to Demo
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="border-2 border-black p-2 bg-white">
-              <div className="relative w-full h-96 border-2 border-black">
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="border-2 border-black p-2 bg-white flex items-center justify-center w-full">
+              <div className="relative w-full h-96 ">
                 <Image src={product.imageUrl} alt={product.name} fill style={{ objectFit: 'cover' }} />
               </div>
             </div>
@@ -43,20 +45,20 @@ export default function DemoProductPage() {
               <div className="mt-6">
                 <h3 className="font-bold">Style & Tags:</h3>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  <span className="px-3 py-1 border-2 border-black bg-black text-white font-bold text-sm">{product.style}</span>
+                  <span className="px-3 py-1 border-2 border-brand-warm-brown bg-brand-warm-brown text-white font-bold text-sm">{product.style}</span>
                   {product.tags.map((tag) => (
-                    <span key={tag} className="px-3 py-1 border-2 border-black bg-gray-100 font-bold text-sm">{tag}</span>
+                    <span key={tag} className="px-3 py-1 border-2 border-gray-100 bg-gray-100 font-bold text-sm">{tag}</span>
                   ))}
                 </div>
               </div>
               <div className="mt-auto pt-8 space-y-4">
                 <button
                   onClick={() => setIsARVisible(true)}
-                  className="w-full px-6 py-4 border-2 border-black bg-white text-black font-bold text-lg hover:bg-gray-100 shadow-[4px_4px_0px_#000]"
+                  className="w-full px-6 py-4 border-2 border-black bg-white text-black font-bold text-lg hover:bg-gray-100"
                 >
                   View in your Room (AR)
                 </button>
-                <button className="w-full px-6 py-4 border-2 border-black bg-black text-white font-bold text-lg hover:bg-gray-800 shadow-[4px_4px_0px_#000]">
+                <button className="w-full px-6 py-4 border-2 border-black/90 bg-black/90 text-white font-bold text-lg hover:bg-brand-forest cursor-pointer">
                   Add to Cart
                 </button>
               </div>

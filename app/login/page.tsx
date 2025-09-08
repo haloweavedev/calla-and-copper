@@ -1,11 +1,16 @@
+import Link from 'next/link'
 import { login, signup } from './actions'
+import Image from 'next/image'
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center">Welcome to Calla & Copper</h1>
-        <form className="space-y-6">
+    <div className="flex items-center justify-center min-h-screen w-full gap-12">
+      <div className="w-96 p-8 space-y-6 bg-white flex items-center justify-center flex-col border border-gray-200 rounded-lg shadow-md relative overflow-hidden">
+      <Link href="/" className=""> 
+        <Image src="/images/cnc-logo-dark.png" alt="Calla & Copper" width={150} height={150} /> 
+      </Link>
+      
+        <form className="space-y-6 w-full">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email address
@@ -15,7 +20,7 @@ export default function LoginPage() {
               name="email"
               type="email"
               required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-gold focus:border-brand-gold"
             />
           </div>
           <div>
@@ -27,25 +32,40 @@ export default function LoginPage() {
               name="password"
               type="password"
               required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-gold focus:border-brand-gold"
             />
           </div>
           <div className="flex items-center justify-between gap-4">
             <button
               formAction={login}
-              className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 font-medium text-white bg-brand-dark-brown rounded-md hover:bg-brand-gold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold cursor-pointer"
             >
               Log in
             </button>
             <button
               formAction={signup}
-              className="w-full px-4 py-2 font-medium text-indigo-600 bg-white border border-indigo-600 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 font-medium text-brand-dark-brown bg-white border border-brand-dark-brown rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold cursor-pointer"
             >
               Sign up
             </button>
           </div>
         </form>
+        <div className='w-full flex items-center justify-center gap-4'>
+          <hr className="w-full border-gray-200" />
+          <span className="text-sm text-gray-500">Or</span>
+          <hr className="w-full border-gray-200" />
+        </div>
+        <div className='w-full flex items-center justify-center gap-4'>
+          <button className='w-full px-4 py-2 font-medium text-black border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold flex items-center justify-center gap-2 cursor-pointer'>
+            <Image src="/images/google.png" alt="Google" width={20} height={20} />
+            <span>Log in with Google</span>
+          </button>
+        </div>
       </div>
+      {/* <div className='rounded-lg w-1/2'>
+        <Image src="/images/products/vintage-console.png" alt="Calla & Copper" width={500} height={500} className='' />
+      </div> */}
+
     </div>
   )
 } 
