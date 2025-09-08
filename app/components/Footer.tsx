@@ -14,21 +14,30 @@ export default function Footer() {
                     </Link> 
                     <span className="text-white">Interior design made simple. <br /> Upload your space, discover products that belong.</span>
                     <div className="flex flex-row items-center gap-4">
-                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 cursor-pointer">
-                            <Image src="/images/fb.png" alt="Facebook" width={16} height={16} />
-                        </div>
-                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 cursor-pointer">
+                        <a 
+                            href="https://x.com/coppercalla" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 cursor-pointer"
+                        >
                             <Image src="/images/x.png" alt="Twitter" width={16} height={16} />
-                        </div>
-                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 cursor-pointer">
+                        </a>
+                        <a 
+                            href="https://www.instagram.com/calla_copper?igsh=OThic3dyMjJud2dn&utm_source=qr" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 cursor-pointer"
+                        >
                             <Image src="/images/ig.png" alt="Instagram" width={16} height={16} />
-                        </div>
-                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 cursor-pointer">
+                        </a>
+                        <a 
+                            href="https://www.linkedin.com/company/calla-and-copper/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 cursor-pointer"
+                        >
                             <Image src="/images/li.png" alt="LinkedIn" width={16} height={16} />
-                        </div>
-                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 cursor-pointer">
-                            <Image src="/images/yt.png" alt="Youtube" width={16} height={16} />
-                        </div>
+                        </a>
                     </div>
                 </div>
                 
