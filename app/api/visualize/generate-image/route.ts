@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { roomImageUrl, productImageUrl, productCategory, productName } = body
+    const { roomImageUrl, productImageUrl, productCategory, productName, userContext } = body
 
     // Validate all required fields are present
     if (!roomImageUrl || !productImageUrl || !productCategory || !productName) {
@@ -16,13 +16,19 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('[API] Generating image with Gemini for product category:', productCategory)
+    console.log('[API] User context provided:', !!userContext)
 
     const gemini = google('gemini-2.5-flash-image-preview')
 
-    // Construct high-precision replacement prompt
-    const prompt = `Replace the ${productCategory} in the room picture with the ${productCategory} from the second product image.`
+    // Simple, effective prompt like nano banana
+    let prompt = `Add the ${productName} to the room. Keep the room walls, windows, flooring, and architecture exactly the same. Only add the furniture item.`
+    
+    // Add style context if available
+    if (userContext?.styleProfile?.styleHierarchy?.foundation) {
+      prompt += ` Style: ${userContext.styleProfile.styleHierarchy.foundation}.`
+    }
 
-    console.log('[API] Sending high-precision prompt to Gemini:', prompt)
+    console.log('[API] Sending context-aware prompt to Gemini:', prompt)
 
     const result = await generateText({
       model: gemini,
