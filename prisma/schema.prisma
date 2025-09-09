@@ -56,6 +56,7 @@ model User {
   roomData      RoomData[]
   snapshots     Snapshot[]
   orders        Order[]
+  uploads       UserUpload[]
 }
 
 model Session {
@@ -210,4 +211,17 @@ model OrderItem {
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
   price     Float   // Price at the time of purchase
+}
+
+model UserUpload {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName    String
+  filePath    String   // Supabase storage path
+  publicUrl   String   // Public URL for the uploaded image
+  mimeType    String
+  fileSize    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

@@ -3,8 +3,9 @@ import { useDemoStore } from '@/lib/store/demo-store'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
-import { analyzeAndMatch } from '../actions'
+import { analyzeAndMatch, analyzeExistingImage, getUserUploadedImages, deleteUserUpload } from '../actions'
 import { motion, AnimatePresence } from 'framer-motion'
+import type { UserUpload } from '@prisma/client'
 
 export function Step3Upload() {
   const photoGuidelines = useMemo(() => ({
@@ -63,12 +64,35 @@ export function Step3Upload() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null) // State for error message
   const [preview, setPreview] = useState<string | null>(null)
+  const [previousImages, setPreviousImages] = useState<UserUpload[]>([])
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
+  const [isDeletingId, setIsDeletingId] = useState<string | null>(null)
   
   // Auto-rotating guidelines state
   const [currentGuidelineIndex, setCurrentGuidelineIndex] = useState(0)
   const [currentTipIndex, setCurrentTipIndex] = useState(0)
   
   const guidelineKeys = Object.keys(photoGuidelines) as Array<keyof typeof photoGuidelines>
+
+  // Fetch previous images on component mount
+  useEffect(() => {
+    const fetchPreviousImages = async () => {
+      try {
+        const result = await getUserUploadedImages()
+        if (result.error) {
+          console.error('Failed to fetch previous images:', result.error)
+        } else {
+          setPreviousImages(result.uploads)
+        }
+      } catch (error) {
+        console.error('Error fetching previous images:', error)
+      }
+    }
+
+    fetchPreviousImages()
+  }, [])
 
   // Auto-rotate guidelines every 4 seconds
   useEffect(() => {
@@ -98,9 +122,68 @@ export function Step3Upload() {
     if (file) {
       setData({ uploadedFile: file })
       setPreview(URL.createObjectURL(file))
+      setSelectedImageUrl(null) // Clear any previously selected image
       setError(null) // Clear previous errors on new upload
     }
   }, [setData])
+
+  const handleSelectPreviousImage = useCallback((upload: UserUpload) => {
+    setSelectedImageUrl(upload.publicUrl)
+    setPreview(upload.publicUrl)
+    setData({ uploadedFile: null }) // Clear current file upload
+    setError(null)
+  }, [setData])
+
+  const handleDeleteUpload = useCallback(async (uploadId: string) => {
+    setIsDeletingId(uploadId)
+    setDeleteConfirmId(null)
+    setOpenMenuId(null)
+    
+    try {
+      const result = await deleteUserUpload(uploadId)
+      if (result.error) {
+        setError(result.error)
+      } else {
+        // Remove from local state
+        setPreviousImages(prev => prev.filter(img => img.id !== uploadId))
+        
+        // Clear selection if the deleted image was selected
+        const deletedImage = previousImages.find(img => img.id === uploadId)
+        if (deletedImage && selectedImageUrl === deletedImage.publicUrl) {
+          setSelectedImageUrl(null)
+          setPreview(null)
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting upload:', error)
+      setError('Failed to delete image. Please try again.')
+    } finally {
+      setIsDeletingId(null)
+    }
+  }, [selectedImageUrl, previousImages])
+
+  const handleMenuToggle = useCallback((uploadId: string, event: React.MouseEvent) => {
+    event.stopPropagation()
+    setOpenMenuId(openMenuId === uploadId ? null : uploadId)
+  }, [openMenuId])
+
+  const handleDeleteConfirm = useCallback((uploadId: string, event: React.MouseEvent) => {
+    event.stopPropagation()
+    setDeleteConfirmId(uploadId)
+    setOpenMenuId(null)
+  }, [])
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setOpenMenuId(null)
+    }
+    
+    if (openMenuId) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [openMenuId])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -112,7 +195,7 @@ export function Step3Upload() {
   const [progressText, setProgressText] = useState("")
 
   const handleAnalyze = async () => {
-    if (!uploadedFile) return
+    if (!uploadedFile && !selectedImageUrl) return
     
     setIsLoading(true)
     setError(null)
@@ -125,34 +208,65 @@ export function Step3Upload() {
       setCurrentProgress(5)
       setProgressText("Received request to analyze room")
 
-      // Simulate realistic timing based on server actions
-      const progressTimeline = [
-        { delay: 1000, progress: 15, text: "Uploading Image to database..." },
-        { delay: 3000, progress: 25, text: "Image upload successful!" },
-        { delay: 5000, progress: 45, text: "Getting insights from our AI stylist..." },
-        { delay: 8000, progress: 55, text: "AI analysis successful!" },
-        { delay: 10000, progress: 75, text: "Matching products from our catalog..." },
-        { delay: 12000, progress: 95, text: "Analysis and matching complete! Returning results." }
-      ]
+      let result;
 
-      // Set up progress timeline
-      const progressTimeouts = progressTimeline.map(({ delay, progress, text }) => 
-        setTimeout(() => {
-          setCurrentProgress(progress)
-          setProgressText(text)
-        }, delay)
-      )
+      if (selectedImageUrl) {
+        // Analyze existing image
+        const progressTimeline = [
+          { delay: 1000, progress: 25, text: "Using previously uploaded image..." },
+          { delay: 3000, progress: 45, text: "Getting insights from our AI stylist..." },
+          { delay: 6000, progress: 75, text: "Matching products from our catalog..." },
+          { delay: 8000, progress: 95, text: "Analysis and matching complete! Returning results." }
+        ]
 
-      const result = await analyzeAndMatch({
-        image: uploadedFile,
-        style,
-        roomType: roomType || 'Living Room', // Default fallback
-        budget: budget || '$1,500-4,000', // Default fallback
-        lifestyleTags,
-      })
+        // Set up progress timeline
+        const progressTimeouts = progressTimeline.map(({ delay, progress, text }) => 
+          setTimeout(() => {
+            setCurrentProgress(progress)
+            setProgressText(text)
+          }, delay)
+        )
 
-      // Clear all timeouts
-      progressTimeouts.forEach(timeout => clearTimeout(timeout))
+        result = await analyzeExistingImage({
+          imageUrl: selectedImageUrl,
+          style,
+          roomType: roomType || 'Living Room',
+          budget: budget || '$1,500-4,000',
+          lifestyleTags,
+        })
+
+        // Clear all timeouts
+        progressTimeouts.forEach(timeout => clearTimeout(timeout))
+      } else {
+        // Upload and analyze new image
+        const progressTimeline = [
+          { delay: 1000, progress: 15, text: "Uploading Image to database..." },
+          { delay: 3000, progress: 25, text: "Image upload successful!" },
+          { delay: 5000, progress: 45, text: "Getting insights from our AI stylist..." },
+          { delay: 8000, progress: 55, text: "AI analysis successful!" },
+          { delay: 10000, progress: 75, text: "Matching products from our catalog..." },
+          { delay: 12000, progress: 95, text: "Analysis and matching complete! Returning results." }
+        ]
+
+        // Set up progress timeline
+        const progressTimeouts = progressTimeline.map(({ delay, progress, text }) => 
+          setTimeout(() => {
+            setCurrentProgress(progress)
+            setProgressText(text)
+          }, delay)
+        )
+
+        result = await analyzeAndMatch({
+          image: uploadedFile!,
+          style,
+          roomType: roomType || 'Living Room',
+          budget: budget || '$1,500-4,000',
+          lifestyleTags,
+        })
+
+        // Clear all timeouts
+        progressTimeouts.forEach(timeout => clearTimeout(timeout))
+      }
       
       // Set to completion
       setCurrentProgress(100)
@@ -165,7 +279,11 @@ export function Step3Upload() {
       console.log('[CLIENT] Analysis successful. Setting data and moving to step 4.')
       setData({ analysisResult: result.analysis, recommendations: result.recommendations })
       useDemoStore.getState().setUploadedFileUrl(result.publicUrl!)
-      useDemoStore.getState().setUploadedFileData(result.base64String!, result.mimeType!)
+      
+      if (result.base64String && result.mimeType) {
+        useDemoStore.getState().setUploadedFileData(result.base64String, result.mimeType)
+      }
+      
       setStep(4)
 
     } catch (e: unknown) {
@@ -245,6 +363,108 @@ export function Step3Upload() {
         </div>
       </div>
 
+      {/* Previously Uploaded Images Section */}
+      {previousImages.length > 0 && (
+        <div className="mt-8">
+          <div className="text-center mb-4">
+            <h3 className="text-lg font-medium text-black/80">Or choose from your previously uploaded images:</h3>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {previousImages.map((upload) => (
+              <div
+                key={upload.id}
+                onClick={() => handleSelectPreviousImage(upload)}
+                className={`relative aspect-square cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 ${
+                  selectedImageUrl === upload.publicUrl
+                    ? 'border-brand-gold ring-2 ring-brand-gold/50'
+                    : 'border-gray-200 hover:border-brand-gold/50'
+                }`}
+              >
+                <Image
+                  src={upload.publicUrl}
+                  alt={`Uploaded ${upload.fileName}`}
+                  fill
+                  className="object-cover"
+                />
+                
+                {/* Three-dot menu button */}
+                <button
+                  onClick={(e) => handleMenuToggle(upload.id, e)}
+                  className="absolute top-2 right-2 w-6 h-6 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-200"
+                  aria-label="Menu"
+                >
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                  </svg>
+                </button>
+
+                {/* Dropdown menu */}
+                {openMenuId === upload.id && (
+                  <div className="absolute top-8 right-2 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10 min-w-32">
+                    <button
+                      onClick={(e) => handleDeleteConfirm(upload.id, e)}
+                      className="w-full px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                      disabled={isDeletingId === upload.id}
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
+                )}
+
+                {/* Selection indicator */}
+                {selectedImageUrl === upload.publicUrl && (
+                  <div className="absolute inset-0 bg-brand-gold/20 flex items-center justify-center">
+                    <div className="bg-brand-gold text-white px-2 py-1 rounded text-xs font-medium">
+                      Selected
+                    </div>
+                  </div>
+                )}
+
+                {/* Loading indicator for deletion */}
+                {isDeletingId === upload.id && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmId && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Delete Image?</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you want to delete this image? This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setDeleteConfirmId(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteUpload(deleteConfirmId)}
+                disabled={isDeletingId === deleteConfirmId}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors flex items-center gap-2"
+              >
+                {isDeletingId === deleteConfirmId && (
+                  <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin"></div>
+                )}
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className='flex flex-col items-center justify-center py-6'>
         <span className='text-base font-light uppercase text-black/60 mb-2'>Photo Guidelines</span>
         <AnimatePresence mode="wait">
@@ -276,9 +496,9 @@ export function Step3Upload() {
         <button onClick={() => setStep(2)} className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">← Back</button>
         <button 
           onClick={handleAnalyze} 
-          disabled={!uploadedFile || isLoading} 
+          disabled={(!uploadedFile && !selectedImageUrl) || isLoading} 
           className={`px-6 py-2 font-medium transition-all duration-200 ${
-            uploadedFile
+            (uploadedFile || selectedImageUrl)
               ? 'bg-brand-gold text-white border-2 border-brand-gold hover:bg-brand-gold/90 hover:text-white cursor-pointer'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
           }`}>
