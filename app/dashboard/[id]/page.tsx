@@ -5,12 +5,7 @@ import Link from 'next/link'
 import { Header } from '@/app/components/Header'
 import { CompleteRoomVisualization } from './_components/CompleteRoomVisualization'
 
-interface PageProps {
-  params: Promise<{ id: string }>
-}
-
-export default async function DashboardGenerationPage({ params }: PageProps) {
-  const resolvedParams = await params
+export default function DashboardGenerationPage() {
   const { analysisResult, recommendations, reset, uploadedFileUrl } = useDemoStore()
 
   if (!analysisResult || !recommendations) {

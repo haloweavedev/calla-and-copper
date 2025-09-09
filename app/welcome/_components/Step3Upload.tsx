@@ -411,12 +411,13 @@ export function Step3Upload() {
         
         // Upload and analyze new image
         const progressTimeline = [
-          { delay: 1000, progress: 15, text: "Uploading Image to database..." },
-          { delay: 3000, progress: 25, text: "Image upload successful!" },
-          { delay: 5000, progress: 45, text: "Getting insights from our AI stylist..." },
-          { delay: 8000, progress: 55, text: "AI analysis successful!" },
-          { delay: 10000, progress: 75, text: "Matching products from our catalog..." },
-          { delay: 12000, progress: 95, text: "Analysis and matching complete! Returning results." }
+          { delay: 1000, progress: 10, text: "Validating image content..." },
+          { delay: 3000, progress: 20, text: "Image validation passed!" },
+          { delay: 4000, progress: 30, text: "Uploading image to database..." },
+          { delay: 6000, progress: 45, text: "Image upload successful!" },
+          { delay: 8000, progress: 65, text: "Getting insights from our AI stylist..." },
+          { delay: 11000, progress: 85, text: "Matching products from our catalog..." },
+          { delay: 13000, progress: 95, text: "Analysis and matching complete! Returning results." }
         ]
 
         // Set up progress timeline
@@ -453,7 +454,13 @@ export function Step3Upload() {
       setProgressText("Complete!")
 
       if (result.error) {
-        throw new Error(result.error)
+        // Check if it's a validation error with suggestions
+        if ('suggestions' in result && result.suggestions) {
+          const validationError = `${result.error}\n\n💡 Suggestions: ${result.suggestions}`;
+          throw new Error(validationError)
+        } else {
+          throw new Error(result.error)
+        }
       }
 
       console.log('[CLIENT] ✅ Analysis successful. Setting data and moving to step 4.')
@@ -461,16 +468,17 @@ export function Step3Upload() {
         hasAnalysis: !!result.analysis,
         recommendationsCount: result.recommendations?.length || 0,
         publicUrl: result.publicUrl,
-        base64Available: !!((result as any).base64String || useDemoStore.getState().uploadedFileBase64),
-        mimeType: (result as any).mimeType || useDemoStore.getState().uploadedFileMimeType
+        base64Available: !!(('base64String' in result ? result.base64String : null) || useDemoStore.getState().uploadedFileBase64),
+        mimeType: ('mimeType' in result ? result.mimeType : null) || useDemoStore.getState().uploadedFileMimeType
       })
       
       setData({ analysisResult: result.analysis, recommendations: result.recommendations })
       useDemoStore.getState().setUploadedFileUrl(result.publicUrl!)
       
-      if ((result as any).base64String && (result as any).mimeType) {
+      if ('base64String' in result && result.base64String && 'mimeType' in result && result.mimeType && 
+          typeof result.base64String === 'string' && typeof result.mimeType === 'string') {
         console.log('[CLIENT] 💾 Setting base64 data from analysis result')
-        useDemoStore.getState().setUploadedFileData((result as any).base64String, (result as any).mimeType)
+        useDemoStore.getState().setUploadedFileData(result.base64String, result.mimeType)
       } else {
         console.log('[CLIENT] ⚠️ No base64 data in analysis result, using existing store data')
       }
@@ -538,7 +546,10 @@ export function Step3Upload() {
       
       {error && (
         <div className="p-4 mb-4 border-2 border-black bg-red-500 text-white font-bold">
-          <p>Error: {error}</p>
+          <div className="whitespace-pre-line">
+            <p className="font-bold mb-2">Error:</p>
+            <p className="font-normal">{error}</p>
+          </div>
         </div>
       )}
       <div className='w-full flex items-center justify-center'>

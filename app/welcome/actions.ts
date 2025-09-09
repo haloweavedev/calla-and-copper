@@ -19,6 +19,78 @@ interface AnalyzeRoomParams {
   image: File;
 }
 
+const ImageValidationSchema = z.object({
+  isValidInterior: z.boolean().describe('True if the image shows an interior room space suitable for interior design purposes, false otherwise.'),
+  reason: z.string().describe('Brief explanation of why the image is or is not suitable for interior design analysis.'),
+  suggestions: z.string().optional().describe('If not valid, suggest what type of room interior image would work better.')
+})
+
+export async function validateRoomImage(imageFile: File): Promise<{
+  isValid: boolean;
+  reason: string;
+  suggestions?: string;
+  error?: string;
+}> {
+  console.log('[SERVER] Starting image validation for:', imageFile.name);
+  
+  try {
+    // Convert image to base64 for OpenAI
+    const arrayBuffer = await imageFile.arrayBuffer();
+    const base64String = Buffer.from(arrayBuffer).toString('base64');
+    const mimeType = imageFile.type;
+    const dataUrl = `data:${mimeType};base64,${base64String}`;
+
+    const systemPrompt = `You are an expert interior design consultant. Your task is to validate whether an uploaded image shows an interior room space that is suitable for interior design analysis and furniture recommendations.
+
+ACCEPT these types of images:
+- Living rooms, bedrooms, kitchens, dining rooms, home offices
+- Empty rooms or rooms with existing furniture
+- Any residential or commercial interior spaces
+- Rooms in any condition (messy, clean, under renovation)
+- Multiple room angles or wide shots of interior spaces
+
+REJECT these types of images:
+- Exterior views, outdoor spaces, patios, decks
+- People portraits, selfies, or photos focused on people
+- Close-up shots of individual objects/furniture pieces
+- Non-room images (landscapes, food, products, etc.)
+- Blurry or completely dark images where room details can't be seen
+- Images that don't show enough of the space to provide design recommendations`;
+
+    const userPrompt = `Please analyze this image and determine if it shows an interior room space suitable for interior design analysis. Consider whether we can identify room features, layout, lighting, and potential for furniture placement recommendations.`;
+
+    console.log('[SERVER] Calling OpenAI Vision API for validation...');
+    const { object: validation } = await generateObject({
+      model: openai('gpt-4o-mini'),
+      schema: ImageValidationSchema,
+      system: systemPrompt,
+      messages: [{ 
+        role: 'user', 
+        content: [
+          { type: 'text', text: userPrompt }, 
+          { type: 'image', image: dataUrl }
+        ] 
+      }],
+    });
+
+    console.log('[SERVER] Image validation result:', validation);
+
+    return {
+      isValid: validation.isValidInterior,
+      reason: validation.reason,
+      suggestions: validation.suggestions
+    };
+
+  } catch (error: unknown) {
+    console.error('[SERVER] Error during image validation:', error);
+    return {
+      isValid: false,
+      reason: 'Unable to process image for validation.',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
+    };
+  }
+}
+
 export async function analyzeAndMatch(params: AnalyzeRoomParams) {
   console.log('[SERVER] Received request to analyze room.');
   const prisma = new PrismaClient()
@@ -33,16 +105,30 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
       redirect('/login')
     }
 
+    // 1. Validate image before proceeding with storage
+    console.log('[SERVER] Validating image before processing...');
+    const validationResult = await validateRoomImage(params.image);
+    
+    if (!validationResult.isValid) {
+      console.log('[SERVER] Image validation failed:', validationResult.reason);
+      return { 
+        error: `Image not suitable for interior design analysis: ${validationResult.reason}`,
+        suggestions: validationResult.suggestions
+      };
+    }
+    
+    console.log('[SERVER] Image validation passed:', validationResult.reason);
+
     const supabase = createStorageClient();
     console.log('[SERVER] Supabase storage client created.');
 
-    // 1. Convert image to base64 for Gemini usage later
+    // 2. Convert image to base64 for Gemini usage later
     const arrayBuffer = await params.image.arrayBuffer();
     const base64String = Buffer.from(arrayBuffer).toString('base64');
     const mimeType = params.image.type;
     console.log('[SERVER] Image converted to base64 for Gemini usage.');
 
-    // 2. Upload image to Supabase Storage for OpenAI Vision
+    // 3. Upload image to Supabase Storage for OpenAI Vision
     const filePath = `room-uploads/${Date.now()}-${params.image.name}`;
     console.log(`[SERVER] Attempting to upload to Supabase Storage at path: ${filePath}`);
     
@@ -56,7 +142,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     }
     console.log('[SERVER] Image upload successful.');
 
-    // 3. Get public URL of the uploaded image for OpenAI Vision
+    // 4. Get public URL of the uploaded image for OpenAI Vision
     const { data: { publicUrl } } = supabase.storage
       .from('product-assets')
       .getPublicUrl(filePath);
@@ -80,7 +166,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     })
     console.log('[SERVER] Upload record saved to database.');
 
-    // 4. Call OpenAI Vision API
+    // 5. Call OpenAI Vision API for room analysis
     const systemPrompt = `You are an expert interior design assistant. Your task is to analyze an image of a user's room in the context of their stated style preferences. Based on ALL the information, provide a structured analysis of the room. Identify key visual elements, materials, lighting conditions, and overall current vibe. Generate a list of descriptive tags that can be used to match products. The user's desired style is the most important factor.`;
     const userPrompt = `User Preferences:\n- Desired Style: ${params.style || 'AI-Powered Discovery (let AI determine best style)'}\n- Room Type: ${params.roomType}\n- Budget: ${params.budget}\n- Lifestyle Needs: ${params.lifestyleTags.join(', ')}\n\nAnalyze the room in the provided image and generate a description and tags.`;
     
@@ -100,7 +186,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     });
     console.log('[SERVER] OpenAI analysis successful:', analysis);
 
-    // 5. Match products from catalog using a scoring system
+    // 6. Match products from catalog using a scoring system
     console.log('[SERVER] Matching products from catalog with scoring system...');
     const scoredProducts = productCatalog.map((product) => {
       let score = 0
@@ -218,7 +304,7 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
     });
     console.log('[SERVER] OpenAI analysis successful:', analysis);
 
-    // 5. Match products from catalog using a scoring system
+    // 6. Match products from catalog using a scoring system
     console.log('[SERVER] Matching products from catalog with scoring system...');
     const scoredProducts = productCatalog.map((product) => {
       let score = 0
