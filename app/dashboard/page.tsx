@@ -1,29 +1,216 @@
-import { getSmartSuggestions } from './actions'
-import { ProductCard } from '@/app/components/ProductCard'
-import { Product } from '@prisma/client'
+'use client'
 
-export default async function DashboardPage() {
-  const suggestions = await getSmartSuggestions() as (Product & { reason: string })[]
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { PlusIcon, PhotoIcon, ClockIcon } from '@heroicons/react/24/outline'
+
+interface SnapshotData {
+  id: string
+  name?: string
+  roomPhotoUrl?: string
+  roomSizeInfo?: string
+  aiTags: string[]
+  notes?: string
+  createdAt: string
+  snapshotProducts: {
+    product: {
+      id: string
+      name: string
+      price: number
+      imageUrl: string
+    }
+  }[]
+}
+
+export default function DashboardPage() {
+  const [sessions, setSessions] = useState<SnapshotData[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const response = await fetch('/api/creations')
+        
+        if (response.ok) {
+          const data = await response.json()
+          setSessions(data)
+        } else {
+          // Don't show error, just show empty state
+          console.log('API not available, showing empty state')
+          setSessions([])
+        }
+      } catch (err) {
+        console.error('Error fetching sessions:', err)
+        setSessions([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchSessions()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-gray-50 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-64 mb-6"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-white rounded-lg h-64 shadow-sm"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="w-full container mx-auto p-4 sm:p-6 lg:p-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Your Curated Picks</h1>
-      {suggestions.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {suggestions.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+    <div className="w-full min-h-screen bg-gray-50">
+      {/* Main Content */}
+      <div className="w-full px-6 py-8">
+
+        {/* Recent Creations */}
+        <div className="bg-white rounded-lg shadow-sm">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-gray-900">Recent Designs</h2>
+              <Link
+                href="/dashboard/history"
+                className="text-brand-gold hover:text-brand-dark-brown font-medium text-sm"
+              >
+                View All
+              </Link>
+            </div>
+          </div>
+
+          {sessions.length === 0 ? (
+            <div className="py-12">
+              <PhotoIcon className="w-16 h-16 text-gray-400 mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No designs yet</h3>
+              <p className="text-gray-600 mb-6">Start creating your first personalized room design!</p>
+              <Link
+                href="/welcome"
+                className="inline-flex items-center px-6 py-3 bg-brand-gold text-white font-medium rounded-lg hover:bg-brand-dark-brown transition-colors"
+              >
+                <PlusIcon className="w-5 h-5 mr-2" />
+                Create Your First Design
+              </Link>
+            </div>
+          ) : (
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sessions.slice(0, 6).map((session) => (
+                  <Link key={session.id} href={`/dashboard/${session.id}`}>
+                    <div className="group bg-gray-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+                      {/* Image Preview */}
+                      <div className="aspect-video bg-gray-200 relative">
+                        {session.generatedImageUrl ? (
+                          <Image
+                            src={session.generatedImageUrl}
+                            alt="Generated room visualization"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform"
+                            unoptimized={session.generatedImageUrl.startsWith('data:')}
+                          />
+                        ) : session.originalImageUrl ? (
+                          <Image
+                            src={session.originalImageUrl}
+                            alt="Original room image"
+                            fill
+                            className="object-cover opacity-70 group-hover:scale-105 transition-transform"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center h-full text-gray-400">
+                            <PhotoIcon className="w-12 h-12" />
+                          </div>
+                        )}
+                        
+                        {/* Status Badge */}
+                        <div className="absolute top-2 right-2">
+                          {session.generationStatus === 'completed' && (
+                            <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
+                              ✓ Complete
+                            </span>
+                          )}
+                          {session.generationStatus === 'generating' && (
+                            <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-medium">
+                              ⏳ Processing
+                            </span>
+                          )}
+                          {session.generationStatus === 'not_generated' && (
+                            <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full font-medium">
+                              ◯ Draft
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-4">
+                        <h3 className="font-medium text-gray-900 truncate mb-2">
+                          {session.name || `${session.style || 'Styled'} ${session.roomType || 'Room'}`}
+                        </h3>
+                        <div className="text-sm text-gray-600 space-y-1">
+                          {session.style && (
+                            <div>Style: <span className="font-medium text-gray-800">{session.style}</span></div>
+                          )}
+                          {session.roomType && (
+                            <div>Room: <span className="font-medium text-gray-800">{session.roomType}</span></div>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">
+                          {new Date(session.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {sessions.length > 6 && (
+                <div className="text-center mt-6">
+                  <Link
+                    href="/dashboard/history"
+                    className="inline-flex items-center px-4 py-2 text-brand-gold hover:text-brand-dark-brown font-medium"
+                  >
+                    View All {sessions.length} Designs →
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-600">
-            We&apos;re analyzing your style! Suggestions will appear here shortly.
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            (Make sure you have added products in the admin panel.)
-          </p>
+
+        {/* Quick Actions */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-gradient-to-br from-brand-gold to-brand-warm-brown rounded-lg p-6 text-white">
+            <h3 className="text-lg font-semibold mb-2">Start New Design</h3>
+            <p className="text-brand-cream mb-4">Upload your room photo and get personalized recommendations</p>
+            <Link
+              href="/welcome"
+              className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Get Started
+            </Link>
+          </div>
+          
+          <div className="bg-gradient-to-br from-brand-forest to-brand-dark-brown rounded-lg p-6 text-white">
+            <h3 className="text-lg font-semibold mb-2">Browse History</h3>
+            <p className="text-gray-200 mb-4">View all your previous designs and visualizations</p>
+            <Link
+              href="/dashboard/history"
+              className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              View History
+            </Link>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
-} 
+}

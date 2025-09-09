@@ -45,14 +45,12 @@ export function Header() {
           FAQ
         </Link>
         {session ? (
-          <>
-            <span className="text-sm text-gray-600">{session.user.email}</span>
-            <form action={logout}>
-              <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors">
-                Logout
-              </button>
-            </form>
-          </>
+          <Link
+            href="/dashboard"
+            className="px-4 py-2 text-md font-medium text-white bg-brand-gold rounded-full hover:bg-brand-dark-brown transition-colors"
+          >
+            Dashboard
+          </Link>
         ) : (
           <div className="flex items-center gap-2">
             <Link
@@ -124,12 +122,13 @@ export function Header() {
             
             {session ? (
               <div className="pt-4 border-t border-gray-200">
-                <div className="text-sm text-gray-600 mb-4">{session.user.email}</div>
-                <form action={logout}>
-                  <button className="w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors">
-                    Logout
-                  </button>
-                </form>
+                <Link
+                  href="/dashboard"
+                  className="block w-full px-4 py-2 text-center text-md font-medium text-white bg-brand-gold rounded-full hover:bg-brand-dark-brown transition-colors"
+                  onClick={closeMenu}
+                >
+                  Dashboard
+                </Link>
               </div>
             ) : (
               <div className="pt-4 border-t border-gray-200 space-y-3">

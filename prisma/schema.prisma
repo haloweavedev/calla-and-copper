@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
@@ -14,15 +8,237 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ENUMS
-enum Style {
-  SCANDINAVIAN
-  INDUSTRIAL
-  BOHO
-  MODERN
-  JAPANDI
-  MINIMALIST
-  ECLECTIC
+model Account {
+  id                    String    @id
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime
+  User                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+}
+
+model Bundle {
+  id            String          @id
+  title         String
+  description   String
+  styleTag      Style
+  roomType      RoomType
+  budgetRange   Budget
+  moodboardUrl  String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime
+  BundleProduct BundleProduct[]
+}
+
+model BundleProduct {
+  bundleId  String
+  productId String
+  Bundle    Bundle  @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([bundleId, productId])
+}
+
+model Creation {
+  id                    String   @id
+  userId                String
+  style                 String?
+  roomType              String?
+  budget                String?
+  lifestyleTags         String[]
+  styleProfile          Json?
+  originalImageUrl      String?
+  originalImageBase64   String?
+  originalImageMimeType String?
+  analysisResult        Json?
+  recommendedProductIds String[]
+  recommendationsData   Json?
+  generatedImageUrl     String?
+  generationStatus      String   @default("not_generated")
+  name                  String?
+  notes                 String?
+  isPublic              Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime
+  User                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ImageGeneration {
+  id               String   @id
+  userId           String
+  generationType   String
+  prompt           String
+  inputImageUrl    String?
+  outputImageUrl   String?
+  productIds       String[]
+  metadata         Json?
+  status           String   @default("pending")
+  errorMessage     String?
+  processingTimeMs Int?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime
+  User             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id                    String      @id
+  userId                String
+  totalAmount           Float
+  status                String
+  stripePaymentIntentId String      @unique
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime
+  User                  User        @relation(fields: [userId], references: [id])
+  OrderItem             OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+  Order     Order   @relation(fields: [orderId], references: [id])
+  Product   Product @relation(fields: [productId], references: [id])
+}
+
+model Product {
+  id              String            @id
+  name            String
+  description     String
+  price           Float
+  category        String
+  styleTags       Style[]
+  dimensions      String
+  imageUrl        String
+  model3dUrl      String?
+  isArCompatible  Boolean           @default(false)
+  stripeProductId String?           @unique
+  status          String            @default("ACTIVE")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  BundleProduct   BundleProduct[]
+  OrderItem       OrderItem[]
+  SnapshotProduct SnapshotProduct[]
+}
+
+model RoomData {
+  id           String    @id
+  userId       String
+  roomType     RoomType?
+  layoutPreset String?
+  length       Float?
+  width        Float?
+  height       Float?
+  photoUrl     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+  User         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Snapshot {
+  id              String            @id
+  userId          String
+  name            String?
+  roomPhotoUrl    String?
+  roomSizeInfo    String?
+  aiTags          String[]
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  User            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SnapshotProduct SnapshotProduct[]
+}
+
+model SnapshotProduct {
+  snapshotId String
+  productId  String
+  Product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  Snapshot   Snapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  @@id([snapshotId, productId])
+}
+
+model User {
+  id              String            @id
+  email           String            @unique
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  image           String?
+  name            String
+  emailVerified   Boolean           @default(false)
+  Account         Account[]
+  Creation        Creation[]
+  ImageGeneration ImageGeneration[]
+  Order           Order[]
+  RoomData        RoomData[]
+  Session         Session[]
+  Snapshot        Snapshot[]
+  UserProfile     UserProfile?
+  UserUpload      UserUpload[]
+}
+
+model UserProfile {
+  id             String   @id
+  userId         String   @unique
+  preferredStyle Style?
+  budget         Budget?
+  tags           String[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+  User           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserUpload {
+  id        String   @id
+  userId    String
+  fileName  String
+  filePath  String
+  publicUrl String
+  mimeType  String
+  fileSize  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+
+  @@unique([identifier, value])
+}
+
+enum Budget {
+  LOW
+  MODERATE
+  FLEXIBLE
 }
 
 enum RoomType {
@@ -34,212 +250,12 @@ enum RoomType {
   KITCHEN
 }
 
-enum Budget {
-  LOW
-  MODERATE
-  FLEXIBLE
-}
-
-// MODELS
-
-model User {
-  id            String        @id @default(cuid())
-  name          String
-  email         String        @unique
-  emailVerified Boolean       @default(false)
-  image         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  profile       UserProfile?
-  roomData      RoomData[]
-  snapshots     Snapshot[]
-  orders        Order[]
-  uploads       UserUpload[]
-  imageGenerations ImageGeneration[]
-}
-
-model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Account {
-  id                String   @id @default(cuid())
-  userId            String
-  accountId         String
-  providerId        String
-  accessToken       String?
-  refreshToken      String?
-  idToken           String?
-  accessTokenExpiresAt DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope             String?
-  password          String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([providerId, accountId])
-}
-
-model Verification {
-  id         String   @id @default(cuid())
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@unique([identifier, value])
-}
-
-model UserProfile {
-  id            String   @id @default(cuid())
-  userId        String   @unique
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  preferredStyle Style?
-  budget        Budget?
-  tags          String[] // e.g., ["pet_friendly", "natural_light"]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model RoomData {
-  id            String   @id @default(cuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  roomType      RoomType?
-  layoutPreset  String?  // e.g., "small_studio", "large_living"
-  length        Float?
-  width         Float?
-  height        Float?
-  photoUrl      String?  // URL to image in Supabase Storage
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model Product {
-  id              String           @id @default(cuid())
-  name            String
-  description     String
-  price           Float
-  category        String           // e.g., "Sofa", "Lamp", "Rug"
-  styleTags       Style[]
-  dimensions      String           // e.g., "120x80x90cm"
-  imageUrl        String
-  model3dUrl      String?          // URL to GLB/USDZ file
-  isArCompatible  Boolean          @default(false)
-  stripeProductId String?          @unique
-  status          String           @default("ACTIVE") // ACTIVE, OUT_OF_STOCK, HIDDEN
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  bundleProducts  BundleProduct[]
-  snapshotProducts SnapshotProduct[]
-  orderItems      OrderItem[]
-}
-
-model Bundle {
-  id             String          @id @default(cuid())
-  title          String
-  description    String
-  styleTag       Style
-  roomType       RoomType
-  budgetRange    Budget
-  moodboardUrl   String
-  bundleProducts BundleProduct[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-}
-
-model BundleProduct {
-  bundleId  String
-  bundle    Bundle   @relation(fields: [bundleId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@id([bundleId, productId])
-}
-
-model Snapshot {
-  id               String            @id @default(cuid())
-  userId           String
-  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name             String?           // e.g., "My Japandi Bedroom"
-  roomPhotoUrl     String?
-  roomSizeInfo     String?           // e.g., "Preset: Large Living" or "Manual: 10x12ft"
-  aiTags           String[]
-  notes            String?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  snapshotProducts SnapshotProduct[]
-}
-
-model SnapshotProduct {
-  snapshotId String
-  snapshot   Snapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
-  productId  String
-  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@id([snapshotId, productId])
-}
-
-model Order {
-  id          String      @id @default(cuid())
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
-  totalAmount Float
-  status      String      // e.g., "PENDING", "COMPLETED", "FAILED"
-  stripePaymentIntentId String @unique
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  items       OrderItem[]
-}
-
-model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int
-  price     Float   // Price at the time of purchase
-}
-
-model UserUpload {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  fileName    String
-  filePath    String   // Supabase storage path
-  publicUrl   String   // Public URL for the uploaded image
-  mimeType    String
-  fileSize    Int?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model ImageGeneration {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  generationType  String   // "single-product" or "complete-room"
-  prompt          String   // The prompt used for generation
-  inputImageUrl   String?  // Original room image URL
-  outputImageUrl  String?  // Generated image data URL or storage path
-  productIds      String[] // IDs of products used in generation
-  metadata        Json?    // Additional metadata like user context, settings, etc.
-  status          String   @default("pending") // "pending", "completed", "failed"
-  errorMessage    String?  // Error details if generation failed
-  processingTimeMs Int?    // Time taken for generation in milliseconds
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+enum Style {
+  SCANDINAVIAN
+  INDUSTRIAL
+  BOHO
+  MODERN
+  JAPANDI
+  MINIMALIST
+  ECLECTIC
 }

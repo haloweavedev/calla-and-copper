@@ -72,6 +72,7 @@ export function Step3Upload() {
   const [isDeletingId, setIsDeletingId] = useState<string | null>(null)
   const [isCompressing, setIsCompressing] = useState(false)
   const [compressionProgress, setCompressionProgress] = useState(0)
+  const [isLoadingPrevious, setIsLoadingPrevious] = useState(true)
   
   // Auto-rotating guidelines state
   const [currentGuidelineIndex, setCurrentGuidelineIndex] = useState(0)
@@ -83,6 +84,7 @@ export function Step3Upload() {
   useEffect(() => {
     const fetchPreviousImages = async () => {
       try {
+        setIsLoadingPrevious(true)
         const result = await getUserUploadedImages()
         if (result.error) {
           console.error('Failed to fetch previous images:', result.error)
@@ -91,6 +93,8 @@ export function Step3Upload() {
         }
       } catch (error) {
         console.error('Error fetching previous images:', error)
+      } finally {
+        setIsLoadingPrevious(false)
       }
     }
 
@@ -596,74 +600,86 @@ export function Step3Upload() {
       </div>
 
       {/* Previously Uploaded Images Section */}
-      {previousImages.length > 0 && (
+      {(isLoadingPrevious || previousImages.length > 0) && (
         <div className="mt-8">
           <div className="text-center mb-4">
             <h3 className="text-lg font-medium text-black/80">Or choose from your previously uploaded images:</h3>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {previousImages.map((upload) => (
-              <div
-                key={upload.id}
-                onClick={() => handleSelectPreviousImage(upload)}
-                className={`relative aspect-square cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 ${
-                  selectedImageUrl === upload.publicUrl
-                    ? 'border-brand-gold ring-2 ring-brand-gold/50'
-                    : 'border-gray-200 hover:border-brand-gold/50'
-                }`}
-              >
-                <Image
-                  src={upload.publicUrl}
-                  alt={`Uploaded ${upload.fileName}`}
-                  fill
-                  className="object-cover"
-                />
-                
-                {/* Three-dot menu button */}
-                <button
-                  onClick={(e) => handleMenuToggle(upload.id, e)}
-                  className="absolute top-2 right-2 w-6 h-6 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-200"
-                  aria-label="Menu"
-                >
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                  </svg>
-                </button>
-
-                {/* Dropdown menu */}
-                {openMenuId === upload.id && (
-                  <div className="absolute top-8 right-2 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10 min-w-32">
-                    <button
-                      onClick={(e) => handleDeleteConfirm(upload.id, e)}
-                      className="w-full px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                      disabled={isDeletingId === upload.id}
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                      Delete
-                    </button>
-                  </div>
-                )}
-
-                {/* Selection indicator */}
-                {selectedImageUrl === upload.publicUrl && (
-                  <div className="absolute inset-0 bg-brand-gold/20 flex items-center justify-center">
-                    <div className="bg-brand-gold text-white px-2 py-1 rounded text-xs font-medium">
-                      Selected
-                    </div>
-                  </div>
-                )}
-
-                {/* Loading indicator for deletion */}
-                {isDeletingId === upload.id && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                )}
+          {isLoadingPrevious ? (
+            <div className="flex flex-col items-center justify-center py-8">
+              <div className="w-8 h-8 mb-3">
+                <svg className="animate-spin w-8 h-8 text-brand-gold" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
               </div>
-            ))}
-          </div>
+              <p className="text-sm text-black/60">Looking for previous uploads...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {previousImages.map((upload) => (
+                <div
+                  key={upload.id}
+                  onClick={() => handleSelectPreviousImage(upload)}
+                  className={`relative aspect-square cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 ${
+                    selectedImageUrl === upload.publicUrl
+                      ? 'border-brand-gold ring-2 ring-brand-gold/50'
+                      : 'border-gray-200 hover:border-brand-gold/50'
+                  }`}
+                >
+                  <Image
+                    src={upload.publicUrl}
+                    alt={`Uploaded ${upload.fileName}`}
+                    fill
+                    className="object-cover"
+                  />
+                  
+                  {/* Three-dot menu button */}
+                  <button
+                    onClick={(e) => handleMenuToggle(upload.id, e)}
+                    className="absolute top-2 right-2 w-6 h-6 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-200"
+                    aria-label="Menu"
+                  >
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown menu */}
+                  {openMenuId === upload.id && (
+                    <div className="absolute top-8 right-2 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10 min-w-32">
+                      <button
+                        onClick={(e) => handleDeleteConfirm(upload.id, e)}
+                        className="w-full px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                        disabled={isDeletingId === upload.id}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Delete
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Selection indicator */}
+                  {selectedImageUrl === upload.publicUrl && (
+                    <div className="absolute inset-0 bg-brand-gold/20 flex items-center justify-center">
+                      <div className="bg-brand-gold text-white px-2 py-1 rounded text-xs font-medium">
+                        Selected
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Loading indicator for deletion */}
+                  {isDeletingId === upload.id && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
