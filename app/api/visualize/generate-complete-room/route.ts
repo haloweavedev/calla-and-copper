@@ -114,7 +114,7 @@ The result should look like someone placed new furniture in the exact same room 
     console.log('[API] Personalization details:')
     console.log(`[API] • ${products.length} products styled together harmoniously`)
     if (userContext) {
-      const primaryStyle = userContext.styleProfile?.styleProfile?.styleHierarchy?.foundation || userContext.analysisResult?.tags?.find(tag => tag.includes('vintage') || tag.includes('modern') || tag.includes('boho')) || 'harmonious'
+      const primaryStyle = userContext.styleProfile?.styleProfile?.styleHierarchy?.foundation || userContext.analysisResult?.tags?.find((tag: string) => tag.includes('vintage') || tag.includes('modern') || tag.includes('boho')) || 'harmonious'
       console.log(`[API] • Designed for ${primaryStyle} aesthetic`)
       if (userContext.roomType) console.log(`[API] • Optimized for ${userContext.roomType} layout and flow`)
       if (userContext.lifestyleTags?.length > 0) console.log(`[API] • Considers lifestyle: ${userContext.lifestyleTags.join(', ')}`)
@@ -130,7 +130,7 @@ The result should look like someone placed new furniture in the exact same room 
       dataPreview: roomImageBase64?.substring(0, 50) + '...' || 'NO DATA'
     })
     
-    const contentParts = [
+    const contentParts: any[] = [
       {
         inlineData: {
           mimeType: roomImageMimeType,

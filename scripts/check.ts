@@ -1,15 +1,19 @@
 #!/usr/bin/env bun
 
-import { spawn } from 'bun'
+import { spawn } from 'child_process'
 
 console.log('🔍 Running TypeScript type check...\n')
 
-const typecheck = spawn(['npx', 'tsc', '--noEmit'], {
+const typecheck = spawn('npx', ['tsc', '--noEmit'], {
   cwd: process.cwd(),
   stdio: ['inherit', 'inherit', 'inherit'],
 })
 
-const result = await typecheck.exited
+const result = await new Promise((resolve) => {
+  typecheck.on('close', (code) => {
+    resolve(code)
+  })
+})
 
 if (result === 0) {
   console.log('\n✅ TypeScript check passed!')

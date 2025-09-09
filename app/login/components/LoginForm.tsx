@@ -23,7 +23,7 @@ export function LoginForm() {
       })
 
       if (error) {
-        setError(error.message)
+        setError(error.message || 'An error occurred')
       } else {
         router.push('/welcome')
       }

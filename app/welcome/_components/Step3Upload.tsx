@@ -461,16 +461,16 @@ export function Step3Upload() {
         hasAnalysis: !!result.analysis,
         recommendationsCount: result.recommendations?.length || 0,
         publicUrl: result.publicUrl,
-        base64Available: !!(result.base64String || useDemoStore.getState().uploadedFileBase64),
-        mimeType: result.mimeType || useDemoStore.getState().uploadedFileMimeType
+        base64Available: !!((result as any).base64String || useDemoStore.getState().uploadedFileBase64),
+        mimeType: (result as any).mimeType || useDemoStore.getState().uploadedFileMimeType
       })
       
       setData({ analysisResult: result.analysis, recommendations: result.recommendations })
       useDemoStore.getState().setUploadedFileUrl(result.publicUrl!)
       
-      if (result.base64String && result.mimeType) {
+      if ((result as any).base64String && (result as any).mimeType) {
         console.log('[CLIENT] 💾 Setting base64 data from analysis result')
-        useDemoStore.getState().setUploadedFileData(result.base64String, result.mimeType)
+        useDemoStore.getState().setUploadedFileData((result as any).base64String, (result as any).mimeType)
       } else {
         console.log('[CLIENT] ⚠️ No base64 data in analysis result, using existing store data')
       }

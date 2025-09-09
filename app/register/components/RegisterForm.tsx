@@ -32,7 +32,7 @@ export function RegisterForm() {
       })
 
       if (error) {
-        setError(error.message)
+        setError(error.message || 'An error occurred')
       } else {
         router.push('/welcome')
       }

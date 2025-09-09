@@ -6,10 +6,11 @@ import { Header } from '@/app/components/Header'
 import { CompleteRoomVisualization } from './_components/CompleteRoomVisualization'
 
 interface PageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
-export default function DashboardGenerationPage({ params }: PageProps) {
+export default async function DashboardGenerationPage({ params }: PageProps) {
+  const resolvedParams = await params
   const { analysisResult, recommendations, reset, uploadedFileUrl } = useDemoStore()
 
   if (!analysisResult || !recommendations) {
