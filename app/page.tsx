@@ -13,9 +13,6 @@ export default async function HomePage() {
     headers: await headers(),
   })
 
-  if (session) {
-    redirect('/dashboard')
-  }
 
   return (
     <>
