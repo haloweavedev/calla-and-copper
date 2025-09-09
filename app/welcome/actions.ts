@@ -176,10 +176,13 @@ export async function getUserUploadedImages() {
 
     return { uploads, error: null }
   } catch (e: unknown) {
-    console.error('[SERVER] Error fetching user uploads:', e)
-    return { error: e instanceof Error ? e.message : 'Failed to fetch uploaded images.', uploads: [] }
+    console.error('[SERVER] Error fetching user uploads (DB might be paused):', e)
+    // Return empty array when database is unreachable
+    return { error: null, uploads: [] }
   } finally {
-    await prisma.$disconnect()
+    try {
+      await prisma.$disconnect()
+    } catch {}
   }
 }
 

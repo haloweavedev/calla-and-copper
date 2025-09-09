@@ -168,6 +168,13 @@ export function Step3Upload() {
       setCompressionProgress(0)
 
       try {
+        console.log('[CLIENT] 📤 NEW UPLOAD FLOW - Starting')
+        console.log('[CLIENT] 📋 Original file details:', {
+          name: file.name,
+          size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+          type: file.type
+        })
+        
         // Show compression progress
         const progressInterval = setInterval(() => {
           setCompressionProgress(prev => {
@@ -180,6 +187,7 @@ export function Step3Upload() {
         }, 100)
 
         const compressedFile = await compressImage(file)
+        console.log('[CLIENT] ✅ Compression complete. New size:', `${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`)
         
         clearInterval(progressInterval)
         setCompressionProgress(100)
@@ -191,10 +199,18 @@ export function Step3Upload() {
           setSelectedImageUrl(null) // Clear any previously selected image
           setIsCompressing(false)
           setCompressionProgress(0)
+          
+          console.log('[CLIENT] 💾 New upload data set in demo store')
+          console.log('[CLIENT] 📊 Demo store state after new upload:', {
+            uploadedFile: !!useDemoStore.getState().uploadedFile,
+            uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+            uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
+            uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
+          })
         }, 300)
 
       } catch (error) {
-        console.error('Compression failed:', error)
+        console.error('[CLIENT] ❌ Compression failed:', error)
         setError('Failed to compress image. Please try again.')
         setIsCompressing(false)
         setCompressionProgress(0)
@@ -226,22 +242,37 @@ export function Step3Upload() {
 
   const handleSelectPreviousImage = useCallback(async (upload: UserUpload) => {
     try {
+      console.log('[CLIENT] 🖼️ PRESELECTED IMAGE FLOW - Starting')
+      console.log('[CLIENT] 📋 Upload details:', {
+        id: upload.id,
+        fileName: upload.fileName,
+        publicUrl: upload.publicUrl,
+        mimeType: upload.mimeType,
+        fileSize: upload.fileSize
+      })
+      
       setSelectedImageUrl(upload.publicUrl)
       setPreview(upload.publicUrl)
       setData({ uploadedFile: null }) // Clear current file upload
       setError(null)
 
       // Convert the public URL to base64 and update demo store
-      console.log('[CLIENT] Converting gallery image to base64 for AI generation...')
+      console.log('[CLIENT] 🔄 Converting gallery image to base64 for AI generation...')
       const base64Data = await convertUrlToBase64(upload.publicUrl, upload.mimeType)
+      console.log('[CLIENT] ✅ Base64 conversion complete. Length:', base64Data.length, 'chars')
       
       // Update demo store with the gallery image data
       useDemoStore.getState().setUploadedFileUrl(upload.publicUrl)
       useDemoStore.getState().setUploadedFileData(base64Data, upload.mimeType)
       
-      console.log('[CLIENT] Gallery image data set in demo store')
+      console.log('[CLIENT] 💾 Gallery image data set in demo store')
+      console.log('[CLIENT] 📊 Demo store state after preselect:', {
+        uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+        uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
+        uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
+      })
     } catch (error) {
-      console.error('Failed to process gallery image:', error)
+      console.error('[CLIENT] ❌ Failed to process gallery image:', error)
       setError('Failed to process selected image. Please try again.')
     }
   }, [setData, convertUrlToBase64])
@@ -325,6 +356,15 @@ export function Step3Upload() {
       let result;
 
       if (selectedImageUrl) {
+        console.log('[CLIENT] 🔍 PRESELECTED IMAGE ANALYSIS - Starting')
+        console.log('[CLIENT] 📋 Analysis params:', {
+          imageUrl: selectedImageUrl,
+          style: style,
+          roomType: roomType || 'Living Room',
+          budget: budget || '$1,500-4,000',
+          lifestyleTags: lifestyleTags
+        })
+        
         // Analyze existing image
         const progressTimeline = [
           { delay: 1000, progress: 25, text: "Using previously uploaded image..." },
@@ -348,10 +388,27 @@ export function Step3Upload() {
           budget: budget || '$1,500-4,000',
           lifestyleTags,
         })
+        
+        console.log('[CLIENT] ✅ PRESELECTED IMAGE ANALYSIS - Complete:', {
+          hasAnalysis: !!result.analysis,
+          recommendationsCount: result.recommendations?.length || 0,
+          publicUrl: result.publicUrl,
+          error: result.error
+        })
 
         // Clear all timeouts
         progressTimeouts.forEach(timeout => clearTimeout(timeout))
       } else {
+        console.log('[CLIENT] 🆕 NEW UPLOAD ANALYSIS - Starting')
+        console.log('[CLIENT] 📋 Analysis params:', {
+          imageFile: uploadedFile?.name,
+          imageSize: uploadedFile?.size ? `${(uploadedFile.size / 1024 / 1024).toFixed(2)} MB` : 'unknown',
+          style: style,
+          roomType: roomType || 'Living Room',
+          budget: budget || '$1,500-4,000',
+          lifestyleTags: lifestyleTags
+        })
+        
         // Upload and analyze new image
         const progressTimeline = [
           { delay: 1000, progress: 15, text: "Uploading Image to database..." },
@@ -377,6 +434,15 @@ export function Step3Upload() {
           budget: budget || '$1,500-4,000',
           lifestyleTags,
         })
+        
+        console.log('[CLIENT] ✅ NEW UPLOAD ANALYSIS - Complete:', {
+          hasAnalysis: !!result.analysis,
+          recommendationsCount: result.recommendations?.length || 0,
+          publicUrl: result.publicUrl,
+          base64Length: result.base64String?.length,
+          mimeType: result.mimeType,
+          error: result.error
+        })
 
         // Clear all timeouts
         progressTimeouts.forEach(timeout => clearTimeout(timeout))
@@ -390,13 +456,32 @@ export function Step3Upload() {
         throw new Error(result.error)
       }
 
-      console.log('[CLIENT] Analysis successful. Setting data and moving to step 4.')
+      console.log('[CLIENT] ✅ Analysis successful. Setting data and moving to step 4.')
+      console.log('[CLIENT] 📊 Final data being set:', {
+        hasAnalysis: !!result.analysis,
+        recommendationsCount: result.recommendations?.length || 0,
+        publicUrl: result.publicUrl,
+        base64Available: !!(result.base64String || useDemoStore.getState().uploadedFileBase64),
+        mimeType: result.mimeType || useDemoStore.getState().uploadedFileMimeType
+      })
+      
       setData({ analysisResult: result.analysis, recommendations: result.recommendations })
       useDemoStore.getState().setUploadedFileUrl(result.publicUrl!)
       
       if (result.base64String && result.mimeType) {
+        console.log('[CLIENT] 💾 Setting base64 data from analysis result')
         useDemoStore.getState().setUploadedFileData(result.base64String, result.mimeType)
+      } else {
+        console.log('[CLIENT] ⚠️ No base64 data in analysis result, using existing store data')
       }
+      
+      console.log('[CLIENT] 🏁 Final demo store state before step 4:', {
+        uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+        uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
+        uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType,
+        analysisResult: !!useDemoStore.getState().analysisResult,
+        recommendations: useDemoStore.getState().recommendations?.length
+      })
       
       setStep(4)
 

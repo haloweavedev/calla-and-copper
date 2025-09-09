@@ -22,8 +22,21 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { roomImageBase64, roomImageMimeType, products, userContext } = body
 
+    console.log('[API] 📨 INCOMING REQUEST DATA:')
+    console.log('[API] 🖼️ Room image data:', {
+      base64Available: !!roomImageBase64,
+      base64Length: roomImageBase64?.length,
+      mimeType: roomImageMimeType,
+      startsWithSlash: roomImageBase64?.startsWith('/'),
+      startsWithData: roomImageBase64?.startsWith('data:'),
+      isValidBase64: roomImageBase64 && /^[A-Za-z0-9+/]*={0,2}$/.test(roomImageBase64.slice(0, 100))
+    })
+    console.log('[API] 🛋️ Products:', products?.length || 0, 'items')
+    console.log('[API] 📄 User context provided:', !!userContext)
+
     // Validate all required fields are present
     if (!roomImageBase64 || !roomImageMimeType || !products || !Array.isArray(products) || products.length === 0) {
+      console.log('[API] ❌ VALIDATION FAILED - Missing required fields')
       await prisma.$disconnect()
       return NextResponse.json(
         { error: 'Missing required fields: roomImageBase64, roomImageMimeType, products (array)' },
@@ -31,37 +44,40 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('[API] Generating complete room with', products.length, 'products')
-    console.log('[API] User context provided:', !!userContext)
+    console.log('[API] ✅ Validation passed - Generating complete room with', products.length, 'products')
 
-    // Create generation record
+    // Create generation record (with error handling)
     const productNames = products.map(p => p.name).join(', ')
-    generationRecord = await prisma.imageGeneration.create({
-      data: {
-        userId: session.user.id,
-        generationType: 'complete-room',
-        prompt: `Complete room with: ${productNames}`,
-        inputImageUrl: `data:${roomImageMimeType};base64,[BASE64_DATA]`, // Don't store full base64 to avoid huge logs
-        productIds: products.map(p => String(p.id)).filter(Boolean),
-        metadata: {
-          products: products.map(p => ({
-            id: p.id,
-            name: p.name,
-            category: p.category,
-            imageUrl: p.imageUrl,
-          })),
-          userContext: userContext || null,
+    try {
+      generationRecord = await prisma.imageGeneration.create({
+        data: {
+          userId: session.user.id,
+          generationType: 'complete-room',
+          prompt: `Complete room with: ${productNames}`,
+          inputImageUrl: `data:${roomImageMimeType};base64,[BASE64_DATA]`, // Don't store full base64 to avoid huge logs
+          productIds: products.map(p => String(p.id)).filter(Boolean),
+          metadata: {
+            products: products.map(p => ({
+              id: p.id,
+              name: p.name,
+              category: p.category,
+              imageUrl: p.imageUrl,
+            })),
+            userContext: userContext || null,
+          },
+          status: 'pending',
         },
-        status: 'pending',
-      },
-    })
+      })
+      console.log('[API] ✅ Generation record created:', generationRecord.id)
+    } catch (dbError) {
+      console.warn('[API] ⚠️ Failed to create generation record (continuing anyway):', dbError)
+      // Continue with generation even if DB logging fails
+    }
 
-    console.log('[API] Generation record created:', generationRecord.id)
 
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
 
     // Create a simple, natural prompt following Gemini's best practices
-    const productNames = products.map(p => p.name).join(', ')
     
     // Add personalization context
     let styleContext = ''
@@ -75,12 +91,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Simple, natural prompt that lets Gemini decide placement
-    let promptText = `Create a new image by combining the room from the first image with the furniture pieces from the following product images. Add the ${productNames} to the room naturally and tastefully${styleContext}. 
+    // Hyper-specific prompt to preserve original image integrity
+    let promptText = `EDIT the first room image by adding furniture from the product images. This is an IMAGE EDITING task, not image generation.
 
-Keep the room's walls, flooring, lighting, windows, and all architectural details exactly the same as the original room image. You may remove or replace any existing furniture if needed to make space for the new pieces. Arrange everything in a way that looks natural and livable.
+CRITICAL: Keep these elements from the original room image COMPLETELY UNCHANGED:
+- All walls (exact color, texture, paint, materials)
+- All flooring (exact wood grain, color, pattern)
+- All lighting (natural light, shadows, window light)
+- All windows (exact size, position, frames)
+- All doors and architectural details
+- All built-in features and fixtures
+- Room dimensions and perspective
+- Camera angle and viewpoint
 
-The final image should show the same room with the new furniture pieces integrated seamlessly.`
+ONLY ADD these furniture pieces from the product images: ${productNames}
+
+Place them naturally in the space${styleContext}, but preserve every single architectural detail of the original room. Remove or replace only existing moveable furniture if needed for space.
+
+The result should look like someone placed new furniture in the exact same room - not a new room that looks similar.`
 
     console.log('[API] Sending room editing prompt to Gemini:', promptText)
     console.log('[API] Personalization details:')
@@ -95,6 +123,13 @@ The final image should show the same room with the new furniture pieces integrat
     console.log('[API] Room image data - Base64 length:', roomImageBase64?.length)
 
     // Following docs multi-image composition - room image first, then product images, then text
+    console.log('[API] 📝 Preparing content parts for Gemini:')
+    console.log('[API] 🖼️ Room image part:', {
+      mimeType: roomImageMimeType,
+      dataLength: roomImageBase64?.length,
+      dataPreview: roomImageBase64?.substring(0, 50) + '...' || 'NO DATA'
+    })
+    
     const contentParts = [
       {
         inlineData: {
@@ -105,12 +140,16 @@ The final image should show the same room with the new furniture pieces integrat
     ]
 
     // Add product images for visual reference (like the docs composition example)
+    console.log('[API] 🛋️ Fetching product images for Gemini (max 3)...')
     for (const product of products.slice(0, 3)) { // Limit to 3 products for better performance
       try {
+        console.log(`[API] 🍇 Fetching product image: ${product.name} - ${product.imageUrl}`)
         const response = await fetch(product.imageUrl)
         const arrayBuffer = await response.arrayBuffer()
         const base64ProductImage = Buffer.from(arrayBuffer).toString('base64')
         const mimeType = response.headers.get('content-type') || 'image/jpeg'
+        
+        console.log(`[API] ✅ Product image fetched: ${product.name}, base64 length: ${base64ProductImage.length}`)
         
         contentParts.push({
           inlineData: {
@@ -119,17 +158,25 @@ The final image should show the same room with the new furniture pieces integrat
           },
         })
       } catch (error) {
-        console.error(`[API] Failed to fetch product image: ${product.imageUrl}`, error)
+        console.error(`[API] ❌ Failed to fetch product image: ${product.imageUrl}`, error)
       }
     }
+    
+    console.log('[API] 📊 Content parts prepared for Gemini:', {
+      totalParts: contentParts.length,
+      roomImagePart: 1,
+      productImageParts: contentParts.length - 2, // -2 for room image and text parts
+      textParts: 1
+    })
 
     // Add the specific placement instructions referencing the images
     contentParts.push({ text: promptText })
 
+    console.log('[API] 🤖 Sending request to Gemini 2.5 Flash Image Preview...')
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-image-preview' })
     const result = await model.generateContent(contentParts)
 
-    console.log('[API] Gemini generation completed, checking for image parts...')
+    console.log('[API] ✅ Gemini generation completed, checking for image parts...')
 
     // Check if result contains image parts
     const response = await result.response
@@ -146,8 +193,11 @@ The final image should show the same room with the new furniture pieces integrat
       throw new Error('No image was generated by Gemini')
     }
 
-    console.log(`[API] Image file received, type: ${imagePart.inlineData.mimeType}`)
-    console.log(`[API] Generated image file received successfully`)
+    console.log(`[API] 📸 Generated image received from Gemini:`, {
+      mimeType: imagePart.inlineData.mimeType,
+      base64Length: imagePart.inlineData.data?.length,
+      dataPreview: imagePart.inlineData.data?.substring(0, 50) + '...' || 'NO DATA'
+    })
 
     // Get the raw base64 string
     const rawBase64 = imagePart.inlineData.data
@@ -155,7 +205,10 @@ The final image should show the same room with the new furniture pieces integrat
     // Construct the proper Data URL with prefix
     const dataUrl = `data:${imagePart.inlineData.mimeType || 'image/png'};base64,${rawBase64}`
 
-    console.log('[API] Complete room generation successful, returning data URL')
+    console.log('[API] ✅ Complete room generation successful, returning data URL:', {
+      dataUrlLength: dataUrl.length,
+      mimeType: imagePart.inlineData.mimeType || 'image/png'
+    })
 
     // Update generation record with success
     if (generationRecord) {
