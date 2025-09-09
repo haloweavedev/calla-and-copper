@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName, productId, userContext } = body
+    const { roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName, productId, userContext, creationId } = body
 
     // Validate all required fields are present
     if (!roomImageBase64 || !roomImageMimeType || !productImageUrl || !productCategory || !productName) {
@@ -136,6 +136,25 @@ export async function POST(request: NextRequest) {
           processingTimeMs: Date.now() - startTime,
         },
       })
+    }
+
+    // Update the creation record with the generated image (for single product)
+    if (creationId) {
+      try {
+        console.log('[API] 💾 Saving single product image to creation:', creationId)
+        await prisma.creation.update({
+          where: { id: creationId },
+          data: {
+            generatedImageUrl: dataUrl,
+            generationStatus: 'completed',
+            updatedAt: new Date(),
+          },
+        })
+        console.log('[API] ✅ Creation updated with single product image')
+      } catch (error) {
+        console.error('[API] ❌ Failed to update creation with single product image:', error)
+        // Don't fail the entire request if creation update fails
+      }
     }
 
     return NextResponse.json({ 

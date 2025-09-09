@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { roomImageBase64, roomImageMimeType, products, userContext } = body
+    const { roomImageBase64, roomImageMimeType, products, userContext, creationId } = body
 
     console.log('[API] 📨 INCOMING REQUEST DATA:')
     console.log('[API] 🖼️ Room image data:', {
@@ -204,6 +204,27 @@ export async function POST(request: NextRequest) {
           processingTimeMs: Date.now() - startTime,
         },
       })
+    }
+
+    // Update the creation record with the generated image
+    if (creationId) {
+      try {
+        console.log('[API] 💾 Saving generated image to creation:', creationId)
+        await prisma.creation.update({
+          where: { id: creationId },
+          data: {
+            generatedImageUrl: dataUrl,
+            generationStatus: 'completed',
+            updatedAt: new Date(),
+          },
+        })
+        console.log('[API] ✅ Creation updated with generated image')
+      } catch (error) {
+        console.error('[API] ❌ Failed to update creation with generated image:', error)
+        // Don't fail the entire request if creation update fails
+      }
+    } else {
+      console.warn('[API] ⚠️ No creationId provided, generated image not saved to creation')
     }
 
     return NextResponse.json({ 

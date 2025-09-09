@@ -87,7 +87,11 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
 
         {/* Complete Room Visualization */}
         {uploadedFileUrl && recommendations.length > 0 && (
-          <CompleteRoomVisualization products={recommendations} />
+          <CompleteRoomVisualization 
+            products={recommendations} 
+            creationId={params.id}
+            existingGeneratedImage={creation?.generatedImageUrl || null}
+          />
         )}
 
         {/* Product Grid */}

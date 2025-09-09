@@ -18,9 +18,11 @@ interface Product {
 
 interface CompleteRoomVisualizationProps {
   products: Product[]
+  creationId?: string
+  existingGeneratedImage?: string | null
 }
 
-export function CompleteRoomVisualization({ products }: CompleteRoomVisualizationProps) {
+export function CompleteRoomVisualization({ products, creationId, existingGeneratedImage }: CompleteRoomVisualizationProps) {
   const { 
     uploadedFileUrl, 
     uploadedFileBase64,
@@ -34,19 +36,28 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
   
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null)
+  const [generatedImage, setGeneratedImage] = useState<string | null>(existingGeneratedImage || null)
   const [showModal, setShowModal] = useState(false)
 
-  // Auto-generate on component mount if we have all the data
+  // Load existing generated image on mount
   useEffect(() => {
-    if (uploadedFileUrl && products.length > 0 && !generatedImage && !isLoading) {
+    if (existingGeneratedImage) {
+      console.log('[CLIENT] 🖼️ Loading existing generated image from database')
+      setGeneratedImage(existingGeneratedImage)
+    }
+  }, [existingGeneratedImage])
+
+  // Auto-generate on component mount if we have all the data but no existing image
+  useEffect(() => {
+    if (uploadedFileUrl && products.length > 0 && !generatedImage && !isLoading && !existingGeneratedImage) {
+      console.log('[CLIENT] 🤖 Auto-generating room since no existing image found')
       // Add a small delay to prevent duplicate calls
       const timer = setTimeout(() => {
         handleGenerateRoom()
       }, 500)
       return () => clearTimeout(timer)
     }
-  }, [uploadedFileUrl, products, generatedImage, isLoading])
+  }, [uploadedFileUrl, products, generatedImage, isLoading, existingGeneratedImage])
 
   // Clear error after 5 seconds
   useEffect(() => {
@@ -103,6 +114,7 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
         roomImageMimeType: uploadedFileMimeType,
         products: productsWithAbsoluteUrls,
         userContext,
+        creationId, // Pass creation ID to save to database
       }
       
       console.log('[CLIENT] 📤 Sending request to generate-complete-room API:', {
@@ -133,6 +145,7 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
         startsWithData: imageUrl?.startsWith('data:'),
         mimeType: imageUrl?.split(';')[0]?.split(':')[1] || 'unknown'
       })
+      console.log('[CLIENT] 💾 Image automatically saved to database via API')
       setGeneratedImage(imageUrl)
 
     } catch (error) {
@@ -180,9 +193,9 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
             <p className="text-red-600 mb-4">{error}</p>
             <button
               onClick={handleGenerateRoom}
-              className="px-6 py-2 bg-purple-600 text-white font-medium hover:bg-purple-700 transition-colors"
+              className="px-6 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-medium hover:from-yellow-500 hover:to-orange-600 transition-all rounded-full shadow-lg hover:shadow-xl transform hover:scale-105"
             >
-              Try Again
+              🍌 Try Again with Nano Banana
             </button>
           </div>
         ) : generatedImage ? (
@@ -233,11 +246,14 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
           <div className="text-center py-8">
             <button
               onClick={handleGenerateRoom}
-              className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-2 mx-auto"
+              className="px-8 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-lg hover:from-yellow-500 hover:to-orange-600 transition-all flex items-center gap-2 mx-auto rounded-full shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               <SparklesIcon className="w-5 h-5" />
-              Generate Complete Room
+              🍌 Generate with Nano Banana
             </button>
+            <p className="text-sm text-gray-600 mt-3">
+              Generate your complete room visualization with AI magic
+            </p>
           </div>
         )}
       </div>
