@@ -122,21 +122,41 @@ export function Step3Upload() {
 
   const compressImage = useCallback((file: File): Promise<File> => {
     return new Promise((resolve, reject) => {
-      new Compressor(file, {
-        quality: 0.8, // 80% quality
-        maxWidth: 1920, // Max width 1920px
-        maxHeight: 1920, // Max height 1920px
-        convertSize: 1000000, // Convert to JPEG if larger than 1MB
-        success: (compressedFile) => {
-          console.log('[COMPRESSION] Original size:', (file.size / 1024 / 1024).toFixed(2), 'MB')
-          console.log('[COMPRESSION] Compressed size:', (compressedFile.size / 1024 / 1024).toFixed(2), 'MB')
-          resolve(compressedFile as File)
-        },
-        error: (error) => {
-          console.error('[COMPRESSION] Error:', error)
-          reject(error)
-        },
-      })
+      const targetSizeBytes = 1024 * 1024 // 1MB target
+      
+      const tryCompress = (quality: number, maxWidth: number) => {
+        new Compressor(file, {
+          quality,
+          maxWidth,
+          maxHeight: maxWidth,
+          convertSize: 0, // Always convert to JPEG for better compression
+          convertTypes: ['image/png', 'image/webp'], // Convert PNG/WebP to JPEG
+          success: (compressedFile) => {
+            const compressedSize = compressedFile.size
+            console.log('[COMPRESSION] Attempt - Quality:', quality, 'MaxWidth:', maxWidth)
+            console.log('[COMPRESSION] Original size:', (file.size / 1024 / 1024).toFixed(2), 'MB')
+            console.log('[COMPRESSION] Compressed size:', (compressedSize / 1024 / 1024).toFixed(2), 'MB')
+            
+            // If still too large, try more aggressive compression
+            if (compressedSize > targetSizeBytes && quality > 0.3) {
+              const newQuality = Math.max(0.3, quality - 0.2)
+              const newMaxWidth = Math.max(800, maxWidth - 200)
+              console.log('[COMPRESSION] Still too large, retrying with quality:', newQuality, 'maxWidth:', newMaxWidth)
+              tryCompress(newQuality, newMaxWidth)
+            } else {
+              console.log('[COMPRESSION] Final compressed size:', (compressedSize / 1024 / 1024).toFixed(2), 'MB')
+              resolve(compressedFile as File)
+            }
+          },
+          error: (error) => {
+            console.error('[COMPRESSION] Error:', error)
+            reject(error)
+          },
+        })
+      }
+      
+      // Start with reasonable quality and dimensions
+      tryCompress(0.8, 1920)
     })
   }, [])
 

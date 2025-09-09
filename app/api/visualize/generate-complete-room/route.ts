@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         generationType: 'complete-room',
         prompt: `Complete room with: ${productNames}`,
         inputImageUrl: 'data:' + roomImageMimeType + ';base64,' + roomImageBase64,
-        productIds: products.map(p => p.id).filter(Boolean),
+        productIds: products.map(p => String(p.id)).filter(Boolean),
         metadata: {
           products: products.map(p => ({
             id: p.id,
