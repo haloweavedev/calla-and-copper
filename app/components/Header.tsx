@@ -1,27 +1,16 @@
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { logout } from './actions'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { User } from '@supabase/supabase-js'
+import { useSession } from '@/lib/auth-client'
+import type { User } from '@/lib/auth'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const getUser = async () => {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      setIsLoading(false)
-    }
-    getUser()
-  }, [])
+  const { data: session, isPending } = useSession()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -31,7 +20,7 @@ export function Header() {
     setIsMenuOpen(false)
   }
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <nav className="px-4 sm:px-8 py-4 flex justify-between items-center w-full">
         <div className="w-12 h-12 bg-gray-200 animate-pulse rounded"></div>
@@ -55,9 +44,9 @@ export function Header() {
         <Link href="/#faq" className="text-md text-gray-600 px-4 hover:text-gray-800 transition-colors">
           FAQ
         </Link>
-        {user ? (
+        {session ? (
           <>
-            <span className="text-sm text-gray-600">{user.email}</span>
+            <span className="text-sm text-gray-600">{session.user.email}</span>
             <form action={logout}>
               <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors">
                 Logout
@@ -133,9 +122,9 @@ export function Header() {
               FAQ
             </Link>
             
-            {user ? (
+            {session ? (
               <div className="pt-4 border-t border-gray-200">
-                <div className="text-sm text-gray-600 mb-4">{user.email}</div>
+                <div className="text-sm text-gray-600 mb-4">{session.user.email}</div>
                 <form action={logout}>
                   <button className="w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors">
                     Logout

@@ -1,9 +1,10 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { auth } from '@/lib/auth'
 import { PrismaClient } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 
 const prisma = new PrismaClient()
 
@@ -40,12 +41,15 @@ interface OnboardingData {
 }
 
 export async function saveOnboardingData(data: OnboardingData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
 
-  if (!user) {
+  if (!session) {
     return redirect('/login')
   }
+
+  const user = session.user
 
   try {
     console.log('Saving onboarding data:', data, 'for user:', user.id)
@@ -58,7 +62,8 @@ export async function saveOnboardingData(data: OnboardingData) {
         update: {}, // No updates needed if user already exists
         create: {
           id: user.id,
-          email: user.email!,
+          email: user.email,
+          name: user.name,
         },
       })
 

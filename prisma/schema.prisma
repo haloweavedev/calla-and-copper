@@ -42,17 +42,62 @@ enum Budget {
 
 // MODELS
 
-// This model is a public representation of a user, linked to Supabase Auth.
 model User {
-  id          String        @id @default(uuid()) // This MUST match the UUID from auth.users
-  email       String        @unique
-  role        String        @default("USER") // e.g., "USER" or "ADMIN"
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  profile     UserProfile?
-  roomData    RoomData[]
-  snapshots   Snapshot[]
-  orders      Order[]
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  profile       UserProfile?
+  roomData      RoomData[]
+  snapshots     Snapshot[]
+  orders        Order[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  accountId         String
+  providerId        String
+  accessToken       String?
+  refreshToken      String?
+  idToken           String?
+  accessTokenExpiresAt DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope             String?
+  password          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, value])
 }
 
 model UserProfile {

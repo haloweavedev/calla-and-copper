@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createStorageClient } from '@/lib/supabase/storage'
 import { openai } from '@ai-sdk/openai'
 import { generateObject } from 'ai'
 import { z } from 'zod'
@@ -18,8 +18,8 @@ interface AnalyzeRoomParams {
 export async function analyzeAndMatch(params: AnalyzeRoomParams) {
   console.log('[SERVER] Received request to analyze room.');
   try {
-    const supabase = await createClient();
-    console.log('[SERVER] Supabase client created.');
+    const supabase = createStorageClient();
+    console.log('[SERVER] Supabase storage client created.');
 
     // 1. Convert image to base64 for Gemini usage later
     const arrayBuffer = await params.image.arrayBuffer();
