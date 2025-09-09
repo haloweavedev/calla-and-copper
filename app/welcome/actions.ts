@@ -8,6 +8,7 @@ import type { StyleSelection, RoomType, Budget } from '@/lib/store/demo-store'
 import { productCatalog } from '@/lib/mock-data/products'
 import { auth } from '@/lib/auth'
 import { PrismaClient } from '@prisma/client'
+import { randomUUID } from 'crypto'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import crypto from 'crypto'
@@ -157,12 +158,14 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     // Save upload record to database
     await prisma.userUpload.create({
       data: {
+        id: randomUUID(),
         userId: session.user.id,
         fileName: params.image.name,
         filePath: filePath,
         publicUrl: publicUrl,
         mimeType: mimeType,
         fileSize: params.image.size,
+        updatedAt: new Date(),
       }
     })
     console.log('[SERVER] Upload record saved to database.');

@@ -3,9 +3,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { useSession } from '@/lib/auth-client'
 import { authClient } from '@/lib/auth-client'
-import { ChevronDownIcon, EyeIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, ClockIcon, HomeIcon } from '@heroicons/react/24/outline'
 
 export default function DashboardLayout({
   children,
@@ -14,6 +15,7 @@ export default function DashboardLayout({
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const { data: session } = useSession()
+  const pathname = usePathname()
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen)
@@ -49,16 +51,24 @@ export default function DashboardLayout({
         <div className="flex-1 p-6">
           <nav className="space-y-2">
             <Link
-              href="/welcome"
-              className="flex items-center px-4 py-3 text-white bg-brand-gold rounded-lg hover:bg-brand-dark-brown transition-colors font-medium"
+              href="/dashboard"
+              className={`flex items-center px-4 py-3 rounded-lg transition-colors font-medium ${
+                pathname === '/dashboard' 
+                  ? 'text-white bg-brand-gold' 
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
             >
-              <EyeIcon className="w-5 h-5 mr-3" />
-              Visualise
+              <HomeIcon className="w-5 h-5 mr-3" />
+              Dashboard
             </Link>
             
             <Link
               href="/dashboard/history"
-              className="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+              className={`flex items-center px-4 py-3 rounded-lg transition-colors font-medium ${
+                pathname === '/dashboard/history' 
+                  ? 'text-white bg-brand-gold' 
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
             >
               <ClockIcon className="w-5 h-5 mr-3" />
               History
