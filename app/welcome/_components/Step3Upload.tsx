@@ -202,12 +202,49 @@ export function Step3Upload() {
     }
   }, [setData, compressImage])
 
-  const handleSelectPreviousImage = useCallback((upload: UserUpload) => {
-    setSelectedImageUrl(upload.publicUrl)
-    setPreview(upload.publicUrl)
-    setData({ uploadedFile: null }) // Clear current file upload
-    setError(null)
-  }, [setData])
+  const convertUrlToBase64 = useCallback(async (url: string, mimeType: string): Promise<string> => {
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const base64String = reader.result as string
+          // Remove the data URL prefix to get just the base64 data
+          const base64Data = base64String.split(',')[1]
+          resolve(base64Data)
+        }
+        reader.onerror = reject
+        reader.readAsDataURL(blob)
+      })
+    } catch (error) {
+      console.error('Failed to convert URL to base64:', error)
+      throw error
+    }
+  }, [])
+
+  const handleSelectPreviousImage = useCallback(async (upload: UserUpload) => {
+    try {
+      setSelectedImageUrl(upload.publicUrl)
+      setPreview(upload.publicUrl)
+      setData({ uploadedFile: null }) // Clear current file upload
+      setError(null)
+
+      // Convert the public URL to base64 and update demo store
+      console.log('[CLIENT] Converting gallery image to base64 for AI generation...')
+      const base64Data = await convertUrlToBase64(upload.publicUrl, upload.mimeType)
+      
+      // Update demo store with the gallery image data
+      useDemoStore.getState().setUploadedFileUrl(upload.publicUrl)
+      useDemoStore.getState().setUploadedFileData(base64Data, upload.mimeType)
+      
+      console.log('[CLIENT] Gallery image data set in demo store')
+    } catch (error) {
+      console.error('Failed to process gallery image:', error)
+      setError('Failed to process selected image. Please try again.')
+    }
+  }, [setData, convertUrlToBase64])
 
   const handleDeleteUpload = useCallback(async (uploadId: string) => {
     setIsDeletingId(uploadId)
