@@ -476,7 +476,11 @@ export function Step3Upload() {
         mimeType: ('mimeType' in result ? result.mimeType : null) || useDemoStore.getState().uploadedFileMimeType
       })
       
-      setData({ analysisResult: result.analysis, recommendations: result.recommendations })
+      setData({ 
+        analysisResult: result.analysis, 
+        recommendations: result.recommendations,
+        creationId: result.creationId 
+      })
       useDemoStore.getState().setUploadedFileUrl(result.publicUrl!)
       
       if ('base64String' in result && result.base64String && 'mimeType' in result && result.mimeType && 

@@ -10,6 +10,7 @@ import { auth } from '@/lib/auth'
 import { PrismaClient } from '@prisma/client'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
+import crypto from 'crypto'
 
 interface AnalyzeRoomParams {
   style: StyleSelection | null;
@@ -226,8 +227,51 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
         ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
         : productCatalog.slice(0, 3) // If no style, return top 3 products
 
+    // 7. Save the complete creation session to database
+    let creationId = crypto.randomUUID();
+    try {
+      console.log('[SERVER] Saving creation session to database...');
+      
+      await prisma.creation.create({
+        data: {
+          id: creationId,
+          userId: session.user.id,
+          style: params.style || null,
+          roomType: params.roomType,
+          budget: params.budget,
+          lifestyleTags: params.lifestyleTags,
+          styleProfile: null, // Will be added later if needed
+          originalImageUrl: publicUrl,
+          originalImageBase64: base64String,
+          originalImageMimeType: mimeType,
+          analysisResult: analysis,
+          recommendedProductIds: finalRecommendations.map(p => p.id.toString()),
+          recommendationsData: finalRecommendations,
+          generationStatus: 'not_generated',
+          name: `${params.style || 'AI-Styled'} ${params.roomType} - ${new Date().toLocaleDateString()}`,
+          notes: null,
+          isPublic: false,
+          updatedAt: new Date()
+        }
+      });
+      console.log('[SERVER] Creation session saved with ID:', creationId);
+    } catch (dbError) {
+      console.error('[SERVER] Failed to save creation to database:', dbError);
+      // Don't fail the entire flow if database save fails, just log the error
+      // User can still see results, just won't be saved to history
+      creationId = Date.now().toString(); // Fallback ID for redirect
+    }
+
     console.log('[SERVER] Analysis and matching complete. Returning results.');
-    return { analysis, recommendations: finalRecommendations, publicUrl, base64String, mimeType, error: null };
+    return { 
+      analysis, 
+      recommendations: finalRecommendations, 
+      publicUrl, 
+      base64String, 
+      mimeType, 
+      creationId, 
+      error: null 
+    };
 
   } catch (e: unknown) {
     console.error('[SERVER] A critical error occurred in analyzeAndMatch:', e);
@@ -344,8 +388,49 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
         ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
         : productCatalog.slice(0, 3) // If no style, return top 3 products
 
+    // 6. Save the complete creation session to database
+    let creationId = crypto.randomUUID();
+    try {
+      console.log('[SERVER] Saving existing image creation session to database...');
+      const prisma = new PrismaClient();
+      
+      await prisma.creation.create({
+        data: {
+          id: creationId,
+          userId: session.user.id,
+          style: params.style || null,
+          roomType: params.roomType,
+          budget: params.budget,
+          lifestyleTags: params.lifestyleTags,
+          styleProfile: null,
+          originalImageUrl: params.imageUrl,
+          originalImageBase64: null, // Not available for existing images
+          originalImageMimeType: null,
+          analysisResult: analysis,
+          recommendedProductIds: finalRecommendations.map(p => p.id.toString()),
+          recommendationsData: finalRecommendations,
+          generationStatus: 'not_generated',
+          name: `${params.style || 'AI-Styled'} ${params.roomType} - ${new Date().toLocaleDateString()}`,
+          notes: null,
+          isPublic: false,
+          updatedAt: new Date()
+        }
+      });
+      console.log('[SERVER] Existing image creation session saved with ID:', creationId);
+      await prisma.$disconnect();
+    } catch (dbError) {
+      console.error('[SERVER] Failed to save existing image creation to database:', dbError);
+      creationId = Date.now().toString(); // Fallback ID
+    }
+
     console.log('[SERVER] Analysis and matching complete. Returning results.');
-    return { analysis, recommendations: finalRecommendations, publicUrl: params.imageUrl, error: null };
+    return { 
+      analysis, 
+      recommendations: finalRecommendations, 
+      publicUrl: params.imageUrl, 
+      creationId, 
+      error: null 
+    };
 
   } catch (e: unknown) {
     console.error('[SERVER] A critical error occurred in analyzeExistingImage:', e);

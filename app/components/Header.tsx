@@ -20,15 +20,6 @@ export function Header() {
     setIsMenuOpen(false)
   }
 
-  if (isPending) {
-    return (
-      <nav className="px-4 sm:px-8 py-4 flex justify-between items-center w-full">
-        <div className="w-12 h-12 bg-gray-200 animate-pulse rounded"></div>
-        <div className="w-8 h-8 bg-gray-200 animate-pulse rounded"></div>
-      </nav>
-    )
-  }
-
   return (
     <nav className="px-4 sm:px-8 py-4 flex justify-between items-center w-full relative">
       {/* Logo */}
@@ -44,7 +35,12 @@ export function Header() {
         <Link href="/#faq" className="text-md text-gray-600 px-4 hover:text-gray-800 transition-colors">
           FAQ
         </Link>
-        {session ? (
+        {isPending ? (
+          <div className="flex items-center gap-2">
+            <div className="w-16 h-8 bg-gray-200 animate-pulse rounded"></div>
+            <div className="w-20 h-8 bg-gray-200 animate-pulse rounded-full"></div>
+          </div>
+        ) : session ? (
           <Link
             href="/dashboard"
             className="px-4 py-2 text-md font-medium text-white bg-brand-gold rounded-full hover:bg-brand-dark-brown transition-colors"
@@ -120,7 +116,12 @@ export function Header() {
               FAQ
             </Link>
             
-            {session ? (
+            {isPending ? (
+              <div className="pt-4 border-t border-gray-200 space-y-3">
+                <div className="w-full h-10 bg-gray-200 animate-pulse rounded-full"></div>
+                <div className="w-full h-10 bg-gray-200 animate-pulse rounded-full"></div>
+              </div>
+            ) : session ? (
               <div className="pt-4 border-t border-gray-200">
                 <Link
                   href="/dashboard"

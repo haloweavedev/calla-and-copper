@@ -15,25 +15,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { generationId, status, outputImageUrl } = await request.json()
+    const { creationId, generationStatus, generatedImageUrl } = await request.json()
 
-    if (!generationId) {
-      return NextResponse.json({ error: 'Generation ID is required' }, { status: 400 })
+    if (!creationId) {
+      return NextResponse.json({ error: 'Creation ID is required' }, { status: 400 })
     }
 
-    const imageGeneration = await prisma.imageGeneration.updateMany({
+    const creation = await prisma.creation.updateMany({
       where: {
-        id: generationId,
-        userId: session.user.id // Ensure user owns the generation
+        id: creationId,
+        userId: session.user.id // Ensure user owns the creation
       },
       data: {
-        status,
-        ...(outputImageUrl && { outputImageUrl })
+        generationStatus,
+        ...(generatedImageUrl && { generatedImageUrl })
       }
     })
 
-    if (imageGeneration.count === 0) {
-      return NextResponse.json({ error: 'Image generation not found or not authorized' }, { status: 404 })
+    if (creation.count === 0) {
+      return NextResponse.json({ error: 'Creation not found or not authorized' }, { status: 404 })
     }
 
     return NextResponse.json({ success: true })

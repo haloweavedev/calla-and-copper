@@ -28,6 +28,7 @@ type DemoState = {
     price: number
     imageUrl: string
   }> | null
+  creationId: string | null
 }
 
 type DemoActions = {
@@ -51,6 +52,7 @@ const initialState: DemoState = {
   uploadedFileMimeType: null,
   analysisResult: null,
   recommendations: null,
+  creationId: null,
 }
 
 export const useDemoStore = create<DemoState & DemoActions>()(

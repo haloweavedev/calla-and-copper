@@ -20,45 +20,31 @@ export async function GET(request: Request) {
     const id = searchParams.get('id')
 
     if (id) {
-      // Get specific snapshot by ID
-      const snapshot = await prisma.snapshot.findFirst({
+      // Get specific creation by ID
+      const creation = await prisma.creation.findFirst({
         where: {
           id: id,
           userId: session.user.id
-        },
-        include: {
-          snapshotProducts: {
-            include: {
-              product: true
-            }
-          }
         }
       })
 
-      if (!snapshot) {
-        return NextResponse.json({ error: 'Snapshot not found' }, { status: 404 })
+      if (!creation) {
+        return NextResponse.json({ error: 'Creation not found' }, { status: 404 })
       }
 
-      return NextResponse.json(snapshot)
+      return NextResponse.json(creation)
     } else {
-      // Get all snapshots for the user
-      const snapshots = await prisma.snapshot.findMany({
+      // Get all creations for the user
+      const creations = await prisma.creation.findMany({
         where: {
           userId: session.user.id
-        },
-        include: {
-          snapshotProducts: {
-            include: {
-              product: true
-            }
-          }
         },
         orderBy: {
           createdAt: 'desc'
         }
       })
 
-      return NextResponse.json(snapshots)
+      return NextResponse.json(creations)
     }
   } catch (error) {
     console.error('Error fetching creations:', error)
@@ -78,14 +64,15 @@ export async function POST(request: Request) {
 
     const body = await request.json()
     
-    const snapshot = await prisma.snapshot.create({
+    const creation = await prisma.creation.create({
       data: {
         ...body,
-        userId: session.user.id
+        userId: session.user.id,
+        id: body.id || crypto.randomUUID() // Generate ID if not provided
       }
     })
 
-    return NextResponse.json(snapshot)
+    return NextResponse.json(creation)
   } catch (error) {
     console.error('Error creating creation:', error)
     return NextResponse.json({ error: 'Failed to create creation' }, { status: 500 })

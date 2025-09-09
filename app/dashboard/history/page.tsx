@@ -4,20 +4,30 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-interface CreationSessionSummary {
+interface CreationData {
   id: string
   name?: string
   style?: string
   roomType?: string
   budget?: string
+  lifestyleTags: string[]
+  styleProfile?: any
   originalImageUrl?: string
+  originalImageBase64?: string
+  originalImageMimeType?: string
+  analysisResult?: any
+  recommendedProductIds: string[]
+  recommendationsData?: any[]
   generatedImageUrl?: string
   generationStatus: string
+  notes?: string
+  isPublic: boolean
   createdAt: string
+  updatedAt: string
 }
 
 export default function HistoryPage() {
-  const [sessions, setSessions] = useState<CreationSessionSummary[]>([])
+  const [sessions, setSessions] = useState<CreationData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
