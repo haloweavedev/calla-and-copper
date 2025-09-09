@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
         userId: session.user.id,
         generationType: 'single-product',
         prompt: `Add ${productName} (${productCategory}) to room`,
-        inputImageUrl: 'data:' + roomImageMimeType + ';base64,' + roomImageBase64,
-        productIds: productId ? [productId] : [],
+        inputImageUrl: `data:${roomImageMimeType};base64,[BASE64_DATA]`, // Don't store full base64 to avoid huge logs
+        productIds: productId ? [String(productId)] : [],
         metadata: {
           productName,
           productCategory,
@@ -57,26 +57,23 @@ export async function POST(request: NextRequest) {
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
 
     // Add personalization context
-    let personalizationContext = ''
+    let styleContext = ''
     if (userContext) {
-      const { styleProfile, analysisResult, lifestyleTags, roomType } = userContext
-      
-      // Extract style information  
-      const primaryStyle = styleProfile?.styleProfile?.styleHierarchy?.foundation || analysisResult?.tags?.find(tag => tag.includes('vintage') || tag.includes('modern') || tag.includes('boho')) || 'harmonious'
-      
-      personalizationContext = `Style the placement for a ${primaryStyle} aesthetic that feels cozy and inviting. `
+      const { styleProfile, lifestyleTags } = userContext
+      const primaryStyle = styleProfile?.styleProfile?.styleHierarchy?.foundation || 'cozy and inviting'
+      styleContext = ` in a ${primaryStyle} style`
       
       if (lifestyleTags?.length > 0) {
-        personalizationContext += `Consider the lifestyle needs: ${lifestyleTags.join(', ')}. `
-      }
-      
-      if (roomType) {
-        personalizationContext += `Optimize for a ${roomType} layout. `
+        styleContext += ` that suits a ${lifestyleTags.join(', ').toLowerCase()} lifestyle`
       }
     }
 
-    // Create specific placement prompt with personalization
-    let promptText = `Using the first image of the room as the base, take the ${productName} from the second image and add it to the room in a natural, appropriate location. Keep the walls, flooring, lighting, windows, and architectural details exactly the same as the first room image. ${personalizationContext}Place the furniture thoughtfully to enhance the room's functionality and aesthetic appeal.`
+    // Simple, natural prompt following Gemini's best practices
+    let promptText = `Create a new image by combining the room from the first image with the ${productName} from the second image. Add the ${productName} to the room naturally and tastefully${styleContext}.
+
+Keep the room's walls, flooring, lighting, windows, and all architectural details exactly the same as the original room image. You may remove or replace any existing furniture if needed to make space for the new piece. Place it where it looks most natural and functional.
+
+The final image should show the same room with the ${productName} integrated seamlessly.`
 
     console.log('[API] Sending personalized prompt to Gemini:', promptText)
 

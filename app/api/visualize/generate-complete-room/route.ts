@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         userId: session.user.id,
         generationType: 'complete-room',
         prompt: `Complete room with: ${productNames}`,
-        inputImageUrl: 'data:' + roomImageMimeType + ';base64,' + roomImageBase64,
+        inputImageUrl: `data:${roomImageMimeType};base64,[BASE64_DATA]`, // Don't store full base64 to avoid huge logs
         productIds: products.map(p => String(p.id)).filter(Boolean),
         metadata: {
           products: products.map(p => ({
@@ -60,59 +60,27 @@ export async function POST(request: NextRequest) {
 
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
 
-    // Create specific replacement instructions for each furniture category
-    const sofaProduct = products.find(p => p.category === 'Sofas')
-    const tableProduct = products.find(p => p.category === 'Tables')  
-    const chairProduct = products.find(p => p.category === 'Chairs')
-    const storageProduct = products.find(p => p.category === 'Storage')
-    const rugProduct = products.find(p => p.category === 'Rugs')
-    const decorProduct = products.find(p => p.category === 'Decor')
-
-    let replacementInstructions = []
-    let imageIndex = 1 // Start from 1 since 0 is the room image
+    // Create a simple, natural prompt following Gemini's best practices
+    const productNames = products.map(p => p.name).join(', ')
     
-    if (sofaProduct && imageIndex <= 3) {
-      replacementInstructions.push(`take the ${sofaProduct.name} from image ${imageIndex + 1} and place it in the center of the room facing the existing sideboard`)
-      imageIndex++
-    }
-    if (tableProduct && imageIndex <= 3) {
-      replacementInstructions.push(`take the ${tableProduct.name} from image ${imageIndex + 1} and put it in front of the sofa as a coffee table`)
-      imageIndex++
-    }
-    if (chairProduct && imageIndex <= 3) {
-      replacementInstructions.push(`take the ${chairProduct.name} from image ${imageIndex + 1} and position it to the side of the room as an accent chair`)
-      imageIndex++
-    }
-    if (storageProduct && storageProduct.name !== 'Walnut Record Console' && imageIndex <= 3) {
-      replacementInstructions.push(`replace the existing sideboard with the ${storageProduct.name} from one of the product images`)
-    }
-    if (rugProduct) replacementInstructions.push(`add the ${rugProduct.name} under the seating area`)
-    if (decorProduct && decorProduct.name !== 'Ornate Gilt Mirror') replacementInstructions.push(`replace the round mirror with the ${decorProduct.name}`)
-    
-    // Add personalization context from user analysis
-    let personalizationContext = ''
+    // Add personalization context
+    let styleContext = ''
     if (userContext) {
-      const { styleProfile, analysisResult, lifestyleTags, roomType, budget } = userContext
-      
-      // Extract style information
-      const primaryStyle = styleProfile?.styleProfile?.styleHierarchy?.foundation || analysisResult?.tags?.find(tag => tag.includes('vintage') || tag.includes('modern') || tag.includes('boho')) || 'harmonious'
-      
-      // Create personalization details
-      personalizationContext = `Style the arrangement for a ${primaryStyle} aesthetic that feels cozy and inviting. `
+      const { styleProfile, lifestyleTags } = userContext
+      const primaryStyle = styleProfile?.styleProfile?.styleHierarchy?.foundation || 'cozy and inviting'
+      styleContext = ` in a ${primaryStyle} style`
       
       if (lifestyleTags?.length > 0) {
-        personalizationContext += `Consider the lifestyle needs: ${lifestyleTags.join(', ')}. `
+        styleContext += ` that suits a ${lifestyleTags.join(', ').toLowerCase()} lifestyle`
       }
-      
-      if (roomType) {
-        personalizationContext += `Optimize the layout and flow for a ${roomType}. `
-      }
-      
-      personalizationContext += `Arrange the ${products.length} products together harmoniously to create a cohesive, lived-in feeling. `
     }
 
-    // Reference images specifically like the docs composition example with personalization
-    let promptText = `Using the first image of the room as the base, make these specific changes: ${replacementInstructions.join(', ')}. Keep the walls, flooring, lighting, windows, and architectural details exactly the same as the first image. Use the furniture from the subsequent product images and arrange them in a natural, livable way. ${personalizationContext}Make the space feel warm, inviting, and perfectly suited to the user's lifestyle and aesthetic preferences.`
+    // Simple, natural prompt that lets Gemini decide placement
+    let promptText = `Create a new image by combining the room from the first image with the furniture pieces from the following product images. Add the ${productNames} to the room naturally and tastefully${styleContext}. 
+
+Keep the room's walls, flooring, lighting, windows, and all architectural details exactly the same as the original room image. You may remove or replace any existing furniture if needed to make space for the new pieces. Arrange everything in a way that looks natural and livable.
+
+The final image should show the same room with the new furniture pieces integrated seamlessly.`
 
     console.log('[API] Sending room editing prompt to Gemini:', promptText)
     console.log('[API] Personalization details:')
@@ -125,7 +93,6 @@ export async function POST(request: NextRequest) {
     }
     console.log('[API] Room image data - MIME type:', roomImageMimeType)
     console.log('[API] Room image data - Base64 length:', roomImageBase64?.length)
-    console.log('[API] Room image data - First 50 chars:', roomImageBase64?.substring(0, 50))
 
     // Following docs multi-image composition - room image first, then product images, then text
     const contentParts = [
