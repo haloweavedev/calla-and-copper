@@ -25,7 +25,7 @@ export function LoginForm() {
       if (error) {
         setError(error.message)
       } else {
-        router.push('/dashboard')
+        router.push('/welcome')
       }
     } catch (err) {
       setError('An unexpected error occurred')

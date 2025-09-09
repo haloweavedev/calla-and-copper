@@ -1,29 +1,17 @@
 import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  // Create test user
-  const hashedPassword = await bcrypt.hash('password123', 10)
+  console.log('Clearing existing data...')
   
-  const testUser = await prisma.user.upsert({
-    where: { email: 'test@example.com' },
-    update: {},
-    create: {
-      email: 'test@example.com',
-      name: 'Test User',
-      accounts: {
-        create: {
-          accountId: 'email-account',
-          providerId: 'credential',
-          password: hashedPassword,
-        },
-      },
-    },
-  })
-
-  console.log('Created test user:', testUser)
+  // Clear existing data
+  await prisma.account.deleteMany()
+  await prisma.session.deleteMany()
+  await prisma.user.deleteMany()
+  
+  console.log('Database cleared. Use the register page to create a test user.')
+  console.log('Or test with: email: test@example.com, password: password123')
 }
 
 main()

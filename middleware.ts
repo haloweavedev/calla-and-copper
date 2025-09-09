@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
   const sessionToken = request.cookies.get('better-auth.session_token')?.value
 
   // Protected routes that require authentication
-  const protectedRoutes = ['/dashboard', '/onboarding', '/admin']
+  const protectedRoutes = ['/welcome', '/admin']
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
   )
@@ -15,9 +15,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // If logged in and trying to access login page, redirect to dashboard
-  if (sessionToken && request.nextUrl.pathname === '/login') {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+  // If logged in and trying to access login/register pages, redirect to welcome
+  if (sessionToken && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register')) {
+    return NextResponse.redirect(new URL('/welcome', request.url))
   }
 
   return NextResponse.next()
