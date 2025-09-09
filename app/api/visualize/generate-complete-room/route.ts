@@ -28,31 +28,95 @@ export async function POST(request: NextRequest) {
     const decorProduct = products.find(p => p.category === 'Decor')
 
     let replacementInstructions = []
-    if (sofaProduct) replacementInstructions.push(`place the ${sofaProduct.name} in the center of the room facing the existing sideboard`)
-    if (tableProduct) replacementInstructions.push(`put the ${tableProduct.name} in front of the sofa as a coffee table`)
-    if (chairProduct) replacementInstructions.push(`position the ${chairProduct.name} to the side of the room as an accent chair`)
-    if (storageProduct && storageProduct.name !== 'Walnut Record Console') replacementInstructions.push(`replace the existing sideboard with the ${storageProduct.name}`)
+    let imageIndex = 1 // Start from 1 since 0 is the room image
+    
+    if (sofaProduct && imageIndex <= 3) {
+      replacementInstructions.push(`take the ${sofaProduct.name} from image ${imageIndex + 1} and place it in the center of the room facing the existing sideboard`)
+      imageIndex++
+    }
+    if (tableProduct && imageIndex <= 3) {
+      replacementInstructions.push(`take the ${tableProduct.name} from image ${imageIndex + 1} and put it in front of the sofa as a coffee table`)
+      imageIndex++
+    }
+    if (chairProduct && imageIndex <= 3) {
+      replacementInstructions.push(`take the ${chairProduct.name} from image ${imageIndex + 1} and position it to the side of the room as an accent chair`)
+      imageIndex++
+    }
+    if (storageProduct && storageProduct.name !== 'Walnut Record Console' && imageIndex <= 3) {
+      replacementInstructions.push(`replace the existing sideboard with the ${storageProduct.name} from one of the product images`)
+    }
     if (rugProduct) replacementInstructions.push(`add the ${rugProduct.name} under the seating area`)
     if (decorProduct && decorProduct.name !== 'Ornate Gilt Mirror') replacementInstructions.push(`replace the round mirror with the ${decorProduct.name}`)
     
-    // Much more specific placement instructions following docs examples
-    let promptText = `Using the provided image of the room, make these specific changes: ${replacementInstructions.join(', ')}. Keep the walls, flooring, lighting, windows, and architectural details exactly the same. Arrange the furniture in a natural, livable way that makes sense for the room's layout and proportions.`
+    // Add personalization context from user analysis
+    let personalizationContext = ''
+    if (userContext) {
+      const { styleProfile, analysisResult, lifestyleTags, roomType, budget } = userContext
+      
+      // Extract style information
+      const primaryStyle = styleProfile?.styleProfile?.styleHierarchy?.foundation || analysisResult?.tags?.find(tag => tag.includes('vintage') || tag.includes('modern') || tag.includes('boho')) || 'harmonious'
+      
+      // Create personalization details
+      personalizationContext = `Style the arrangement for a ${primaryStyle} aesthetic that feels cozy and inviting. `
+      
+      if (lifestyleTags?.length > 0) {
+        personalizationContext += `Consider the lifestyle needs: ${lifestyleTags.join(', ')}. `
+      }
+      
+      if (roomType) {
+        personalizationContext += `Optimize the layout and flow for a ${roomType}. `
+      }
+      
+      personalizationContext += `Arrange the ${products.length} products together harmoniously to create a cohesive, lived-in feeling. `
+    }
+
+    // Reference images specifically like the docs composition example with personalization
+    let promptText = `Using the first image of the room as the base, make these specific changes: ${replacementInstructions.join(', ')}. Keep the walls, flooring, lighting, windows, and architectural details exactly the same as the first image. Use the furniture from the subsequent product images and arrange them in a natural, livable way. ${personalizationContext}Make the space feel warm, inviting, and perfectly suited to the user's lifestyle and aesthetic preferences.`
 
     console.log('[API] Sending room editing prompt to Gemini:', promptText)
+    console.log('[API] Personalization details:')
+    console.log(`[API] • ${products.length} products styled together harmoniously`)
+    if (userContext) {
+      const primaryStyle = userContext.styleProfile?.styleProfile?.styleHierarchy?.foundation || userContext.analysisResult?.tags?.find(tag => tag.includes('vintage') || tag.includes('modern') || tag.includes('boho')) || 'harmonious'
+      console.log(`[API] • Designed for ${primaryStyle} aesthetic`)
+      if (userContext.roomType) console.log(`[API] • Optimized for ${userContext.roomType} layout and flow`)
+      if (userContext.lifestyleTags?.length > 0) console.log(`[API] • Considers lifestyle: ${userContext.lifestyleTags.join(', ')}`)
+    }
     console.log('[API] Room image data - MIME type:', roomImageMimeType)
     console.log('[API] Room image data - Base64 length:', roomImageBase64?.length)
     console.log('[API] Room image data - First 50 chars:', roomImageBase64?.substring(0, 50))
 
-    // Following docs EXACTLY - only the room image, then text prompt
+    // Following docs multi-image composition - room image first, then product images, then text
     const contentParts = [
       {
         inlineData: {
           mimeType: roomImageMimeType,
           data: roomImageBase64,
         },
-      },
-      { text: promptText }
+      }
     ]
+
+    // Add product images for visual reference (like the docs composition example)
+    for (const product of products.slice(0, 3)) { // Limit to 3 products for better performance
+      try {
+        const response = await fetch(product.imageUrl)
+        const arrayBuffer = await response.arrayBuffer()
+        const base64ProductImage = Buffer.from(arrayBuffer).toString('base64')
+        const mimeType = response.headers.get('content-type') || 'image/jpeg'
+        
+        contentParts.push({
+          inlineData: {
+            mimeType: mimeType,
+            data: base64ProductImage,
+          },
+        })
+      } catch (error) {
+        console.error(`[API] Failed to fetch product image: ${product.imageUrl}`, error)
+      }
+    }
+
+    // Add the specific placement instructions referencing the images
+    contentParts.push({ text: promptText })
 
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-image-preview' })
     const result = await model.generateContent(contentParts)
