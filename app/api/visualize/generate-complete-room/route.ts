@@ -91,8 +91,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Use advanced composition pattern from Gemini docs for combining multiple images
-    let promptText = `Create a new image by combining the elements from the provided images. Take the room from the first image and place the furniture from the product images naturally in the space${styleContext}. The final image should show the same room with the new furniture integrated seamlessly.`
+    // Use proper semantic masking to edit the existing room image
+    let promptText = `Using the provided room image, add the furniture pieces from the product images to the available floor space. Place each item where it would naturally belong: ${products.map(p => `${p.name} (${p.category})`).join(', ')}. Keep all walls, flooring, windows, lighting, architectural details, and existing built-in features completely unchanged${styleContext}. Only add the new furniture to empty areas of the floor.`
 
     console.log('[API] Sending room editing prompt to Gemini:', promptText)
     console.log('[API] Personalization details:')

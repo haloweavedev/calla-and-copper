@@ -68,8 +68,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Use semantic masking pattern from Gemini docs for precise image editing
-    let promptText = `Using the provided image, add the ${productName} from the second image to the empty floor space in the room. Keep everything else in the image exactly the same, preserving the original style, lighting, and composition${styleContext}.`
+    // Use proper semantic masking to edit only the floor space
+    let promptText = `Using the provided room image, place the ${productName} from the product image onto the available floor space where it would naturally belong in a ${productCategory.toLowerCase()} arrangement. Keep all walls, flooring texture, windows, lighting, ceiling, architectural details, and any existing furniture completely unchanged${styleContext}. Only add the new ${productName} to an appropriate empty floor area.`
 
     console.log('[API] Sending personalized prompt to Gemini:', promptText)
 
