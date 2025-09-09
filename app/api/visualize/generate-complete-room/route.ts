@@ -125,9 +125,9 @@ export async function POST(request: NextRequest) {
       }
     ]
 
-    // Add product images for visual reference (like the docs composition example)
-    console.log('[API] 🛋️ Fetching product images for Gemini (max 3)...')
-    for (const product of products.slice(0, 3)) { // Limit to 3 products for better performance
+    // Add product images for visual reference - LIMIT TO 2 to stay within Gemini's 3-image limit
+    console.log('[API] 🛋️ Fetching product images for Gemini (max 2 to preserve room)...')
+    for (const product of products.slice(0, 2)) { // Limit to 2 products to stay within 3 total images
       try {
         console.log(`[API] 🍇 Fetching product image: ${product.name} - ${product.imageUrl}`)
         const response = await fetch(product.imageUrl)
@@ -152,15 +152,26 @@ export async function POST(request: NextRequest) {
       totalParts: contentParts.length,
       roomImagePart: 1,
       productImageParts: contentParts.length - 2, // -2 for room image and text parts
-      textParts: 1
+      textParts: 1,
+      withinLimit: contentParts.length <= 3 ? '✅ WITHIN 3-IMAGE LIMIT' : '❌ EXCEEDS LIMIT'
     })
 
     // Add the specific placement instructions referencing the images
     contentParts.push({ text: promptText })
 
+    // HARD LIMIT: Only send first 3 parts to Gemini (stay within limit)
+    const limitedContentParts = contentParts.slice(0, 3)
+    console.log('[API] 🚨 ENFORCING 3-IMAGE LIMIT:', {
+      originalParts: contentParts.length,
+      limitedParts: limitedContentParts.length,
+      parts: limitedContentParts.map((part, i) => 
+        'text' in part ? `${i}: TEXT` : `${i}: IMAGE`
+      )
+    })
+
     console.log('[API] 🤖 Sending request to Gemini 2.5 Flash Image Preview...')
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-image-preview' })
-    const result = await model.generateContent(contentParts)
+    const result = await model.generateContent(limitedContentParts)
 
     console.log('[API] ✅ Gemini generation completed, checking for image parts...')
 
