@@ -1,13 +1,30 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@/lib/auth'
+import { PrismaClient } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
+  const prisma = new PrismaClient()
+  const startTime = Date.now()
+  let generationRecord: any = null
+
   try {
+    // Get authenticated user
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    })
+
+    if (!session) {
+      await prisma.$disconnect()
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const body = await request.json()
-    const { roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName, userContext } = body
+    const { roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName, productId, userContext } = body
 
     // Validate all required fields are present
     if (!roomImageBase64 || !roomImageMimeType || !productImageUrl || !productCategory || !productName) {
+      await prisma.$disconnect()
       return NextResponse.json(
         { error: 'Missing required fields: roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName' },
         { status: 400 }
@@ -16,6 +33,26 @@ export async function POST(request: NextRequest) {
 
     console.log('[API] Generating image with Gemini for product category:', productCategory)
     console.log('[API] User context provided:', !!userContext)
+
+    // Create generation record
+    generationRecord = await prisma.imageGeneration.create({
+      data: {
+        userId: session.user.id,
+        generationType: 'single-product',
+        prompt: `Add ${productName} (${productCategory}) to room`,
+        inputImageUrl: 'data:' + roomImageMimeType + ';base64,' + roomImageBase64,
+        productIds: productId ? [productId] : [],
+        metadata: {
+          productName,
+          productCategory,
+          productImageUrl,
+          userContext: userContext || null,
+        },
+        status: 'pending',
+      },
+    })
+
+    console.log('[API] Generation record created:', generationRecord.id)
 
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
 
@@ -96,13 +133,47 @@ export async function POST(request: NextRequest) {
 
     console.log('[API] Image generation successful, returning data URL')
 
-    return NextResponse.json({ imageUrl: dataUrl }, { status: 200 })
+    // Update generation record with success
+    if (generationRecord) {
+      await prisma.imageGeneration.update({
+        where: { id: generationRecord.id },
+        data: {
+          status: 'completed',
+          outputImageUrl: dataUrl,
+          processingTimeMs: Date.now() - startTime,
+        },
+      })
+    }
+
+    return NextResponse.json({ 
+      imageUrl: dataUrl,
+      generationId: generationRecord?.id 
+    }, { status: 200 })
 
   } catch (error) {
     console.error('[API] Error in generate-image route:', error)
+    
+    // Update generation record with error
+    if (generationRecord) {
+      try {
+        await prisma.imageGeneration.update({
+          where: { id: generationRecord.id },
+          data: {
+            status: 'failed',
+            errorMessage: error instanceof Error ? error.message : 'Unknown error',
+            processingTimeMs: Date.now() - startTime,
+          },
+        })
+      } catch (updateError) {
+        console.error('[API] Failed to update generation record:', updateError)
+      }
+    }
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }

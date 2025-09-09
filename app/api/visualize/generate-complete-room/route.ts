@@ -1,13 +1,30 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@/lib/auth'
+import { PrismaClient } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
+  const prisma = new PrismaClient()
+  const startTime = Date.now()
+  let generationRecord: any = null
+
   try {
+    // Get authenticated user
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    })
+
+    if (!session) {
+      await prisma.$disconnect()
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const body = await request.json()
     const { roomImageBase64, roomImageMimeType, products, userContext } = body
 
     // Validate all required fields are present
     if (!roomImageBase64 || !roomImageMimeType || !products || !Array.isArray(products) || products.length === 0) {
+      await prisma.$disconnect()
       return NextResponse.json(
         { error: 'Missing required fields: roomImageBase64, roomImageMimeType, products (array)' },
         { status: 400 }
@@ -16,6 +33,30 @@ export async function POST(request: NextRequest) {
 
     console.log('[API] Generating complete room with', products.length, 'products')
     console.log('[API] User context provided:', !!userContext)
+
+    // Create generation record
+    const productNames = products.map(p => p.name).join(', ')
+    generationRecord = await prisma.imageGeneration.create({
+      data: {
+        userId: session.user.id,
+        generationType: 'complete-room',
+        prompt: `Complete room with: ${productNames}`,
+        inputImageUrl: 'data:' + roomImageMimeType + ';base64,' + roomImageBase64,
+        productIds: products.map(p => p.id).filter(Boolean),
+        metadata: {
+          products: products.map(p => ({
+            id: p.id,
+            name: p.name,
+            category: p.category,
+            imageUrl: p.imageUrl,
+          })),
+          userContext: userContext || null,
+        },
+        status: 'pending',
+      },
+    })
+
+    console.log('[API] Generation record created:', generationRecord.id)
 
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
 
@@ -149,13 +190,47 @@ export async function POST(request: NextRequest) {
 
     console.log('[API] Complete room generation successful, returning data URL')
 
-    return NextResponse.json({ imageUrl: dataUrl }, { status: 200 })
+    // Update generation record with success
+    if (generationRecord) {
+      await prisma.imageGeneration.update({
+        where: { id: generationRecord.id },
+        data: {
+          status: 'completed',
+          outputImageUrl: dataUrl,
+          processingTimeMs: Date.now() - startTime,
+        },
+      })
+    }
+
+    return NextResponse.json({ 
+      imageUrl: dataUrl,
+      generationId: generationRecord?.id 
+    }, { status: 200 })
 
   } catch (error) {
     console.error('[API] Error in generate-complete-room route:', error)
+    
+    // Update generation record with error
+    if (generationRecord) {
+      try {
+        await prisma.imageGeneration.update({
+          where: { id: generationRecord.id },
+          data: {
+            status: 'failed',
+            errorMessage: error instanceof Error ? error.message : 'Unknown error',
+            processingTimeMs: Date.now() - startTime,
+          },
+        })
+      } catch (updateError) {
+        console.error('[API] Failed to update generation record:', updateError)
+      }
+    }
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }

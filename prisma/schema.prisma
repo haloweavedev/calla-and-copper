@@ -57,6 +57,7 @@ model User {
   snapshots     Snapshot[]
   orders        Order[]
   uploads       UserUpload[]
+  imageGenerations ImageGeneration[]
 }
 
 model Session {
@@ -224,4 +225,21 @@ model UserUpload {
   fileSize    Int?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model ImageGeneration {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generationType  String   // "single-product" or "complete-room"
+  prompt          String   // The prompt used for generation
+  inputImageUrl   String?  // Original room image URL
+  outputImageUrl  String?  // Generated image data URL or storage path
+  productIds      String[] // IDs of products used in generation
+  metadata        Json?    // Additional metadata like user context, settings, etc.
+  status          String   @default("pending") // "pending", "completed", "failed"
+  errorMessage    String?  // Error details if generation failed
+  processingTimeMs Int?    // Time taken for generation in milliseconds
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { analyzeAndMatch, analyzeExistingImage, getUserUploadedImages, deleteUserUpload } from '../actions'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { UserUpload } from '@prisma/client'
+import Compressor from 'compressorjs'
 
 export function Step3Upload() {
   const photoGuidelines = useMemo(() => ({
@@ -69,6 +70,8 @@ export function Step3Upload() {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const [isDeletingId, setIsDeletingId] = useState<string | null>(null)
+  const [isCompressing, setIsCompressing] = useState(false)
+  const [compressionProgress, setCompressionProgress] = useState(0)
   
   // Auto-rotating guidelines state
   const [currentGuidelineIndex, setCurrentGuidelineIndex] = useState(0)
@@ -117,15 +120,67 @@ export function Step3Upload() {
   const currentGuideline = photoGuidelines[guidelineKeys[currentGuidelineIndex]]
   const currentTip = currentGuideline.guidelines[currentTipIndex]
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const compressImage = useCallback((file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      new Compressor(file, {
+        quality: 0.8, // 80% quality
+        maxWidth: 1920, // Max width 1920px
+        maxHeight: 1920, // Max height 1920px
+        convertSize: 1000000, // Convert to JPEG if larger than 1MB
+        success: (compressedFile) => {
+          console.log('[COMPRESSION] Original size:', (file.size / 1024 / 1024).toFixed(2), 'MB')
+          console.log('[COMPRESSION] Compressed size:', (compressedFile.size / 1024 / 1024).toFixed(2), 'MB')
+          resolve(compressedFile as File)
+        },
+        error: (error) => {
+          console.error('[COMPRESSION] Error:', error)
+          reject(error)
+        },
+      })
+    })
+  }, [])
+
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
     if (file) {
-      setData({ uploadedFile: file })
-      setPreview(URL.createObjectURL(file))
-      setSelectedImageUrl(null) // Clear any previously selected image
-      setError(null) // Clear previous errors on new upload
+      setIsCompressing(true)
+      setError(null)
+      setCompressionProgress(0)
+
+      try {
+        // Show compression progress
+        const progressInterval = setInterval(() => {
+          setCompressionProgress(prev => {
+            if (prev >= 90) {
+              clearInterval(progressInterval)
+              return 90
+            }
+            return prev + 10
+          })
+        }, 100)
+
+        const compressedFile = await compressImage(file)
+        
+        clearInterval(progressInterval)
+        setCompressionProgress(100)
+
+        // Small delay to show 100% completion
+        setTimeout(() => {
+          setData({ uploadedFile: compressedFile })
+          setPreview(URL.createObjectURL(compressedFile))
+          setSelectedImageUrl(null) // Clear any previously selected image
+          setIsCompressing(false)
+          setCompressionProgress(0)
+        }, 300)
+
+      } catch (error) {
+        console.error('Compression failed:', error)
+        setError('Failed to compress image. Please try again.')
+        setIsCompressing(false)
+        setCompressionProgress(0)
+      }
     }
-  }, [setData])
+  }, [setData, compressImage])
 
   const handleSelectPreviousImage = useCallback((upload: UserUpload) => {
     setSelectedImageUrl(upload.publicUrl)
@@ -189,6 +244,8 @@ export function Step3Upload() {
     onDrop,
     accept: { 'image/*': ['.jpeg', '.png', '.jpg', '.webp'] },
     maxFiles: 1,
+    maxSize: undefined, // Remove size limits
+    disabled: isCompressing, // Disable during compression
   })
 
   const [currentProgress, setCurrentProgress] = useState(0)
@@ -346,19 +403,41 @@ export function Step3Upload() {
         <div {...getRootProps()} 
           className={
           `flex items-center justify-center w-2/3 min-h-80 p-6 border-1 border-dashed border-black bg-white cursor-pointer transition-all
-          ${isDragActive ? 'bg-gray-200' : ''}`
+          ${isDragActive ? 'bg-gray-200' : ''}
+          ${isCompressing ? 'opacity-75 cursor-not-allowed' : ''}`
           }>
           <input {...getInputProps()} />
-          {preview ? (
+          {isCompressing ? (
+            <div className='flex flex-col items-center justify-center'>
+              <div className="w-16 h-16 mb-4">
+                <svg className="animate-spin w-16 h-16 text-brand-gold" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </div>
+              <p className="text-lg font-medium text-black/80 mb-2">Compressing Image...</p>
+              <div className="w-48 bg-gray-200 rounded-full h-2 mb-2">
+                <div 
+                  className="bg-brand-gold h-2 rounded-full transition-all duration-300" 
+                  style={{ width: `${compressionProgress}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-black/60">{compressionProgress}% complete</p>
+            </div>
+          ) : preview ? (
             <div className="relative w-full h-80">
               <Image src={preview} alt="Room preview" fill style={{ objectFit: 'contain' }} />
             </div>
           ) : (
             <div className='flex flex-col items-center justify-center'>
               <Image src="/images/image-upload.png" alt="image-upload-placeholder" width={150} height={150} />
-              <p className="flex items-center justify-center font-medium mt-4 text-black/60">Drag &apos;n&apos; drop a photo here, or click to select a file</p>
+              <p className="flex items-center justify-center font-medium mt-4 text-black/60">
+                Drag &apos;n&apos; drop a photo here, or click to select a file
+              </p>
+              <p className="text-xs text-black/40 mt-2">
+                Images will be automatically compressed for optimal upload
+              </p>
             </div>
-
           )}
         </div>
       </div>
