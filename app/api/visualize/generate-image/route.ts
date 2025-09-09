@@ -68,12 +68,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Simple, natural prompt following Gemini's best practices
-    let promptText = `Create a new image by combining the room from the first image with the ${productName} from the second image. Add the ${productName} to the room naturally and tastefully${styleContext}.
-
-Keep the room's walls, flooring, lighting, windows, and all architectural details exactly the same as the original room image. You may remove or replace any existing furniture if needed to make space for the new piece. Place it where it looks most natural and functional.
-
-The final image should show the same room with the ${productName} integrated seamlessly.`
+    // Use semantic masking pattern from Gemini docs for precise image editing
+    let promptText = `Using the provided image, add the ${productName} from the second image to the empty floor space in the room. Keep everything else in the image exactly the same, preserving the original style, lighting, and composition${styleContext}.`
 
     console.log('[API] Sending personalized prompt to Gemini:', promptText)
 
@@ -105,7 +101,7 @@ The final image should show the same room with the ${productName} integrated sea
     console.log('[API] Gemini generation completed, checking for image parts...')
 
     // Check if result contains image parts
-    const response = await result.response
+    const response = result.response
     const parts = response.candidates?.[0]?.content?.parts
 
     if (!parts || parts.length === 0) {

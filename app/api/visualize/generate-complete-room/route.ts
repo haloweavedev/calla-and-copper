@@ -91,24 +91,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Hyper-specific prompt to preserve original image integrity
-    let promptText = `EDIT the first room image by adding furniture from the product images. This is an IMAGE EDITING task, not image generation.
-
-CRITICAL: Keep these elements from the original room image COMPLETELY UNCHANGED:
-- All walls (exact color, texture, paint, materials)
-- All flooring (exact wood grain, color, pattern)
-- All lighting (natural light, shadows, window light)
-- All windows (exact size, position, frames)
-- All doors and architectural details
-- All built-in features and fixtures
-- Room dimensions and perspective
-- Camera angle and viewpoint
-
-ONLY ADD these furniture pieces from the product images: ${productNames}
-
-Place them naturally in the space${styleContext}, but preserve every single architectural detail of the original room. Remove or replace only existing moveable furniture if needed for space.
-
-The result should look like someone placed new furniture in the exact same room - not a new room that looks similar.`
+    // Use advanced composition pattern from Gemini docs for combining multiple images
+    let promptText = `Create a new image by combining the elements from the provided images. Take the room from the first image and place the furniture from the product images naturally in the space${styleContext}. The final image should show the same room with the new furniture integrated seamlessly.`
 
     console.log('[API] Sending room editing prompt to Gemini:', promptText)
     console.log('[API] Personalization details:')

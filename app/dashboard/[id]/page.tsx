@@ -2,30 +2,84 @@
 import { useDemoStore } from '@/lib/store/demo-store'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Header } from '@/app/components/Header'
 import { CompleteRoomVisualization } from './_components/CompleteRoomVisualization'
+import { useEffect, useState } from 'react'
+import type { Creation } from '@prisma/client'
 
-export default function DashboardGenerationPage() {
-  const { analysisResult, recommendations, reset, uploadedFileUrl } = useDemoStore()
+interface DashboardGenerationPageProps {
+  params: { id: string }
+}
+
+export default function DashboardGenerationPage({ params }: DashboardGenerationPageProps) {
+  const { analysisResult, recommendations, reset, uploadedFileUrl, setData } = useDemoStore()
+  const [creation, setCreation] = useState<Creation | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchCreation = async () => {
+      try {
+        const response = await fetch(`/api/creations/${params.id}`)
+        if (!response.ok) {
+          throw new Error('Creation not found')
+        }
+        const creationData = await response.json()
+        setCreation(creationData)
+        
+        // Set the data in demo store for compatibility
+        setData({
+          analysisResult: creationData.analysisResult,
+          recommendations: creationData.recommendationsData,
+          uploadedFileUrl: creationData.originalImageUrl
+        })
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load creation')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCreation()
+  }, [params.id, setData])
+
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold animate-pulse">Loading your space...</h1>
+          <p>Retrieving your personalized matches.</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !creation) {
+    return (
+      <div className="w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-red-600">Creation Not Found</h1>
+          <p className="mb-4">{error || 'The requested creation could not be found.'}</p>
+          <Link href="/welcome" className="px-6 py-2 font-medium bg-black text-white hover:bg-gray-800 transition-colors">
+            Start New Analysis
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   if (!analysisResult || !recommendations) {
     return (
-      <>
-        <Header />
-        <div className="w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold animate-pulse">Analyzing your space...</h1>
-            <p>Our AI is curating your personalized matches.</p>
-          </div>
+      <div className="w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold animate-pulse">Analyzing your space...</h1>
+          <p>Our AI is curating your personalized matches.</p>
         </div>
-      </>
+      </div>
     )
   }
 
   return (
-    <>
-      <Header />
-      <div className="w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8">
+    <div className="w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-semibold mb-2">Here are your personalized matches</h1>
           <p className="text-lg uppercase font-light">Each recommendation is scored based on your style, space, and budget</p>
@@ -70,6 +124,5 @@ export default function DashboardGenerationPage() {
           <button onClick={reset} className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">Start Over</button>
         </div>
       </div>
-    </>
   )
 }
