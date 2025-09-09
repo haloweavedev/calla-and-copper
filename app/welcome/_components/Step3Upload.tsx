@@ -3,7 +3,7 @@ import { useDemoStore } from '@/lib/store/demo-store'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
-import { analyzeAndMatch, analyzeExistingImage, getUserUploadedImages, deleteUserUpload } from '../actions'
+import { analyzeAndMatch, analyzeExistingImage, getUserUploadedImages, deleteUserUpload, validateRoomImage } from '../actions'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { UserUpload } from '@prisma/client'
 import Compressor from 'compressorjs'
@@ -73,6 +73,15 @@ export function Step3Upload() {
   const [isCompressing, setIsCompressing] = useState(false)
   const [compressionProgress, setCompressionProgress] = useState(0)
   const [isLoadingPrevious, setIsLoadingPrevious] = useState(true)
+  
+  // New validation states
+  const [isValidating, setIsValidating] = useState(false)
+  const [validationResult, setValidationResult] = useState<{
+    isValid: boolean;
+    reason: string;
+    suggestions?: string;
+  } | null>(null)
+  const [showValidationToast, setShowValidationToast] = useState(false)
   
   // Auto-rotating guidelines state
   const [currentGuidelineIndex, setCurrentGuidelineIndex] = useState(0)
@@ -164,6 +173,43 @@ export function Step3Upload() {
     })
   }, [])
 
+  const validateImageOnly = useCallback(async (file: File) => {
+    console.log('[CLIENT] 🔍 Starting image validation only')
+    setIsValidating(true)
+    setValidationResult(null)
+    setShowValidationToast(false)
+
+    try {
+      const result = await validateRoomImage(file)
+      console.log('[CLIENT] ✅ Validation result:', result)
+      
+      setValidationResult({
+        isValid: result.isValid,
+        reason: result.reason,
+        suggestions: result.suggestions
+      })
+      setShowValidationToast(true)
+      
+      // Hide toast after 5 seconds if valid, keep if invalid
+      if (result.isValid) {
+        setTimeout(() => {
+          setShowValidationToast(false)
+        }, 5000)
+      }
+      
+    } catch (error) {
+      console.error('[CLIENT] ❌ Validation error:', error)
+      setValidationResult({
+        isValid: false,
+        reason: 'Unable to validate image. Please try again.',
+        suggestions: 'Try uploading a clear interior room photo.'
+      })
+      setShowValidationToast(true)
+    } finally {
+      setIsValidating(false)
+    }
+  }, [])
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
     if (file) {
@@ -197,7 +243,7 @@ export function Step3Upload() {
         setCompressionProgress(100)
 
         // Small delay to show 100% completion
-        setTimeout(() => {
+        setTimeout(async () => {
           setData({ uploadedFile: compressedFile })
           setPreview(URL.createObjectURL(compressedFile))
           setSelectedImageUrl(null) // Clear any previously selected image
@@ -211,6 +257,9 @@ export function Step3Upload() {
             uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
             uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
           })
+          
+          // Automatically validate the uploaded image
+          await validateImageOnly(compressedFile)
         }, 300)
 
       } catch (error) {
@@ -588,6 +637,16 @@ export function Step3Upload() {
           ) : preview ? (
             <div className="relative w-full h-80">
               <Image src={preview} alt="Room preview" fill style={{ objectFit: 'contain' }} />
+              
+              {/* Validation overlay */}
+              {isValidating && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-3">
+                    <div className="w-6 h-6 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-sm font-medium">Validating image...</span>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className='flex flex-col items-center justify-center'>
@@ -746,17 +805,82 @@ export function Step3Upload() {
       </div>
       <div className="mt-8 flex gap-4 justify-between items-center">
         <button onClick={() => setStep(2)} className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">← Back</button>
-        <button 
-          onClick={handleAnalyze} 
-          disabled={(!uploadedFile && !selectedImageUrl) || isLoading} 
-          className={`px-6 py-2 font-medium transition-all duration-200 ${
-            (uploadedFile || selectedImageUrl)
-              ? 'bg-brand-gold text-white border-2 border-brand-gold hover:bg-brand-gold/90 hover:text-white cursor-pointer'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-          }`}>
-          Analyze & Get Matches
-        </button>
+        
+        {/* Show different buttons based on validation status */}
+        {validationResult && !validationResult.isValid ? (
+          <div className="flex gap-3">
+            <button 
+              onClick={() => {
+                setPreview(null)
+                setData({ uploadedFile: null })
+                setValidationResult(null)
+                setShowValidationToast(false)
+              }}
+              className="px-6 py-2 font-medium transition-all duration-200 bg-red-500 text-white border-2 border-red-500 hover:bg-red-600 cursor-pointer"
+            >
+              Upload New Image
+            </button>
+            <button 
+              onClick={handleAnalyze} 
+              disabled={isLoading}
+              className="px-6 py-2 font-medium transition-all duration-200 bg-orange-500 text-white border-2 border-orange-500 hover:bg-orange-600 cursor-pointer"
+            >
+              Continue Anyway
+            </button>
+          </div>
+        ) : (
+          <button 
+            onClick={handleAnalyze} 
+            disabled={(!uploadedFile && !selectedImageUrl) || isLoading || isValidating || (validationResult && !validationResult.isValid)} 
+            className={`px-6 py-2 font-medium transition-all duration-200 ${
+              ((uploadedFile || selectedImageUrl) && (!validationResult || validationResult.isValid))
+                ? 'bg-brand-gold text-white border-2 border-brand-gold hover:bg-brand-gold/90 hover:text-white cursor-pointer'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}>
+            {isValidating ? 'Validating...' : 'Analyze & Get Matches'}
+          </button>
+        )}
       </div>
+
+      {/* Validation Toast */}
+      {showValidationToast && validationResult && (
+        <div className={`fixed bottom-6 right-6 max-w-md p-4 rounded-lg shadow-lg border-2 z-50 ${
+          validationResult.isValid 
+            ? 'bg-green-50 border-green-200 text-green-800' 
+            : 'bg-red-50 border-red-200 text-red-800'
+        }`}>
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 pt-1">
+              {validationResult.isValid ? (
+                <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+            <div className="flex-1">
+              <h4 className="font-medium text-sm mb-1">
+                {validationResult.isValid ? '✅ Valid Interior Image' : '❌ Invalid Image'}
+              </h4>
+              <p className="text-sm mb-2">{validationResult.reason}</p>
+              {validationResult.suggestions && (
+                <p className="text-xs opacity-80">💡 {validationResult.suggestions}</p>
+              )}
+            </div>
+            <button
+              onClick={() => setShowValidationToast(false)}
+              className="flex-shrink-0 p-1 hover:bg-black/10 rounded"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
     )
   )

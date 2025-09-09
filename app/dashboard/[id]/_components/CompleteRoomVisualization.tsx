@@ -169,22 +169,22 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
 
   return (
     <>
-      <div className="mb-12 bg-gradient-to-r from-purple-50 to-pink-50 p-8 border-2 border-purple-200">
+      <div className="mb-12 bg-gradient-to-r from-brand-cream to-amber-50 p-8 border-2 border-brand-gold/30">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-purple-800 mb-2 flex items-center justify-center gap-2">
-            <SparklesIcon className="w-6 h-6" />
+          <h2 className="text-2xl font-bold text-brand-dark-brown mb-2 flex items-center justify-center gap-2">
+            <SparklesIcon className="w-6 h-6 text-brand-gold" />
             Your Complete Room Transformation
           </h2>
-          <p className="text-purple-700">
+          <p className="text-brand-warm-brown">
             See all your personalized recommendations styled together in your space
           </p>
         </div>
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mb-4"></div>
-            <p className="text-purple-700 font-medium">Creating your dream room...</p>
-            <p className="text-sm text-purple-600 mt-2">
+            <div className="w-16 h-16 border-4 border-brand-gold/30 border-t-brand-gold rounded-full animate-spin mb-4"></div>
+            <p className="text-brand-dark-brown font-medium">Creating your dream room...</p>
+            <p className="text-sm text-brand-warm-brown mt-2">
               AI is placing {products.length} items perfectly in your space
             </p>
           </div>
@@ -200,7 +200,7 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
           </div>
         ) : generatedImage ? (
           <div className="space-y-4">
-            <div className="cursor-pointer border-2 border-purple-200 hover:border-purple-400 transition-colors bg-white rounded-lg overflow-hidden max-w-lg mx-auto shadow-md hover:shadow-lg" onClick={handleShowFullView}>
+            <div className="cursor-pointer border-2 border-brand-gold/30 hover:border-brand-gold transition-colors bg-white rounded-lg overflow-hidden max-w-lg mx-auto shadow-md hover:shadow-lg" onClick={handleShowFullView}>
               <Image
                 src={generatedImage}
                 alt="Complete Room Transformation"
@@ -219,15 +219,15 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
             <div className="text-center">
               <button
                 onClick={handleShowFullView}
-                className="px-6 py-2 bg-purple-600 text-white font-medium hover:bg-purple-700 transition-colors flex items-center gap-2 mx-auto"
+                className="px-6 py-2 bg-brand-gold text-white font-medium hover:bg-brand-dark-brown transition-colors flex items-center gap-2 mx-auto"
               >
                 <EyeIcon className="w-4 h-4" />
                 View Full Size Comparison
               </button>
             </div>
 
-            <div className="bg-white p-4 border border-purple-200">
-              <h4 className="font-medium mb-2 text-purple-800">✨ Personalization Details:</h4>
+            <div className="bg-white p-4 border border-brand-gold/30">
+              <h4 className="font-medium mb-2 text-brand-dark-brown">✨ Personalization Details:</h4>
               <div className="text-sm text-gray-700 space-y-1">
                 <p>• <strong>{products.length} products</strong> styled together harmoniously</p>
                 {styleProfile?.styleHierarchy?.foundation && (
