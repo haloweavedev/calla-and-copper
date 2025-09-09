@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import type { Creation } from '@prisma/client'
 
 interface DashboardGenerationPageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export default function DashboardGenerationPage({ params }: DashboardGenerationPageProps) {
@@ -15,11 +15,22 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
   const [creation, setCreation] = useState<Creation | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null)
 
   useEffect(() => {
+    const resolveParams = async () => {
+      const resolved = await params
+      setResolvedParams(resolved)
+    }
+    resolveParams()
+  }, [params])
+
+  useEffect(() => {
+    if (!resolvedParams) return
+    
     const fetchCreation = async () => {
       try {
-        const response = await fetch(`/api/creations/${params.id}`)
+        const response = await fetch(`/api/creations/${resolvedParams.id}`)
         if (!response.ok) {
           throw new Error('Creation not found')
         }
@@ -40,7 +51,7 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
     }
 
     fetchCreation()
-  }, [params.id, setData])
+  }, [resolvedParams, setData])
 
   if (loading) {
     return (
@@ -86,10 +97,10 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
         </div>
 
         {/* Complete Room Visualization */}
-        {uploadedFileUrl && recommendations.length > 0 && (
+        {uploadedFileUrl && recommendations.length > 0 && resolvedParams && (
           <CompleteRoomVisualization 
             products={recommendations} 
-            creationId={params.id}
+            creationId={resolvedParams.id}
             existingGeneratedImage={creation?.generatedImageUrl || null}
           />
         )}

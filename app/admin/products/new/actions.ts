@@ -43,8 +43,15 @@ export async function createProduct(formData: FormData) {
     // 3. Save product to database
     await prisma.product.create({
       data: {
-        ...rawFormData,
+        id: `prod_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        name: rawFormData.name,
+        description: rawFormData.description,
+        price: rawFormData.price,
+        category: rawFormData.category,
+        dimensions: rawFormData.dimensions,
+        styleTags: rawFormData.styleTags,
         imageUrl: publicUrl,
+        updatedAt: new Date(),
       },
     })
 

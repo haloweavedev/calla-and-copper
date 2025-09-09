@@ -831,7 +831,7 @@ export function Step3Upload() {
         ) : (
           <button 
             onClick={handleAnalyze} 
-            disabled={(!uploadedFile && !selectedImageUrl) || isLoading || isValidating || (validationResult && !validationResult.isValid)} 
+            disabled={(!uploadedFile && !selectedImageUrl) || isLoading || isValidating || (validationResult?.isValid === false)} 
             className={`px-6 py-2 font-medium transition-all duration-200 ${
               ((uploadedFile || selectedImageUrl) && (!validationResult || validationResult.isValid))
                 ? 'bg-brand-gold text-white border-2 border-brand-gold hover:bg-brand-gold/90 hover:text-white cursor-pointer'

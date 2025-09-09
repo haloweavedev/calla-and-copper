@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
     try {
       generationRecord = await prisma.imageGeneration.create({
         data: {
+          id: `gen_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
           userId: session.user.id,
           generationType: 'complete-room',
           prompt: `Complete room with: ${productNames}`,
@@ -64,8 +65,9 @@ export async function POST(request: NextRequest) {
               imageUrl: p.imageUrl,
             })),
             userContext: userContext || null,
-          },
+          } as any,
           status: 'pending',
+          updatedAt: new Date(),
         },
       })
       console.log('[API] ✅ Generation record created:', generationRecord.id)

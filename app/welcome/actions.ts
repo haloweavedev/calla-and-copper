@@ -243,7 +243,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
           roomType: params.roomType,
           budget: params.budget,
           lifestyleTags: params.lifestyleTags,
-          styleProfile: null, // Will be added later if needed
+          styleProfile: undefined, // Will be added later if needed
           originalImageUrl: publicUrl,
           originalImageBase64: base64String,
           originalImageMimeType: mimeType,
@@ -262,7 +262,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
       console.error('[SERVER] Failed to save creation to database:', dbError);
       // Don't fail the entire flow if database save fails, just log the error
       // User can still see results, just won't be saved to history
-      creationId = Date.now().toString(); // Fallback ID for redirect
+      creationId = crypto.randomUUID(); // Fallback ID for redirect
     }
 
     console.log('[SERVER] Analysis and matching complete. Returning results.');
@@ -405,7 +405,7 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
           roomType: params.roomType,
           budget: params.budget,
           lifestyleTags: params.lifestyleTags,
-          styleProfile: null,
+          styleProfile: undefined,
           originalImageUrl: params.imageUrl,
           originalImageBase64: null, // Not available for existing images
           originalImageMimeType: null,
@@ -423,7 +423,7 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
       await prisma.$disconnect();
     } catch (dbError) {
       console.error('[SERVER] Failed to save existing image creation to database:', dbError);
-      creationId = Date.now().toString(); // Fallback ID
+      creationId = crypto.randomUUID(); // Fallback ID
     }
 
     console.log('[SERVER] Analysis and matching complete. Returning results.');

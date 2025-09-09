@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
     // Create generation record
     generationRecord = await prisma.imageGeneration.create({
       data: {
+        id: `gen_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         userId: session.user.id,
         generationType: 'single-product',
         prompt: `Add ${productName} (${productCategory}) to room`,
@@ -47,8 +48,9 @@ export async function POST(request: NextRequest) {
           productCategory,
           productImageUrl,
           userContext: userContext || null,
-        },
+        } as any,
         status: 'pending',
+        updatedAt: new Date(),
       },
     })
 
