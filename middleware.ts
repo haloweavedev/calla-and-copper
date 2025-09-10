@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
   const sessionToken = request.cookies.get('better-auth.session_token')?.value
 
   // Protected routes that require authentication
-  const protectedRoutes = ['/welcome', '/admin']
+  const protectedRoutes = ['/welcome', '/admin', '/dashboard']
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
   )
