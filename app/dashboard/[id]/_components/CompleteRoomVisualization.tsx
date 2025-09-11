@@ -193,7 +193,15 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <div className="w-16 h-16 border-4 border-brand-gold/30 border-t-brand-gold rounded-full animate-spin mb-4"></div>
+            <video
+              src="/seat-loading.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-24 h-24 object-contain opacity-90 mb-4 mix-blend-darken"
+              aria-label="Loading animation"
+            />
             <p className="text-brand-dark-brown font-medium">Creating your dream room...</p>
             <p className="text-sm text-brand-warm-brown mt-2">
               AI is placing {products.length} items perfectly in your space
@@ -225,22 +233,22 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
                 onError={(e) => console.error('[CLIENT] Image load error:', e)}
               />
             </div>
-            <p className="text-center text-sm text-gray-600 italic">Click to view full size comparison</p>
+            <p className="text-center text-sm text-gray-600 italic">Click to view side by side comparison</p>
             
             <div className="text-center">
               <button
                 onClick={handleShowFullView}
                 className="px-6 py-2 bg-brand-gold text-white font-medium hover:bg-brand-dark-brown transition-colors flex items-center gap-2 mx-auto"
               >
-                <EyeIcon className="w-4 h-4" />
-                View Full Size Comparison
+              <EyeIcon className="w-4 h-4" />
+              Compare View
               </button>
             </div>
 
             <div className="bg-white p-4 border border-brand-gold/30">
-              <h4 className="font-medium mb-2 text-brand-dark-brown">✨ Personalization Details:</h4>
+              <h4 className="font-medium mb-2 text-black uppercase">Personalization Details:</h4>
               <div className="text-sm text-gray-700 space-y-1">
-                <p>• <strong>{products.length} products</strong> styled together harmoniously</p>
+                <p>• <strong>{products.length} products</strong> styled together</p>
                 {styleProfile?.styleHierarchy?.foundation && (
                   <p>• Designed for <strong>{styleProfile.styleHierarchy.foundation}</strong> aesthetic</p>
                 )}
@@ -282,7 +290,7 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
             <div className="mt-8">
               <h3 className="text-2xl font-bold mb-2">✨ Your Complete Room Transformation</h3>
               <p className="text-gray-600 mb-6">
-                Before and after comparison with all {products.length} recommended products
+                Before and after comparison with your top recommended products
               </p>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -311,8 +319,8 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
                 </div>
               </div>
               
-              <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200">
-                <h4 className="font-bold mb-3 text-purple-800">Complete Transformation Details:</h4>
+              <div className="mt-6 p-6 bg-gradient-to-r from-brand-cream to-amber-50 border-2 border-brand-gold/30">
+                <h4 className="font-medium mb-2 text-black uppercase mb-2">Complete Transformation Details:</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="font-medium mb-2">Products Included:</p>

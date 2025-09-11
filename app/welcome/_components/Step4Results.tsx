@@ -33,8 +33,18 @@ export function Step4Results() {
 
   return (
     <div className="text-center">
-      <h1 className="text-3xl font-bold animate-pulse">Analyzing your space...</h1>
-      <p>Our AI is curating your personalized matches.</p>
+      <div className="text-center py-12">
+        <video
+          src="/logo-loading.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-46 h-46 object-contain opacity-90"
+          aria-label="Loading animation"
+        />
+        <div className="animate-pulse text-gray-600">Our AI is curating your personalized matches...</div>
+      </div>
     </div>
   )
 }

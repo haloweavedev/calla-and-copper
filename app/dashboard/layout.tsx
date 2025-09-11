@@ -31,7 +31,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen">
       {/* Sidebar */}
       <div className="w-64 bg-white shadow-lg flex flex-col">
         {/* Logo */}
@@ -40,33 +40,22 @@ export default function DashboardLayout({
             <Image 
               src="/images/cnc-logo-dark.png" 
               alt="Calla & Copper" 
-              width={120} 
-              height={120}
+              width={100} 
+              height={100}
               className="mx-auto"
             />
           </Link>
         </div>
 
-        {/* Visualize Button */}
-        <div className="p-6">
-          <Link
-            href="/welcome"
-            className="w-full flex items-center justify-center px-4 py-3 bg-brand-gold text-white font-medium rounded-lg hover:bg-brand-dark-brown transition-colors shadow-sm"
-          >
-            <PlusIcon className="w-5 h-5 mr-2" />
-            Visualize
-          </Link>
-        </div>
-
         {/* Navigation */}
-        <div className="flex-1 p-6">
+        <div className="flex-1 p-4 z-99">
           <nav className="space-y-2">
             <Link
               href="/dashboard"
-              className={`flex items-center px-4 py-3 rounded-lg transition-colors font-medium ${
+              className={`flex items-center px-2 py-2 rounded-sm transition-colors font-medium ${
                 pathname === '/dashboard' 
-                  ? 'text-white bg-brand-gold' 
-                  : 'text-gray-700 hover:bg-gray-100'
+                  ? 'text-black/80 bg-gray-100' 
+                  : 'text-black/40 hover:bg-gray-50'
               }`}
             >
               <HomeIcon className="w-5 h-5 mr-3" />
@@ -75,16 +64,27 @@ export default function DashboardLayout({
             
             <Link
               href="/dashboard/history"
-              className={`flex items-center px-4 py-3 rounded-lg transition-colors font-medium ${
+              className={`flex items-center px-2 py-2 rounded-sm transition-colors font-medium ${
                 pathname === '/dashboard/history' 
-                  ? 'text-white bg-brand-gold' 
-                  : 'text-gray-700 hover:bg-gray-100'
+                  ? 'text-black/80 bg-gray-100' 
+                  : 'text-black/40 hover:bg-gray-100'
               }`}
             >
               <ClockIcon className="w-5 h-5 mr-3" />
               History
             </Link>
           </nav>
+        </div>
+
+        {/* Create New Design Button */}
+        <div className="p-4">
+          <Link
+            href="/welcome"
+            className="flex items-center justify-start px-1 hover:bg-brand-gold/1x0 px-4 py-2 rounded-sm" 
+          >
+            <PlusIcon className="w-6 h-6 mr-2 bg-brand-gold p-1 rounded-full text-white" />
+            <span className="text-base font-medium text-brand-gold">Create new design</span>
+          </Link>
         </div>
 
         {/* User Email Dropdown */}

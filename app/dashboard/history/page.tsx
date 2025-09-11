@@ -58,9 +58,17 @@ export default function HistoryPage() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Your Creation History</h1>
+      <div className="p-6 flex items-center justify-center min-h-screen">
         <div className="text-center py-12">
+          <video
+            src="/logo-loading.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-46 h-46 object-contain opacity-90"
+            aria-label="Loading animation"
+          />
           <div className="animate-pulse text-gray-600">Loading your creations...</div>
         </div>
       </div>
@@ -69,8 +77,8 @@ export default function HistoryPage() {
 
   if (error) {
     return (
-      <div className="p-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Your Creation History</h1>
+      <div className="p-6 min-h-scren">
+        <h1 className="text-3xl text-center lg:text-left">Your Creation History</h1>
         <div className="text-center py-12">
           <p className="text-red-600 mb-4">{error}</p>
           <button 
@@ -87,10 +95,10 @@ export default function HistoryPage() {
   return (
     <div className="w-full p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Your Creation History</h1>
+        <h1 className="text-2xl uppercase font-medium">Your Creation History</h1>
         <Link 
           href="/welcome" 
-          className="px-4 py-2 bg-brand-gold text-white font-medium rounded hover:bg-brand-dark-brown transition-colors"
+          className="px-4 py-2 bg-brand-gold text-white font-medium rounded-full hover:bg-brand-dark-brown transition-colors"
         >
           Create New Design
         </Link>
@@ -116,7 +124,7 @@ export default function HistoryPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sessions.map((session) => (
             <Link key={session.id} href={`/dashboard/${session.id}`}>
-              <div className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-shadow cursor-pointer overflow-hidden">
+              <div className="bg-white border border-gray-200 rounded-sm hover:shadow-lg transition-shadow cursor-pointer overflow-hidden">
                 {/* Image Preview */}
                 <div className="aspect-video bg-gray-100 relative">
                   {session.generatedImageUrl ? (
@@ -165,8 +173,9 @@ export default function HistoryPage() {
                 {/* Content */}
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-medium text-gray-900 truncate">
-                      {session.name || `${session.style || 'Styled'} ${session.roomType || 'Room'}`}
+                    <h3 className="font-medium text-gray-900 truncate uppercase">
+                      {/* {session.name || `${session.style || 'Styled'} ${session.roomType || 'Room'}`} */}
+                      {`${session.style || 'AI Styled'} ${session.roomType || 'Room'}`}
                     </h3>
                     <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
                       {new Date(session.createdAt).toLocaleDateString()}
@@ -174,12 +183,6 @@ export default function HistoryPage() {
                   </div>
                   
                   <div className="text-sm text-gray-600 space-y-1">
-                    {session.style && (
-                      <div>Style: <span className="font-medium">{session.style}</span></div>
-                    )}
-                    {session.roomType && (
-                      <div>Room: <span className="font-medium">{session.roomType}</span></div>
-                    )}
                     {session.budget && (
                       <div>Budget: <span className="font-medium">{session.budget}</span></div>
                     )}
