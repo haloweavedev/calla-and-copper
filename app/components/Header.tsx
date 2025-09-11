@@ -1,12 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { logout } from './actions'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useSession } from '@/lib/auth-client'
-import type { User } from '@/lib/auth'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

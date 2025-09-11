@@ -150,7 +150,7 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
                     <p>• Styled for <strong>{styleProfile.styleHierarchy.foundation}</strong> aesthetic</p>
                   )}
                   {analysisResult?.description && (
-                    <p>• Matched to your room's <strong>{analysisResult.description.split('.')[0].toLowerCase()}</strong></p>
+                    <p>• Matched to your room&apos;s <strong>{analysisResult.description.split('.')[0].toLowerCase()}</strong></p>
                   )}
                   {lifestyleTags?.length > 0 && (
                     <p>• Considers your lifestyle: <strong>{lifestyleTags.slice(0, 3).join(', ')}</strong></p>

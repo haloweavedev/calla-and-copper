@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { useDemoStore } from '@/lib/store/demo-store'
 import { SparklesIcon, EyeIcon } from '@heroicons/react/24/solid'
@@ -37,29 +37,7 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [showModal, setShowModal] = useState(false)
 
-  // Auto-generate on component mount if we have all the data
-  useEffect(() => {
-    if (uploadedFileUrl && products.length > 0 && !generatedImage && !isLoading) {
-      handleGenerateRoom()
-    }
-  }, [uploadedFileUrl, products])
-
-  // Clear error after 5 seconds
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        setError(null)
-      }, 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [error])
-
-  // Don't render if no room photo is available
-  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType || products.length === 0) {
-    return null
-  }
-
-  const handleGenerateRoom = async () => {
+  const handleGenerateRoom = useCallback(async () => {
     setIsLoading(true)
     setError(null)
 
@@ -118,6 +96,28 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
     } finally {
       setIsLoading(false)
     }
+  }, [uploadedFileBase64, uploadedFileMimeType, products, styleProfile, analysisResult, lifestyleTags, roomType, budget])
+
+  // Auto-generate on component mount if we have all the data
+  useEffect(() => {
+    if (uploadedFileUrl && products.length > 0 && !generatedImage && !isLoading) {
+      handleGenerateRoom()
+    }
+  }, [uploadedFileUrl, products, generatedImage, isLoading, handleGenerateRoom])
+
+  // Clear error after 5 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null)
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [error])
+
+  // Don't render if no room photo is available
+  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType || products.length === 0) {
+    return null
   }
 
   const handleShowFullView = () => {

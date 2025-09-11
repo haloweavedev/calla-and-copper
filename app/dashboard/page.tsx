@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { PlusIcon, PhotoIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, PhotoIcon } from '@heroicons/react/24/outline'
 
 interface CreationData {
   id: string
@@ -12,13 +12,13 @@ interface CreationData {
   roomType?: string
   budget?: string
   lifestyleTags: string[]
-  styleProfile?: any
+  styleProfile?: Record<string, unknown>
   originalImageUrl?: string
   originalImageBase64?: string
   originalImageMimeType?: string
-  analysisResult?: any
+  analysisResult?: Record<string, unknown>
   recommendedProductIds: string[]
-  recommendationsData?: any[]
+  recommendationsData?: Record<string, unknown>[]
   generatedImageUrl?: string
   generationStatus: string
   notes?: string
@@ -30,7 +30,7 @@ interface CreationData {
 export default function DashboardPage() {
   const [sessions, setSessions] = useState<CreationData[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [, ] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchSessions = async () => {

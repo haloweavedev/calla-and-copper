@@ -1,5 +1,4 @@
 import { auth } from '@/lib/auth'
-import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import Hero from '@/app/components/landing/Hero'
 import HowItWorks from './components/landing/HowItWorks'
@@ -9,7 +8,7 @@ import LandingCTA from './components/landing/LandingCTA'
 import { Header } from './components/Header'
 
 export default async function HomePage() {
-  const session = await auth.api.getSession({
+  await auth.api.getSession({
     headers: await headers(),
   })
 

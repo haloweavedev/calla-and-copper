@@ -269,9 +269,9 @@ export function Step3Upload() {
         setCompressionProgress(0)
       }
     }
-  }, [setData, compressImage])
+  }, [setData, compressImage, validateImageOnly])
 
-  const convertUrlToBase64 = useCallback(async (url: string, mimeType: string): Promise<string> => {
+  const convertUrlToBase64 = useCallback(async (url: string): Promise<string> => {
     try {
       const response = await fetch(url)
       const blob = await response.blob()
@@ -311,7 +311,7 @@ export function Step3Upload() {
 
       // Convert the public URL to base64 and update demo store
       console.log('[CLIENT] 🔄 Converting gallery image to base64 for AI generation...')
-      const base64Data = await convertUrlToBase64(upload.publicUrl, upload.mimeType)
+      const base64Data = await convertUrlToBase64(upload.publicUrl)
       console.log('[CLIENT] ✅ Base64 conversion complete. Length:', base64Data.length, 'chars')
       
       // Update demo store with the gallery image data

@@ -11,13 +11,13 @@ interface CreationData {
   roomType?: string
   budget?: string
   lifestyleTags: string[]
-  styleProfile?: any
+  styleProfile?: Record<string, unknown>
   originalImageUrl?: string
   originalImageBase64?: string
   originalImageMimeType?: string
-  analysisResult?: any
+  analysisResult?: Record<string, unknown>
   recommendedProductIds: string[]
-  recommendationsData?: any[]
+  recommendationsData?: Record<string, unknown>[]
   generatedImageUrl?: string
   generationStatus: string
   notes?: string
@@ -29,7 +29,7 @@ interface CreationData {
 export default function HistoryPage() {
   const [sessions, setSessions] = useState<CreationData[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [error] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchSessions = async () => {

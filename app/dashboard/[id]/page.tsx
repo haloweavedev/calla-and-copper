@@ -3,7 +3,7 @@ import { useDemoStore } from '@/lib/store/demo-store'
 import Image from 'next/image'
 import Link from 'next/link'
 import { CompleteRoomVisualization } from './_components/CompleteRoomVisualization'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import type { Creation } from '@prisma/client'
 
 interface DashboardGenerationPageProps {
@@ -25,33 +25,45 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
     resolveParams()
   }, [params])
 
-  useEffect(() => {
+  const fetchCreation = useCallback(async () => {
     if (!resolvedParams) return
     
-    const fetchCreation = async () => {
-      try {
-        const response = await fetch(`/api/creations/${resolvedParams.id}`)
-        if (!response.ok) {
-          throw new Error('Creation not found')
-        }
-        const creationData = await response.json()
-        setCreation(creationData)
-        
-        // Set the data in demo store for compatibility
-        setData({
-          analysisResult: creationData.analysisResult,
-          recommendations: creationData.recommendationsData,
-          uploadedFileUrl: creationData.originalImageUrl
-        })
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load creation')
-      } finally {
-        setLoading(false)
+    try {
+      setLoading(true)
+      const response = await fetch(`/api/creations/${resolvedParams.id}`)
+      if (!response.ok) {
+        throw new Error('Creation not found')
       }
+      const creationData = await response.json()
+      console.log('[DASHBOARD] Creation data received:', {
+        id: creationData.id,
+        hasGeneratedImage: !!creationData.generatedImageUrl,
+        generationStatus: creationData.generationStatus,
+        imagePreview: creationData.generatedImageUrl?.substring(0, 50) || 'none'
+      })
+      setCreation(creationData)
+      
+      // Set the data in demo store for compatibility
+      setData({
+        analysisResult: creationData.analysisResult,
+        recommendations: creationData.recommendationsData,
+        uploadedFileUrl: creationData.originalImageUrl
+      })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load creation')
+    } finally {
+      setLoading(false)
     }
-
-    fetchCreation()
   }, [resolvedParams, setData])
+
+  useEffect(() => {
+    fetchCreation()
+  }, [fetchCreation])
+
+  const handleImageGenerated = (imageUrl: string) => {
+    // Update the creation state with the new generated image
+    setCreation(prev => prev ? { ...prev, generatedImageUrl: imageUrl, generationStatus: 'completed' } : null)
+  }
 
   if (loading) {
     return (
@@ -102,6 +114,7 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
             products={recommendations} 
             creationId={resolvedParams.id}
             existingGeneratedImage={creation?.generatedImageUrl || null}
+            onImageGenerated={handleImageGenerated}
           />
         )}
 

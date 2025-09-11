@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { useDemoStore } from '@/lib/store/demo-store'
 import { SparklesIcon, EyeIcon } from '@heroicons/react/24/solid'
@@ -20,9 +20,10 @@ interface CompleteRoomVisualizationProps {
   products: Product[]
   creationId?: string
   existingGeneratedImage?: string | null
+  onImageGenerated?: (imageUrl: string) => void
 }
 
-export function CompleteRoomVisualization({ products, creationId, existingGeneratedImage }: CompleteRoomVisualizationProps) {
+export function CompleteRoomVisualization({ products, creationId, existingGeneratedImage, onImageGenerated }: CompleteRoomVisualizationProps) {
   const { 
     uploadedFileUrl, 
     uploadedFileBase64,
@@ -39,42 +40,7 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
   const [generatedImage, setGeneratedImage] = useState<string | null>(existingGeneratedImage || null)
   const [showModal, setShowModal] = useState(false)
 
-  // Load existing generated image on mount
-  useEffect(() => {
-    if (existingGeneratedImage) {
-      console.log('[CLIENT] 🖼️ Loading existing generated image from database')
-      setGeneratedImage(existingGeneratedImage)
-    }
-  }, [existingGeneratedImage])
-
-  // Auto-generate on component mount if we have all the data but no existing image
-  useEffect(() => {
-    if (uploadedFileUrl && products.length > 0 && !generatedImage && !isLoading && !existingGeneratedImage) {
-      console.log('[CLIENT] 🤖 Auto-generating room since no existing image found')
-      // Add a small delay to prevent duplicate calls
-      const timer = setTimeout(() => {
-        handleGenerateRoom()
-      }, 500)
-      return () => clearTimeout(timer)
-    }
-  }, [uploadedFileUrl, products, generatedImage, isLoading, existingGeneratedImage])
-
-  // Clear error after 5 seconds
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        setError(null)
-      }, 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [error])
-
-  // Don't render if no room photo is available
-  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType || products.length === 0) {
-    return null
-  }
-
-  const handleGenerateRoom = async () => {
+  const handleGenerateRoom = useCallback(async () => {
     console.log('[CLIENT] 🎨 ROOM GENERATION - Starting')
     console.log('[CLIENT] 📊 Current demo store state:', {
       uploadedFileUrl: uploadedFileUrl,
@@ -147,6 +113,11 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
       })
       console.log('[CLIENT] 💾 Image automatically saved to database via API')
       setGeneratedImage(imageUrl)
+      
+      // Notify parent component that image was generated
+      if (onImageGenerated) {
+        onImageGenerated(imageUrl)
+      }
 
     } catch (error) {
       console.error('[CLIENT] Error in complete room visualization:', error)
@@ -161,6 +132,46 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
     } finally {
       setIsLoading(false)
     }
+  }, [uploadedFileBase64, uploadedFileMimeType, uploadedFileUrl, products, styleProfile, analysisResult, lifestyleTags, roomType, budget, creationId, onImageGenerated])
+
+  // Load existing generated image on mount
+  useEffect(() => {
+    console.log('[CLIENT] 🔍 CompleteRoomVisualization props:', {
+      hasExistingImage: !!existingGeneratedImage,
+      existingImagePreview: existingGeneratedImage?.substring(0, 50) || 'none',
+      creationId: creationId || 'none'
+    })
+    if (existingGeneratedImage) {
+      console.log('[CLIENT] 🖼️ Loading existing generated image from database')
+      setGeneratedImage(existingGeneratedImage)
+    }
+  }, [existingGeneratedImage, creationId])
+
+  // Auto-generate on component mount if we have all the data but no existing image
+  useEffect(() => {
+    if (uploadedFileUrl && products.length > 0 && !generatedImage && !isLoading && !existingGeneratedImage) {
+      console.log('[CLIENT] 🤖 Auto-generating room since no existing image found')
+      // Add a small delay to prevent duplicate calls
+      const timer = setTimeout(() => {
+        handleGenerateRoom()
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [uploadedFileUrl, products, generatedImage, isLoading, existingGeneratedImage, handleGenerateRoom])
+
+  // Clear error after 5 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null)
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [error])
+
+  // Don't render if no room photo is available
+  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType || products.length === 0) {
+    return null
   }
 
   const handleShowFullView = () => {

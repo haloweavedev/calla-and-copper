@@ -17,7 +17,7 @@ export function LoginForm() {
     setError('')
 
     try {
-      const { data, error } = await signIn.email({
+      const { error } = await signIn.email({
         email,
         password,
       })
@@ -27,7 +27,7 @@ export function LoginForm() {
       } else {
         router.push('/welcome')
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred')
     } finally {
       setIsLoading(false)

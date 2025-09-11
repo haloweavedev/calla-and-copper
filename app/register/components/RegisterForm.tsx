@@ -25,7 +25,7 @@ export function RegisterForm() {
     }
 
     try {
-      const { data, error } = await signUp.email({
+      const { error } = await signUp.email({
         email,
         password,
         name,
@@ -36,7 +36,7 @@ export function RegisterForm() {
       } else {
         router.push('/welcome')
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred')
     } finally {
       setIsLoading(false)

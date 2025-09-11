@@ -13,7 +13,7 @@ export default function LoginPage() {
         <LoginForm />
         
         <div className="w-full flex items-center justify-center gap-4 text-sm text-gray-600">
-          <span>Don't have an account?</span>
+          <span>Don&apos;t have an account?</span>
           <Link href="/register" className="text-brand-dark-brown hover:text-brand-gold font-medium">
             Sign up
           </Link>
