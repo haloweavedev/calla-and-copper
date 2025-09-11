@@ -15,6 +15,8 @@ type DemoState = {
   lifestyleTags: string[]
   uploadedFile: File | null
   uploadedFileUrl: string | null
+  uploadedFileBase64: string | null
+  uploadedFileMimeType: string | null
   analysisResult: { description: string; tags: string[]; colorPalette?: string[] } | null
   recommendations: Array<{
     id: number
@@ -26,12 +28,14 @@ type DemoState = {
     price: number
     imageUrl: string
   }> | null
+  creationId: string | null
 }
 
 type DemoActions = {
   setStep: (step: number) => void
   setData: (data: Partial<Omit<DemoState, 'step'>>) => void
   setUploadedFileUrl: (url: string) => void
+  setUploadedFileData: (base64: string, mimeType: string) => void
   reset: () => void
 }
 
@@ -44,8 +48,11 @@ const initialState: DemoState = {
   lifestyleTags: [],
   uploadedFile: null,
   uploadedFileUrl: null,
+  uploadedFileBase64: null,
+  uploadedFileMimeType: null,
   analysisResult: null,
   recommendations: null,
+  creationId: null,
 }
 
 export const useDemoStore = create<DemoState & DemoActions>()(
@@ -55,6 +62,7 @@ export const useDemoStore = create<DemoState & DemoActions>()(
       setStep: (step) => set({ step }),
       setData: (data) => set((state) => ({ ...state, ...data })),
       setUploadedFileUrl: (url) => set({ uploadedFileUrl: url }),
+      setUploadedFileData: (base64: string, mimeType: string) => set({ uploadedFileBase64: base64, uploadedFileMimeType: mimeType }),
       reset: () => set(initialState),
     }),
     { name: 'calla-copper-demo-storage' }

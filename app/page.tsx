@@ -1,5 +1,5 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
 import Hero from '@/app/components/landing/Hero'
 import HowItWorks from './components/landing/HowItWorks'
 import FAQs from './components/landing/FAQs'
@@ -8,12 +8,10 @@ import LandingCTA from './components/landing/LandingCTA'
 import { Header } from './components/Header'
 
 export default async function HomePage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  await auth.api.getSession({
+    headers: await headers(),
+  })
 
-  if (user) {
-    redirect('/dashboard')
-  }
 
   return (
     <>

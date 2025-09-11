@@ -1,82 +1,193 @@
-import { google } from '@ai-sdk/google'
-import { generateText } from 'ai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@/lib/auth'
+import { PrismaClient } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
+  const prisma = new PrismaClient()
+  const startTime = Date.now()
+  let generationRecord: { id: string } | null = null
+
   try {
+    // Get authenticated user
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    })
+
+    if (!session) {
+      await prisma.$disconnect()
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const body = await request.json()
-    const { roomImageUrl, productImageUrl, productCategory, productName } = body
+    const { roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName, productId, userContext, creationId } = body
 
     // Validate all required fields are present
-    if (!roomImageUrl || !productImageUrl || !productCategory || !productName) {
+    if (!roomImageBase64 || !roomImageMimeType || !productImageUrl || !productCategory || !productName) {
+      await prisma.$disconnect()
       return NextResponse.json(
-        { error: 'Missing required fields: roomImageUrl, productImageUrl, productCategory, productName' },
+        { error: 'Missing required fields: roomImageBase64, roomImageMimeType, productImageUrl, productCategory, productName' },
         { status: 400 }
       )
     }
 
     console.log('[API] Generating image with Gemini for product category:', productCategory)
+    console.log('[API] User context provided:', !!userContext)
 
-    const gemini = google('gemini-2.5-flash-image-preview')
-
-    // Construct high-precision replacement prompt
-    const prompt = `Replace the ${productCategory} in the room picture with the ${productCategory} from the second product image.`
-
-    console.log('[API] Sending high-precision prompt to Gemini:', prompt)
-
-    const result = await generateText({
-      model: gemini,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: prompt },
-            { type: 'image', image: roomImageUrl },
-            { type: 'image', image: productImageUrl }
-          ]
-        }
-      ],
-      providerOptions: {
-        google: {
-          responseModalities: ['IMAGE']
-        }
-      }
+    // Create generation record
+    generationRecord = await prisma.imageGeneration.create({
+      data: {
+        id: `gen_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        userId: session.user.id,
+        generationType: 'single-product',
+        prompt: `Add ${productName} (${productCategory}) to room`,
+        inputImageUrl: `data:${roomImageMimeType};base64,[BASE64_DATA]`, // Don't store full base64 to avoid huge logs
+        productIds: productId ? [String(productId)] : [],
+        metadata: {
+          productName,
+          productCategory,
+          productImageUrl,
+          userContext: userContext || null,
+        },
+        status: 'pending',
+        updatedAt: new Date(),
+      },
     })
 
-    console.log('[API] Gemini generation completed, checking for image files...')
+    console.log('[API] Generation record created:', generationRecord.id)
 
-    // Check if result contains image files
-    if (!result.files || result.files.length === 0) {
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
+
+    // Add personalization context
+    let styleContext = ''
+    if (userContext) {
+      const { styleProfile, lifestyleTags } = userContext
+      const primaryStyle = styleProfile?.styleProfile?.styleHierarchy?.foundation || 'cozy and inviting'
+      styleContext = ` in a ${primaryStyle} style`
+      
+      if (lifestyleTags?.length > 0) {
+        styleContext += ` that suits a ${lifestyleTags.join(', ').toLowerCase()} lifestyle`
+      }
+    }
+
+    // Use proper semantic masking to edit only the floor space
+    const promptText = `Using the provided room image, place the ${productName} from the product image onto the available floor space where it would naturally belong in a ${productCategory.toLowerCase()} arrangement. Keep all walls, flooring texture, windows, lighting, ceiling, architectural details, and any existing furniture completely unchanged${styleContext}. Only add the new ${productName} to an appropriate empty floor area.`
+
+    console.log('[API] Sending personalized prompt to Gemini:', promptText)
+
+    // Fetch and convert product image to base64
+    const productResponse = await fetch(productImageUrl)
+    const productArrayBuffer = await productResponse.arrayBuffer()
+    const base64ProductImage = Buffer.from(productArrayBuffer).toString('base64')
+    const productMimeType = productResponse.headers.get('content-type') || 'image/jpeg'
+
+    const contentParts = [
+      {
+        inlineData: {
+          mimeType: roomImageMimeType,
+          data: roomImageBase64,
+        },
+      },
+      {
+        inlineData: {
+          mimeType: productMimeType,
+          data: base64ProductImage,
+        },
+      },
+      { text: promptText }
+    ]
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-image-preview' })
+    const result = await model.generateContent(contentParts)
+
+    console.log('[API] Gemini generation completed, checking for image parts...')
+
+    // Check if result contains image parts
+    const response = result.response
+    const parts = response.candidates?.[0]?.content?.parts
+
+    if (!parts || parts.length === 0) {
+      throw new Error('No content parts generated by Gemini')
+    }
+
+    // Find the first image part
+    const imagePart = parts.find((part: { inlineData?: { mimeType?: string; data?: string } }) => part.inlineData)
+    
+    if (!imagePart || !imagePart.inlineData) {
       throw new Error('No image was generated by Gemini')
     }
 
-    // Get the first generated image file
-    const imageFile = result.files[0]
-    // --- Start of new block ---
+    console.log(`[API] Image file received, type: ${imagePart.inlineData.mimeType}`)
+    console.log(`[API] Generated image file received successfully`)
 
-    console.log(`[API] Image file received, type: ${imageFile.mediaType}`);
-    console.log(`[API] imageFile.base64 is of type: ${typeof imageFile.base64}`);
-    console.log(`[API] imageFile.base64 length: ${imageFile.base64?.length || 'undefined'}`);
-
-    // Get the raw base64 string (which was missing the data URL prefix)
-    const rawBase64 = imageFile.base64;
+    // Get the raw base64 string
+    const rawBase64 = imagePart.inlineData.data
     
     // Construct the proper Data URL with prefix
-    const dataUrl = `data:${imageFile.mediaType || 'image/png'};base64,${rawBase64}`;
-
-    console.log('[API] Constructed Data URL (first 100 chars):', dataUrl.substring(0, 100));
-    
-    // --- End of new block ---
+    const dataUrl = `data:${imagePart.inlineData.mimeType || 'image/png'};base64,${rawBase64}`
 
     console.log('[API] Image generation successful, returning data URL')
 
-    return NextResponse.json({ imageUrl: dataUrl }, { status: 200 })
+    // Update generation record with success
+    if (generationRecord) {
+      await prisma.imageGeneration.update({
+        where: { id: generationRecord.id },
+        data: {
+          status: 'completed',
+          outputImageUrl: dataUrl,
+          processingTimeMs: Date.now() - startTime,
+        },
+      })
+    }
+
+    // Update the creation record with the generated image (for single product)
+    if (creationId) {
+      try {
+        console.log('[API] 💾 Saving single product image to creation:', creationId)
+        await prisma.creation.update({
+          where: { id: creationId },
+          data: {
+            generatedImageUrl: dataUrl,
+            generationStatus: 'completed',
+            updatedAt: new Date(),
+          },
+        })
+        console.log('[API] ✅ Creation updated with single product image')
+      } catch (error) {
+        console.error('[API] ❌ Failed to update creation with single product image:', error)
+        // Don't fail the entire request if creation update fails
+      }
+    }
+
+    return NextResponse.json({ 
+      imageUrl: dataUrl,
+      generationId: generationRecord?.id 
+    }, { status: 200 })
 
   } catch (error) {
     console.error('[API] Error in generate-image route:', error)
+    
+    // Update generation record with error
+    if (generationRecord) {
+      try {
+        await prisma.imageGeneration.update({
+          where: { id: generationRecord.id },
+          data: {
+            status: 'failed',
+            errorMessage: error instanceof Error ? error.message : 'Unknown error',
+            processingTimeMs: Date.now() - startTime,
+          },
+        })
+      } catch (updateError) {
+        console.error('[API] Failed to update generation record:', updateError)
+      }
+    }
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }

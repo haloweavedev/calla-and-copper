@@ -1,25 +1,27 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { auth } from '@/lib/auth'
 import { PrismaClient } from '@prisma/client'
 import { openai } from '@ai-sdk/openai'
 import { generateObject } from 'ai'
 import { z } from 'zod'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 
 const prisma = new PrismaClient()
 
 export async function getSmartSuggestions() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
 
-  if (!user) {
+  if (!session) {
     redirect('/login')
   }
 
   // 1. Fetch user preferences and all products from DB
   const [userProfile, products] = await Promise.all([
-    prisma.userProfile.findUnique({ where: { userId: user.id } }),
+    prisma.userProfile.findUnique({ where: { userId: session.user.id } }),
     prisma.product.findMany({ where: { status: 'ACTIVE' } }),
   ])
 

@@ -3,8 +3,10 @@ import { useDemoStore } from '@/lib/store/demo-store'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
-import { analyzeAndMatch } from '../actions'
+import { analyzeAndMatch, analyzeExistingImage, getUserUploadedImages, deleteUserUpload, validateRoomImage } from '../actions'
 import { motion, AnimatePresence } from 'framer-motion'
+import type { UserUpload } from '@prisma/client'
+import Compressor from 'compressorjs'
 
 export function Step3Upload() {
   const photoGuidelines = useMemo(() => ({
@@ -63,12 +65,50 @@ export function Step3Upload() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null) // State for error message
   const [preview, setPreview] = useState<string | null>(null)
+  const [previousImages, setPreviousImages] = useState<UserUpload[]>([])
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
+  const [isDeletingId, setIsDeletingId] = useState<string | null>(null)
+  const [isCompressing, setIsCompressing] = useState(false)
+  const [compressionProgress, setCompressionProgress] = useState(0)
+  const [isLoadingPrevious, setIsLoadingPrevious] = useState(true)
+  
+  // New validation states
+  const [isValidating, setIsValidating] = useState(false)
+  const [validationResult, setValidationResult] = useState<{
+    isValid: boolean;
+    reason: string;
+    suggestions?: string;
+  } | null>(null)
+  const [showValidationToast, setShowValidationToast] = useState(false)
   
   // Auto-rotating guidelines state
   const [currentGuidelineIndex, setCurrentGuidelineIndex] = useState(0)
   const [currentTipIndex, setCurrentTipIndex] = useState(0)
   
   const guidelineKeys = Object.keys(photoGuidelines) as Array<keyof typeof photoGuidelines>
+
+  // Fetch previous images on component mount
+  useEffect(() => {
+    const fetchPreviousImages = async () => {
+      try {
+        setIsLoadingPrevious(true)
+        const result = await getUserUploadedImages()
+        if (result.error) {
+          console.error('Failed to fetch previous images:', result.error)
+        } else {
+          setPreviousImages(result.uploads)
+        }
+      } catch (error) {
+        console.error('Error fetching previous images:', error)
+      } finally {
+        setIsLoadingPrevious(false)
+      }
+    }
+
+    fetchPreviousImages()
+  }, [])
 
   // Auto-rotate guidelines every 4 seconds
   useEffect(() => {
@@ -93,26 +133,267 @@ export function Step3Upload() {
   const currentGuideline = photoGuidelines[guidelineKeys[currentGuidelineIndex]]
   const currentTip = currentGuideline.guidelines[currentTipIndex]
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const compressImage = useCallback((file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const targetSizeBytes = 1024 * 1024 // 1MB target
+      
+      const tryCompress = (quality: number, maxWidth: number) => {
+        new Compressor(file, {
+          quality,
+          maxWidth,
+          maxHeight: maxWidth,
+          convertSize: 0, // Always convert to JPEG for better compression
+          convertTypes: ['image/png', 'image/webp'], // Convert PNG/WebP to JPEG
+          success: (compressedFile) => {
+            const compressedSize = compressedFile.size
+            console.log('[COMPRESSION] Attempt - Quality:', quality, 'MaxWidth:', maxWidth)
+            console.log('[COMPRESSION] Original size:', (file.size / 1024 / 1024).toFixed(2), 'MB')
+            console.log('[COMPRESSION] Compressed size:', (compressedSize / 1024 / 1024).toFixed(2), 'MB')
+            
+            // If still too large, try more aggressive compression
+            if (compressedSize > targetSizeBytes && quality > 0.3) {
+              const newQuality = Math.max(0.3, quality - 0.2)
+              const newMaxWidth = Math.max(800, maxWidth - 200)
+              console.log('[COMPRESSION] Still too large, retrying with quality:', newQuality, 'maxWidth:', newMaxWidth)
+              tryCompress(newQuality, newMaxWidth)
+            } else {
+              console.log('[COMPRESSION] Final compressed size:', (compressedSize / 1024 / 1024).toFixed(2), 'MB')
+              resolve(compressedFile as File)
+            }
+          },
+          error: (error) => {
+            console.error('[COMPRESSION] Error:', error)
+            reject(error)
+          },
+        })
+      }
+      
+      // Start with reasonable quality and dimensions
+      tryCompress(0.8, 1920)
+    })
+  }, [])
+
+  const validateImageOnly = useCallback(async (file: File) => {
+    console.log('[CLIENT] 🔍 Starting image validation only')
+    setIsValidating(true)
+    setValidationResult(null)
+    setShowValidationToast(false)
+
+    try {
+      const result = await validateRoomImage(file)
+      console.log('[CLIENT] ✅ Validation result:', result)
+      
+      setValidationResult({
+        isValid: result.isValid,
+        reason: result.reason,
+        suggestions: result.suggestions
+      })
+      setShowValidationToast(true)
+      
+      // Hide toast after 5 seconds if valid, keep if invalid
+      if (result.isValid) {
+        setTimeout(() => {
+          setShowValidationToast(false)
+        }, 5000)
+      }
+      
+    } catch (error) {
+      console.error('[CLIENT] ❌ Validation error:', error)
+      setValidationResult({
+        isValid: false,
+        reason: 'Unable to validate image. Please try again.',
+        suggestions: 'Try uploading a clear interior room photo.'
+      })
+      setShowValidationToast(true)
+    } finally {
+      setIsValidating(false)
+    }
+  }, [])
+
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
     if (file) {
-      setData({ uploadedFile: file })
-      setPreview(URL.createObjectURL(file))
-      setError(null) // Clear previous errors on new upload
+      setIsCompressing(true)
+      setError(null)
+      setCompressionProgress(0)
+
+      try {
+        console.log('[CLIENT] 📤 NEW UPLOAD FLOW - Starting')
+        console.log('[CLIENT] 📋 Original file details:', {
+          name: file.name,
+          size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+          type: file.type
+        })
+        
+        // Show compression progress
+        const progressInterval = setInterval(() => {
+          setCompressionProgress(prev => {
+            if (prev >= 90) {
+              clearInterval(progressInterval)
+              return 90
+            }
+            return prev + 10
+          })
+        }, 100)
+
+        const compressedFile = await compressImage(file)
+        console.log('[CLIENT] ✅ Compression complete. New size:', `${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`)
+        
+        clearInterval(progressInterval)
+        setCompressionProgress(100)
+
+        // Small delay to show 100% completion
+        setTimeout(async () => {
+          setData({ uploadedFile: compressedFile })
+          setPreview(URL.createObjectURL(compressedFile))
+          setSelectedImageUrl(null) // Clear any previously selected image
+          setIsCompressing(false)
+          setCompressionProgress(0)
+          
+          console.log('[CLIENT] 💾 New upload data set in demo store')
+          console.log('[CLIENT] 📊 Demo store state after new upload:', {
+            uploadedFile: !!useDemoStore.getState().uploadedFile,
+            uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+            uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
+            uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
+          })
+          
+          // Automatically validate the uploaded image
+          await validateImageOnly(compressedFile)
+        }, 300)
+
+      } catch (error) {
+        console.error('[CLIENT] ❌ Compression failed:', error)
+        setError('Failed to compress image. Please try again.')
+        setIsCompressing(false)
+        setCompressionProgress(0)
+      }
     }
-  }, [setData])
+  }, [setData, compressImage, validateImageOnly])
+
+  const convertUrlToBase64 = useCallback(async (url: string): Promise<string> => {
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const base64String = reader.result as string
+          // Remove the data URL prefix to get just the base64 data
+          const base64Data = base64String.split(',')[1]
+          resolve(base64Data)
+        }
+        reader.onerror = reject
+        reader.readAsDataURL(blob)
+      })
+    } catch (error) {
+      console.error('Failed to convert URL to base64:', error)
+      throw error
+    }
+  }, [])
+
+  const handleSelectPreviousImage = useCallback(async (upload: UserUpload) => {
+    try {
+      console.log('[CLIENT] 🖼️ PRESELECTED IMAGE FLOW - Starting')
+      console.log('[CLIENT] 📋 Upload details:', {
+        id: upload.id,
+        fileName: upload.fileName,
+        publicUrl: upload.publicUrl,
+        mimeType: upload.mimeType,
+        fileSize: upload.fileSize
+      })
+      
+      setSelectedImageUrl(upload.publicUrl)
+      setPreview(upload.publicUrl)
+      setData({ uploadedFile: null }) // Clear current file upload
+      setError(null)
+
+      // Convert the public URL to base64 and update demo store
+      console.log('[CLIENT] 🔄 Converting gallery image to base64 for AI generation...')
+      const base64Data = await convertUrlToBase64(upload.publicUrl)
+      console.log('[CLIENT] ✅ Base64 conversion complete. Length:', base64Data.length, 'chars')
+      
+      // Update demo store with the gallery image data
+      useDemoStore.getState().setUploadedFileUrl(upload.publicUrl)
+      useDemoStore.getState().setUploadedFileData(base64Data, upload.mimeType)
+      
+      console.log('[CLIENT] 💾 Gallery image data set in demo store')
+      console.log('[CLIENT] 📊 Demo store state after preselect:', {
+        uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+        uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
+        uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
+      })
+    } catch (error) {
+      console.error('[CLIENT] ❌ Failed to process gallery image:', error)
+      setError('Failed to process selected image. Please try again.')
+    }
+  }, [setData, convertUrlToBase64])
+
+  const handleDeleteUpload = useCallback(async (uploadId: string) => {
+    setIsDeletingId(uploadId)
+    setDeleteConfirmId(null)
+    setOpenMenuId(null)
+    
+    try {
+      const result = await deleteUserUpload(uploadId)
+      if (result.error) {
+        setError(result.error)
+      } else {
+        // Remove from local state
+        setPreviousImages(prev => prev.filter(img => img.id !== uploadId))
+        
+        // Clear selection if the deleted image was selected
+        const deletedImage = previousImages.find(img => img.id === uploadId)
+        if (deletedImage && selectedImageUrl === deletedImage.publicUrl) {
+          setSelectedImageUrl(null)
+          setPreview(null)
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting upload:', error)
+      setError('Failed to delete image. Please try again.')
+    } finally {
+      setIsDeletingId(null)
+    }
+  }, [selectedImageUrl, previousImages])
+
+  const handleMenuToggle = useCallback((uploadId: string, event: React.MouseEvent) => {
+    event.stopPropagation()
+    setOpenMenuId(openMenuId === uploadId ? null : uploadId)
+  }, [openMenuId])
+
+  const handleDeleteConfirm = useCallback((uploadId: string, event: React.MouseEvent) => {
+    event.stopPropagation()
+    setDeleteConfirmId(uploadId)
+    setOpenMenuId(null)
+  }, [])
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setOpenMenuId(null)
+    }
+    
+    if (openMenuId) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [openMenuId])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'image/*': ['.jpeg', '.png', '.jpg', '.webp'] },
     maxFiles: 1,
+    maxSize: undefined, // Remove size limits
+    disabled: isCompressing, // Disable during compression
   })
 
   const [currentProgress, setCurrentProgress] = useState(0)
   const [progressText, setProgressText] = useState("")
 
   const handleAnalyze = async () => {
-    if (!uploadedFile) return
+    if (!uploadedFile && !selectedImageUrl) return
     
     setIsLoading(true)
     setError(null)
@@ -125,46 +406,148 @@ export function Step3Upload() {
       setCurrentProgress(5)
       setProgressText("Received request to analyze room")
 
-      // Simulate realistic timing based on server actions
-      const progressTimeline = [
-        { delay: 1000, progress: 15, text: "Uploading Image to database..." },
-        { delay: 3000, progress: 25, text: "Image upload successful!" },
-        { delay: 5000, progress: 45, text: "Getting insights from our AI stylist..." },
-        { delay: 8000, progress: 55, text: "AI analysis successful!" },
-        { delay: 10000, progress: 75, text: "Matching products from our catalog..." },
-        { delay: 12000, progress: 95, text: "Analysis and matching complete! Returning results." }
-      ]
+      let result;
 
-      // Set up progress timeline
-      const progressTimeouts = progressTimeline.map(({ delay, progress, text }) => 
-        setTimeout(() => {
-          setCurrentProgress(progress)
-          setProgressText(text)
-        }, delay)
-      )
+      if (selectedImageUrl) {
+        console.log('[CLIENT] 🔍 PRESELECTED IMAGE ANALYSIS - Starting')
+        console.log('[CLIENT] 📋 Analysis params:', {
+          imageUrl: selectedImageUrl,
+          style: style,
+          roomType: roomType || 'Living Room',
+          budget: budget || '$1,500-4,000',
+          lifestyleTags: lifestyleTags
+        })
+        
+        // Analyze existing image
+        const progressTimeline = [
+          { delay: 1000, progress: 25, text: "Using previously uploaded image..." },
+          { delay: 3000, progress: 45, text: "Getting insights from our AI stylist..." },
+          { delay: 6000, progress: 75, text: "Matching products from our catalog..." },
+          { delay: 8000, progress: 95, text: "Analysis and matching complete! Returning results." }
+        ]
 
-      const result = await analyzeAndMatch({
-        image: uploadedFile,
-        style,
-        roomType: roomType || 'Living Room', // Default fallback
-        budget: budget || '$1,500-4,000', // Default fallback
-        lifestyleTags,
-      })
+        // Set up progress timeline
+        const progressTimeouts = progressTimeline.map(({ delay, progress, text }) => 
+          setTimeout(() => {
+            setCurrentProgress(progress)
+            setProgressText(text)
+          }, delay)
+        )
 
-      // Clear all timeouts
-      progressTimeouts.forEach(timeout => clearTimeout(timeout))
+        result = await analyzeExistingImage({
+          imageUrl: selectedImageUrl,
+          style,
+          roomType: roomType || 'Living Room',
+          budget: budget || '$1,500-4,000',
+          lifestyleTags,
+        })
+        
+        console.log('[CLIENT] ✅ PRESELECTED IMAGE ANALYSIS - Complete:', {
+          hasAnalysis: !!result.analysis,
+          recommendationsCount: result.recommendations?.length || 0,
+          publicUrl: result.publicUrl,
+          error: result.error
+        })
+
+        // Clear all timeouts
+        progressTimeouts.forEach(timeout => clearTimeout(timeout))
+      } else {
+        console.log('[CLIENT] 🆕 NEW UPLOAD ANALYSIS - Starting')
+        console.log('[CLIENT] 📋 Analysis params:', {
+          imageFile: uploadedFile?.name,
+          imageSize: uploadedFile?.size ? `${(uploadedFile.size / 1024 / 1024).toFixed(2)} MB` : 'unknown',
+          style: style,
+          roomType: roomType || 'Living Room',
+          budget: budget || '$1,500-4,000',
+          lifestyleTags: lifestyleTags
+        })
+        
+        // Upload and analyze new image
+        const progressTimeline = [
+          { delay: 1000, progress: 10, text: "Validating image content..." },
+          { delay: 3000, progress: 20, text: "Image validation passed!" },
+          { delay: 4000, progress: 30, text: "Uploading image to database..." },
+          { delay: 6000, progress: 45, text: "Image upload successful!" },
+          { delay: 8000, progress: 65, text: "Getting insights from our AI stylist..." },
+          { delay: 11000, progress: 85, text: "Matching products from our catalog..." },
+          { delay: 13000, progress: 95, text: "Analysis and matching complete! Returning results." }
+        ]
+
+        // Set up progress timeline
+        const progressTimeouts = progressTimeline.map(({ delay, progress, text }) => 
+          setTimeout(() => {
+            setCurrentProgress(progress)
+            setProgressText(text)
+          }, delay)
+        )
+
+        result = await analyzeAndMatch({
+          image: uploadedFile!,
+          style,
+          roomType: roomType || 'Living Room',
+          budget: budget || '$1,500-4,000',
+          lifestyleTags,
+        })
+        
+        console.log('[CLIENT] ✅ NEW UPLOAD ANALYSIS - Complete:', {
+          hasAnalysis: !!result.analysis,
+          recommendationsCount: result.recommendations?.length || 0,
+          publicUrl: result.publicUrl,
+          base64Length: result.base64String?.length,
+          mimeType: result.mimeType,
+          error: result.error
+        })
+
+        // Clear all timeouts
+        progressTimeouts.forEach(timeout => clearTimeout(timeout))
+      }
       
       // Set to completion
       setCurrentProgress(100)
       setProgressText("Complete!")
 
       if (result.error) {
-        throw new Error(result.error)
+        // Check if it's a validation error with suggestions
+        if ('suggestions' in result && result.suggestions) {
+          const validationError = `${result.error}\n\n💡 Suggestions: ${result.suggestions}`;
+          throw new Error(validationError)
+        } else {
+          throw new Error(result.error)
+        }
       }
 
-      console.log('[CLIENT] Analysis successful. Setting data and moving to step 4.')
-      setData({ analysisResult: result.analysis, recommendations: result.recommendations })
+      console.log('[CLIENT] ✅ Analysis successful. Setting data and moving to step 4.')
+      console.log('[CLIENT] 📊 Final data being set:', {
+        hasAnalysis: !!result.analysis,
+        recommendationsCount: result.recommendations?.length || 0,
+        publicUrl: result.publicUrl,
+        base64Available: !!(('base64String' in result ? result.base64String : null) || useDemoStore.getState().uploadedFileBase64),
+        mimeType: ('mimeType' in result ? result.mimeType : null) || useDemoStore.getState().uploadedFileMimeType
+      })
+      
+      setData({ 
+        analysisResult: result.analysis, 
+        recommendations: result.recommendations,
+        creationId: result.creationId 
+      })
       useDemoStore.getState().setUploadedFileUrl(result.publicUrl!)
+      
+      if ('base64String' in result && result.base64String && 'mimeType' in result && result.mimeType && 
+          typeof result.base64String === 'string' && typeof result.mimeType === 'string') {
+        console.log('[CLIENT] 💾 Setting base64 data from analysis result')
+        useDemoStore.getState().setUploadedFileData(result.base64String, result.mimeType)
+      } else {
+        console.log('[CLIENT] ⚠️ No base64 data in analysis result, using existing store data')
+      }
+      
+      console.log('[CLIENT] 🏁 Final demo store state before step 4:', {
+        uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+        uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
+        uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType,
+        analysisResult: !!useDemoStore.getState().analysisResult,
+        recommendations: useDemoStore.getState().recommendations?.length
+      })
+      
       setStep(4)
 
     } catch (e: unknown) {
@@ -220,29 +603,178 @@ export function Step3Upload() {
       
       {error && (
         <div className="p-4 mb-4 border-2 border-black bg-red-500 text-white font-bold">
-          <p>Error: {error}</p>
+          <div className="whitespace-pre-line">
+            <p className="font-bold mb-2">Error:</p>
+            <p className="font-normal">{error}</p>
+          </div>
         </div>
       )}
       <div className='w-full flex items-center justify-center'>
         <div {...getRootProps()} 
           className={
           `flex items-center justify-center w-2/3 min-h-80 p-6 border-1 border-dashed border-black bg-white cursor-pointer transition-all
-          ${isDragActive ? 'bg-gray-200' : ''}`
+          ${isDragActive ? 'bg-gray-200' : ''}
+          ${isCompressing ? 'opacity-75 cursor-not-allowed' : ''}`
           }>
           <input {...getInputProps()} />
-          {preview ? (
+          {isCompressing ? (
+            <div className='flex flex-col items-center justify-center'>
+              <div className="w-16 h-16 mb-4">
+                <svg className="animate-spin w-16 h-16 text-brand-gold" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </div>
+              <p className="text-lg font-medium text-black/80 mb-2">Compressing Image...</p>
+              <div className="w-48 bg-gray-200 rounded-full h-2 mb-2">
+                <div 
+                  className="bg-brand-gold h-2 rounded-full transition-all duration-300" 
+                  style={{ width: `${compressionProgress}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-black/60">{compressionProgress}% complete</p>
+            </div>
+          ) : preview ? (
             <div className="relative w-full h-80">
               <Image src={preview} alt="Room preview" fill style={{ objectFit: 'contain' }} />
+              
+              {/* Validation overlay */}
+              {isValidating && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-3">
+                    <div className="w-6 h-6 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-sm font-medium">Validating image...</span>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className='flex flex-col items-center justify-center'>
               <Image src="/images/image-upload.png" alt="image-upload-placeholder" width={150} height={150} />
-              <p className="flex items-center justify-center font-medium mt-4 text-black/60">Drag &apos;n&apos; drop a photo here, or click to select a file</p>
+              <p className="flex items-center justify-center font-medium mt-4 text-black/60">
+                Drag &apos;n&apos; drop a photo here, or click to select a file
+              </p>
+              <p className="text-xs text-black/40 mt-2">
+                Images will be automatically compressed for optimal upload
+              </p>
             </div>
-
           )}
         </div>
       </div>
+
+      {/* Previously Uploaded Images Section */}
+      {(isLoadingPrevious || previousImages.length > 0) && (
+        <div className="mt-8">
+          <div className="text-center mb-4">
+            <h3 className="text-lg font-medium text-black/80">Or choose from your previously uploaded images:</h3>
+          </div>
+          {isLoadingPrevious ? (
+            <div className="flex flex-col items-center justify-center py-8">
+              <div className="w-8 h-8 mb-3">
+                <svg className="animate-spin w-8 h-8 text-brand-gold" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </div>
+              <p className="text-sm text-black/60">Looking for previous uploads...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {previousImages.map((upload) => (
+                <div
+                  key={upload.id}
+                  onClick={() => handleSelectPreviousImage(upload)}
+                  className={`relative aspect-square cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 ${
+                    selectedImageUrl === upload.publicUrl
+                      ? 'border-brand-gold ring-2 ring-brand-gold/50'
+                      : 'border-gray-200 hover:border-brand-gold/50'
+                  }`}
+                >
+                  <Image
+                    src={upload.publicUrl}
+                    alt={`Uploaded ${upload.fileName}`}
+                    fill
+                    className="object-cover"
+                  />
+                  
+                  {/* Three-dot menu button */}
+                  <button
+                    onClick={(e) => handleMenuToggle(upload.id, e)}
+                    className="absolute top-2 right-2 w-6 h-6 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-200"
+                    aria-label="Menu"
+                  >
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown menu */}
+                  {openMenuId === upload.id && (
+                    <div className="absolute top-8 right-2 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10 min-w-32">
+                      <button
+                        onClick={(e) => handleDeleteConfirm(upload.id, e)}
+                        className="w-full px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                        disabled={isDeletingId === upload.id}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Delete
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Selection indicator */}
+                  {selectedImageUrl === upload.publicUrl && (
+                    <div className="absolute inset-0 bg-brand-gold/20 flex items-center justify-center">
+                      <div className="bg-brand-gold text-white px-2 py-1 rounded text-xs font-medium">
+                        Selected
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Loading indicator for deletion */}
+                  {isDeletingId === upload.id && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmId && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Delete Image?</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you want to delete this image? This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setDeleteConfirmId(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteUpload(deleteConfirmId)}
+                disabled={isDeletingId === deleteConfirmId}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors flex items-center gap-2"
+              >
+                {isDeletingId === deleteConfirmId && (
+                  <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin"></div>
+                )}
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className='flex flex-col items-center justify-center py-6'>
         <span className='text-base font-light uppercase text-black/60 mb-2'>Photo Guidelines</span>
@@ -273,17 +805,82 @@ export function Step3Upload() {
       </div>
       <div className="mt-8 flex gap-4 justify-between items-center">
         <button onClick={() => setStep(2)} className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">← Back</button>
-        <button 
-          onClick={handleAnalyze} 
-          disabled={!uploadedFile || isLoading} 
-          className={`px-6 py-2 font-medium transition-all duration-200 ${
-            uploadedFile
-              ? 'bg-brand-gold text-white border-2 border-brand-gold hover:bg-brand-gold/90 hover:text-white cursor-pointer'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-          }`}>
-          Analyze & Get Matches
-        </button>
+        
+        {/* Show different buttons based on validation status */}
+        {validationResult && !validationResult.isValid ? (
+          <div className="flex gap-3">
+            <button 
+              onClick={() => {
+                setPreview(null)
+                setData({ uploadedFile: null })
+                setValidationResult(null)
+                setShowValidationToast(false)
+              }}
+              className="px-6 py-2 font-medium transition-all duration-200 bg-red-500 text-white border-2 border-red-500 hover:bg-red-600 cursor-pointer"
+            >
+              Upload New Image
+            </button>
+            <button 
+              onClick={handleAnalyze} 
+              disabled={isLoading}
+              className="px-6 py-2 font-medium transition-all duration-200 bg-orange-500 text-white border-2 border-orange-500 hover:bg-orange-600 cursor-pointer"
+            >
+              Continue Anyway
+            </button>
+          </div>
+        ) : (
+          <button 
+            onClick={handleAnalyze} 
+            disabled={(!uploadedFile && !selectedImageUrl) || isLoading || isValidating || (validationResult?.isValid === false)} 
+            className={`px-6 py-2 font-medium transition-all duration-200 ${
+              ((uploadedFile || selectedImageUrl) && (!validationResult || validationResult.isValid))
+                ? 'bg-brand-gold text-white border-2 border-brand-gold hover:bg-brand-gold/90 hover:text-white cursor-pointer'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}>
+            {isValidating ? 'Validating...' : 'Analyze & Get Matches'}
+          </button>
+        )}
       </div>
+
+      {/* Validation Toast */}
+      {showValidationToast && validationResult && (
+        <div className={`fixed bottom-6 right-6 max-w-md p-4 rounded-lg shadow-lg border-2 z-50 ${
+          validationResult.isValid 
+            ? 'bg-green-50 border-green-200 text-green-800' 
+            : 'bg-red-50 border-red-200 text-red-800'
+        }`}>
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 pt-1">
+              {validationResult.isValid ? (
+                <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+            <div className="flex-1">
+              <h4 className="font-medium text-sm mb-1">
+                {validationResult.isValid ? '✅ Valid Interior Image' : '❌ Invalid Image'}
+              </h4>
+              <p className="text-sm mb-2">{validationResult.reason}</p>
+              {validationResult.suggestions && (
+                <p className="text-xs opacity-80">💡 {validationResult.suggestions}</p>
+              )}
+            </div>
+            <button
+              onClick={() => setShowValidationToast(false)}
+              className="flex-shrink-0 p-1 hover:bg-black/10 rounded"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
     )
   )
