@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { analyzeAndMatch, analyzeExistingImage, getUserUploadedImages, deleteUserUpload, validateRoomImage } from '../actions'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { UserUpload } from '@prisma/client'
+import { InformationCircleIcon } from '@heroicons/react/24/solid'
 import Compressor from 'compressorjs'
 
 export function Step3Upload() {
@@ -666,7 +667,7 @@ export function Step3Upload() {
       {(isLoadingPrevious || previousImages.length > 0) && (
         <div className="mt-8">
           <div className="text-center mb-4">
-            <h3 className="text-lg font-medium text-black/80">Or choose from your previously uploaded images:</h3>
+            <h3 className="font-medium text-base text-black/80">Or choose from your previously uploaded images:</h3>
           </div>
           {isLoadingPrevious ? (
             <div className="flex flex-col items-center justify-center py-8">
@@ -679,12 +680,12 @@ export function Step3Upload() {
               <p className="text-sm text-black/60">Looking for previous uploads...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div className="flex items-center justify-center overflow-x-auto gap-4">
               {previousImages.map((upload) => (
                 <div
                   key={upload.id}
                   onClick={() => handleSelectPreviousImage(upload)}
-                  className={`relative aspect-square cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 ${
+                  className={`relative aspect-square w-42 h-42 cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 ${
                     selectedImageUrl === upload.publicUrl
                       ? 'border-brand-gold ring-2 ring-brand-gold/50'
                       : 'border-gray-200 hover:border-brand-gold/50'
@@ -754,17 +755,17 @@ export function Step3Upload() {
             <p className="text-sm text-gray-600 mb-4">
               Are you sure you want to delete this image? This action cannot be undone.
             </p>
-            <div className="flex gap-3 justify-end">
+            <div className="flex items-center justify-between gap-4">
               <button
                 onClick={() => setDeleteConfirmId(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleDeleteUpload(deleteConfirmId)}
                 disabled={isDeletingId === deleteConfirmId}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors flex items-center gap-2"
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors flex items-center gap-2 cursor-pointer"
               >
                 {isDeletingId === deleteConfirmId && (
                   <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin"></div>
@@ -776,6 +777,7 @@ export function Step3Upload() {
         </div>
       )}
 
+      {/* Photo Guidelines */}
       <div className='flex flex-col items-center justify-center py-6'>
         <span className='text-base font-light uppercase text-black/60 mb-2'>Photo Guidelines</span>
         <AnimatePresence mode="wait">
@@ -803,6 +805,7 @@ export function Step3Upload() {
           </motion.span>
         </AnimatePresence>
       </div>
+
       <div className="mt-8 flex gap-4 justify-between items-center">
         <button onClick={() => setStep(2)} className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">← Back</button>
         
@@ -850,29 +853,18 @@ export function Step3Upload() {
             : 'bg-red-50 border-red-200 text-red-800'
         }`}>
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 pt-1">
-              {validationResult.isValid ? (
-                <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              )}
-            </div>
             <div className="flex-1">
-              <h4 className="font-medium text-sm mb-1">
+              <h4 className="font-medium text-sm mb-2 text-left">
                 {validationResult.isValid ? '✅ Valid Interior Image' : '❌ Invalid Image'}
               </h4>
               <p className="text-sm mb-2">{validationResult.reason}</p>
               {validationResult.suggestions && (
-                <p className="text-xs opacity-80">💡 {validationResult.suggestions}</p>
+                <p className="text-xs opacity-80 flex items-start text-left gap-2"><InformationCircleIcon className="size-10" /> <span>{validationResult.suggestions}</span></p>
               )}
             </div>
             <button
               onClick={() => setShowValidationToast(false)}
-              className="flex-shrink-0 p-1 hover:bg-black/10 rounded"
+              className="flex-shrink-0 p-1 hover:bg-black/10 rounded absolute top-2 right-2"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
