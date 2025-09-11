@@ -110,7 +110,7 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {sessions.slice(0, 6).map((session) => (
                   <Link key={session.id} href={`/dashboard/${session.id}`}>
-                    <div className="group bg-gray-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="bg-white border border-gray-200 rounded-sm hover:shadow-lg transition-shadow cursor-pointer overflow-hidden">
                       {/* Image Preview */}
                       <div className="aspect-video bg-gray-200 relative">
                         {session.generatedImageUrl ? (
@@ -156,20 +156,20 @@ export default function DashboardPage() {
 
                       {/* Content */}
                       <div className="p-4">
-                        <h3 className="font-medium text-gray-900 truncate mb-2">
-                          {session.name || `${session.style || 'Styled'} ${session.roomType || 'Room'}`}
-                        </h3>
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="font-medium text-gray-900 truncate uppercase">
+                            {`${session.style || 'AI Styled'} ${session.roomType || 'Room'}`}
+                          </h3>
+                          <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                            {new Date(session.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+
                         <div className="text-sm text-gray-600 space-y-1">
-                          {session.style && (
-                            <div>Style: <span className="font-medium text-gray-800">{session.style}</span></div>
-                          )}
-                          {session.roomType && (
-                            <div>Room: <span className="font-medium text-gray-800">{session.roomType}</span></div>
+                          {session.budget && (
+                            <div>Budget: <span className="font-medium">{session.budget}</span></div>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 mt-2">
-                          {new Date(session.createdAt).toLocaleDateString()}
-                        </p>
                       </div>
                     </div>
                   </Link>

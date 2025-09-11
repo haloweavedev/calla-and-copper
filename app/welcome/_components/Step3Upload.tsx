@@ -195,7 +195,7 @@ export function Step3Upload() {
       if (result.isValid) {
         setTimeout(() => {
           setShowValidationToast(false)
-        }, 5000)
+        }, 15000)
       }
       
     } catch (error) {
@@ -687,8 +687,8 @@ export function Step3Upload() {
                   onClick={() => handleSelectPreviousImage(upload)}
                   className={`relative aspect-square w-42 h-42 cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 ${
                     selectedImageUrl === upload.publicUrl
-                      ? 'border-brand-gold ring-2 ring-brand-gold/50'
-                      : 'border-gray-200 hover:border-brand-gold/50'
+                      ? 'ring-2 ring-brand-forest'
+                      : 'border-gray-200 hover:border-brand-forest/50'
                   }`}
                 >
                   <Image
@@ -728,7 +728,7 @@ export function Step3Upload() {
                   {/* Selection indicator */}
                   {selectedImageUrl === upload.publicUrl && (
                     <div className="absolute inset-0 bg-brand-gold/20 flex items-center justify-center">
-                      <div className="bg-brand-gold text-white px-2 py-1 rounded text-xs font-medium">
+                      <div className="bg-brand-forest text-white px-2 py-1 rounded-sm text-xs font-medium">
                         Selected
                       </div>
                     </div>

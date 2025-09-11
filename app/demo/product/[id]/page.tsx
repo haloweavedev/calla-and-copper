@@ -54,9 +54,10 @@ export default function DemoProductPage() {
               <div className="mt-auto pt-8 space-y-4">
                 <button
                   onClick={() => setIsARVisible(true)}
-                  className="w-full px-6 py-4 border-2 border-black bg-white text-black font-bold text-lg hover:bg-gray-100"
+                  className="w-full px-6 py-4 border-2 border-black bg-white text-black font-bold text-lg hover:bg-gray-100 flex items-center justify-center gap-2"
                 >
-                  View in your Room (AR)
+                  <Image src="/images/vr-icon.png" alt="AR" width={30} height={30} />
+                  <span>View in your Room</span>
                 </button>
                 <button className="w-full px-6 py-4 border-2 border-black/90 bg-black/90 text-white font-bold text-lg hover:bg-brand-forest cursor-pointer">
                   Add to Cart
