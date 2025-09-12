@@ -18,18 +18,6 @@ export default function LoginPage() {
             Sign up
           </Link>
         </div>
-        
-        <div className='w-full flex items-center justify-center gap-4'>
-          <hr className="w-full border-gray-200" />
-          <span className="text-sm text-gray-500">Or</span>
-          <hr className="w-full border-gray-200" />
-        </div>
-        <div className='w-full flex items-center justify-center gap-4'>
-          <button className='w-full px-4 py-2 font-medium text-black border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold flex items-center justify-center gap-2 cursor-pointer'>
-            <Image src="/images/google.png" alt="Google" width={20} height={20} />
-            <span>Log in with Google</span>
-          </button>
-        </div>
       </div>
     </div>
   )

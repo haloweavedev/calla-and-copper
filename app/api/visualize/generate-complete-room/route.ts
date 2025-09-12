@@ -155,17 +155,18 @@ export async function POST(request: NextRequest) {
       withinLimit: contentParts.length <= 3 ? '✅ WITHIN 3-IMAGE LIMIT' : '❌ EXCEEDS LIMIT'
     })
 
-    // Add the specific placement instructions referencing the images
-    contentParts.push({ text: promptText })
-
-    // HARD LIMIT: Only send first 3 parts to Gemini (stay within limit)
-    const limitedContentParts = contentParts.slice(0, 3)
-    console.log('[API] 🚨 ENFORCING 3-IMAGE LIMIT:', {
-      originalParts: contentParts.length,
-      limitedParts: limitedContentParts.length,
+    // HARD LIMIT: Only send first 2 product images + room image to stay within limit
+    // Then add text prompt to ensure it's always included
+    const limitedContentParts = contentParts.slice(0, 2) // Room image + max 1 product image
+    limitedContentParts.push({ text: promptText }) // Always include text prompt
+    
+    console.log('[API] 🚨 ENFORCING 3-PART LIMIT:', {
+      originalImages: contentParts.length - 1, // -1 for text
+      limitedImages: limitedContentParts.length - 1, // -1 for text  
       parts: limitedContentParts.map((part, i) => 
         'text' in part ? `${i}: TEXT` : `${i}: IMAGE`
-      )
+      ),
+      textPromptIncluded: limitedContentParts.some(part => 'text' in part)
     })
 
     console.log('[API] 🤖 Sending request to Gemini 2.5 Flash Image Preview...')
