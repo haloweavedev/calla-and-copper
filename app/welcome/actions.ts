@@ -190,13 +190,30 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
 
     // 5. Get personalized recommendations using enhanced inventory system
     console.log('[SERVER] Getting personalized recommendations using enhanced inventory system...');
-    const finalRecommendations = getRecommendations(
+    const rawRecommendations = getRecommendations(
       params.style, 
       params.roomType, 
       analysis.tags, 
       params.lifestyleTags,
       3
     )
+    
+    // Transform Product objects to match demo store interface
+    const finalRecommendations = rawRecommendations.map(product => ({
+      id: product.id,
+      name: product.name,
+      style: product.style,
+      category: product.category,
+      description: product.description,
+      tags: [
+        ...product.materials,
+        ...product.styleAttributes,
+        ...product.colors,
+        ...product.functionality
+      ],
+      price: product.price,
+      imageUrl: product.imageUrl
+    }))
 
     console.log(`[SERVER] Found ${finalRecommendations.length} recommended products.`)
     console.log('[SERVER] Recommendations:', finalRecommendations.map((p) => ({ name: p.name, category: p.category, style: p.style })))
@@ -324,13 +341,30 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
 
     // 6. Get personalized recommendations using enhanced inventory system
     console.log('[SERVER] Getting personalized recommendations using enhanced inventory system...');
-    const finalRecommendations = getRecommendations(
+    const rawRecommendations = getRecommendations(
       params.style, 
       params.roomType, 
       analysis.tags, 
       params.lifestyleTags,
       3
     )
+    
+    // Transform Product objects to match demo store interface
+    const finalRecommendations = rawRecommendations.map(product => ({
+      id: product.id,
+      name: product.name,
+      style: product.style,
+      category: product.category,
+      description: product.description,
+      tags: [
+        ...product.materials,
+        ...product.styleAttributes,
+        ...product.colors,
+        ...product.functionality
+      ],
+      price: product.price,
+      imageUrl: product.imageUrl
+    }))
 
     console.log(`[SERVER] Found ${finalRecommendations.length} recommended products.`)
     console.log('[SERVER] Recommendations:', finalRecommendations.map((p) => ({ name: p.name, category: p.category, style: p.style })))
