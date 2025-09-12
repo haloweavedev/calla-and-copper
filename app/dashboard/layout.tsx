@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useSession } from '@/lib/auth-client'
 import { authClient } from '@/lib/auth-client'
-import { ChevronDownIcon, ClockIcon, HomeIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, ClockIcon, HomeIcon, PlusIcon, CubeIcon } from '@heroicons/react/24/outline'
 
 export default function DashboardLayout({
   children,
@@ -59,7 +59,19 @@ export default function DashboardLayout({
               }`}
             >
               <HomeIcon className="w-5 h-5 mr-3" />
-              Dashboard
+              Home
+            </Link>
+            
+            <Link
+              href="/dashboard/products"
+              className={`flex items-center px-2 py-2 rounded-sm transition-colors font-medium ${
+                pathname === '/dashboard/products' 
+                  ? 'text-black/80 bg-gray-100' 
+                  : 'text-black/40 hover:bg-gray-50'
+              }`}
+            >
+              <CubeIcon className="w-5 h-5 mr-3" />
+              Products
             </Link>
             
             <Link
