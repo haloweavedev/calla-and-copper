@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { productCatalog, ProductStyle, ProductCategory } from '@/lib/inventory'
 import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline'
 
@@ -120,38 +121,42 @@ export default function ProductsPage() {
             {filteredProducts.map((product) => (
               <div key={product.id} className="bg-brand-cream border border-8 border-brand-cream flex flex-col transition-all duration-200 hover:scale-105">
                 {/* Product Image */}
-                <div className="w-full h-64 relative bg-white cursor-pointer hover:opacity-90 transition-opacity">
-                  <Image
-                    src={product.imageUrl}
-                    alt={product.name}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                    unoptimized
-                    onError={(e) => {
-                      console.error('Image load error for:', product.imageUrl, e)
-                      // Try to show fallback
-                      const img = e.target as HTMLImageElement
-                      img.src = '/images/placeholder.png'
-                    }}
-                    onLoad={() => console.log('Image loaded successfully:', product.imageUrl)}
-                  />
-                  {/* Debug info */}
-                  <div className="absolute bottom-0 left-0 bg-black/70 text-white text-xs p-1 opacity-50">
-                    {product.imageUrl}
-                  </div>
-                  {!product.inStock && (
-                    <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1">
-                      Out of Stock
+                <Link href={`/demo/product/${product.id}`}>
+                  <div className="w-full h-64 relative bg-white cursor-pointer hover:opacity-90 transition-opacity">
+                    <Image
+                      src={product.imageUrl}
+                      alt={product.name}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      unoptimized
+                      onError={(e) => {
+                        console.error('Image load error for:', product.imageUrl, e)
+                        // Try to show fallback
+                        const img = e.target as HTMLImageElement
+                        img.src = '/images/placeholder.png'
+                      }}
+                      onLoad={() => console.log('Image loaded successfully:', product.imageUrl)}
+                    />
+                    {/* Debug info */}
+                    <div className="absolute bottom-0 left-0 bg-black/70 text-white text-xs p-1 opacity-50">
+                      {product.imageUrl}
                     </div>
-                  )}
-                </div>
+                    {!product.inStock && (
+                      <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1">
+                        Out of Stock
+                      </div>
+                    )}
+                  </div>
+                </Link>
 
                 {/* Product Info */}
                 <div className="text-left mt-2 flex-grow flex flex-col justify-between p-2">
                   <div className='mb-4'>
-                    <h3 className="text-xl font-medium uppercase text-left mb-2 cursor-pointer hover:text-brand-dark-brown transition-colors">
-                      {product.name}
-                    </h3>
+                    <Link href={`/demo/product/${product.id}`}>
+                      <h3 className="text-xl font-medium uppercase text-left mb-2 cursor-pointer hover:text-brand-dark-brown transition-colors">
+                        {product.name}
+                      </h3>
+                    </Link>
                     <p className="font-light text-sm text-left uppercase text-black/60">
                       {getCategoryLabel(product.category)}
                     </p>
