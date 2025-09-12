@@ -5,7 +5,7 @@ import { openai } from '@ai-sdk/openai'
 import { generateObject } from 'ai'
 import { z } from 'zod'
 import type { StyleSelection, RoomType, Budget } from '@/lib/store/demo-store'
-import { productCatalog } from '@/lib/mock-data/products'
+import { productCatalog, getRecommendations } from '@/lib/inventory'
 import { auth } from '@/lib/auth'
 import { PrismaClient } from '@prisma/client'
 import { randomUUID } from 'crypto'
@@ -188,45 +188,18 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     });
     console.log('[SERVER] OpenAI analysis successful:', analysis);
 
-    // 5. Match products from catalog using a scoring system
-    console.log('[SERVER] Matching products from catalog with scoring system...');
-    const scoredProducts = productCatalog.map((product) => {
-      let score = 0
-      // Major score for matching the desired style (skip if no style selected)
-      if (params.style && product.style === params.style) {
-        score += 10
-      }
-      // Score for overlapping tags between product and AI analysis
-      const matchingTags = product.tags.filter((tag) => analysis.tags.includes(tag))
-      score += matchingTags.length * 2
-      // Bonus points if product category seems relevant to room type
-      if (params.roomType === 'Living Room' && ['Chairs', 'Sofas', 'Tables', 'Rugs'].includes(product.category)) {
-        score += 3
-      }
-      if (params.roomType === 'Bedroom' && ['Beds', 'Storage', 'Rugs'].includes(product.category)) {
-        score += 3
-      }
-      if (params.roomType === 'Home Office' && ['Chairs', 'Storage', 'Lighting'].includes(product.category)) {
-        score += 3
-      }
-      if (params.roomType === 'Kitchen' && ['Tables', 'Lighting', 'Storage'].includes(product.category)) {
-        score += 3
-      }
-      return { ...product, score }
-    })
+    // 5. Get personalized recommendations using enhanced inventory system
+    console.log('[SERVER] Getting personalized recommendations using enhanced inventory system...');
+    const finalRecommendations = getRecommendations(
+      params.style, 
+      params.roomType, 
+      analysis.tags, 
+      params.lifestyleTags,
+      3
+    )
 
-    const recommendedProducts = scoredProducts
-      .filter((p) => p.score > 0)
-      .sort((a, b) => b.score - a.score)
-
-    console.log(`[SERVER] Found ${recommendedProducts.length} products with a score > 0.`)
-    console.log('[SERVER] Top 5 scored products:', recommendedProducts.slice(0, 5).map((p) => ({ name: p.name, score: p.score })))
-
-    const finalRecommendations = recommendedProducts.length > 0
-      ? recommendedProducts.slice(0, 3)
-      : params.style 
-        ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
-        : productCatalog.slice(0, 3) // If no style, return top 3 products
+    console.log(`[SERVER] Found ${finalRecommendations.length} recommended products.`)
+    console.log('[SERVER] Recommendations:', finalRecommendations.map((p) => ({ name: p.name, category: p.category, style: p.style })))
 
     // 6. Save the complete creation session to database
     let creationId = crypto.randomUUID();
@@ -349,45 +322,18 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
     });
     console.log('[SERVER] OpenAI analysis successful:', analysis);
 
-    // 6. Match products from catalog using a scoring system
-    console.log('[SERVER] Matching products from catalog with scoring system...');
-    const scoredProducts = productCatalog.map((product) => {
-      let score = 0
-      // Major score for matching the desired style (skip if no style selected)
-      if (params.style && product.style === params.style) {
-        score += 10
-      }
-      // Score for overlapping tags between product and AI analysis
-      const matchingTags = product.tags.filter((tag) => analysis.tags.includes(tag))
-      score += matchingTags.length * 2
-      // Bonus points if product category seems relevant to room type
-      if (params.roomType === 'Living Room' && ['Chairs', 'Sofas', 'Tables', 'Rugs'].includes(product.category)) {
-        score += 3
-      }
-      if (params.roomType === 'Bedroom' && ['Beds', 'Storage', 'Rugs'].includes(product.category)) {
-        score += 3
-      }
-      if (params.roomType === 'Home Office' && ['Chairs', 'Storage', 'Lighting'].includes(product.category)) {
-        score += 3
-      }
-      if (params.roomType === 'Kitchen' && ['Tables', 'Lighting', 'Storage'].includes(product.category)) {
-        score += 3
-      }
-      return { ...product, score }
-    })
+    // 6. Get personalized recommendations using enhanced inventory system
+    console.log('[SERVER] Getting personalized recommendations using enhanced inventory system...');
+    const finalRecommendations = getRecommendations(
+      params.style, 
+      params.roomType, 
+      analysis.tags, 
+      params.lifestyleTags,
+      3
+    )
 
-    const recommendedProducts = scoredProducts
-      .filter((p) => p.score > 0)
-      .sort((a, b) => b.score - a.score)
-
-    console.log(`[SERVER] Found ${recommendedProducts.length} products with a score > 0.`)
-    console.log('[SERVER] Top 5 scored products:', recommendedProducts.slice(0, 5).map((p) => ({ name: p.name, score: p.score })))
-
-    const finalRecommendations = recommendedProducts.length > 0
-      ? recommendedProducts.slice(0, 3)
-      : params.style 
-        ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
-        : productCatalog.slice(0, 3) // If no style, return top 3 products
+    console.log(`[SERVER] Found ${finalRecommendations.length} recommended products.`)
+    console.log('[SERVER] Recommendations:', finalRecommendations.map((p) => ({ name: p.name, category: p.category, style: p.style })))
 
     // 5. Save the complete creation session to database
     let creationId = crypto.randomUUID();
