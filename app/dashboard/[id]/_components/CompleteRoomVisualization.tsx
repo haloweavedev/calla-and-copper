@@ -26,7 +26,6 @@ interface CompleteRoomVisualizationProps {
 export function CompleteRoomVisualization({ products, creationId, existingGeneratedImage, onImageGenerated }: CompleteRoomVisualizationProps) {
   const { 
     uploadedFileUrl, 
-    uploadedFileBase64,
     uploadedFileMimeType,
     styleProfile, 
     analysisResult, 
@@ -44,7 +43,6 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
     console.log('[CLIENT] 🎨 ROOM GENERATION - Starting')
     console.log('[CLIENT] 📊 Current demo store state:', {
       uploadedFileUrl: uploadedFileUrl,
-      uploadedFileBase64Length: uploadedFileBase64?.length,
       uploadedFileMimeType: uploadedFileMimeType,
       productsCount: products.length
     })
@@ -52,31 +50,50 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
     setIsLoading(true)
     setError(null)
 
-    // Prepare products with absolute URLs
-    const productsWithAbsoluteUrls = products.map(product => ({
-      ...product,
-      imageUrl: `${window.location.origin}${product.imageUrl}`
-    }))
-
-    // Prepare user context for enhanced prompting
-    const userContext = {
-      styleProfile,
-      roomAnalysis: analysisResult,
-      lifestyleTags,
-      roomType,
-      budget
-    }
-
     try {
+      if (!uploadedFileUrl) {
+        throw new Error('No uploaded file URL available')
+      }
+
+      // Convert URL to base64 for API call
+      console.log('[CLIENT] Converting URL to base64 for API...')
+      const response = await fetch(uploadedFileUrl)
+      const blob = await response.blob()
+      const roomImageBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const base64String = reader.result as string
+          const base64Data = base64String.split(',')[1]
+          resolve(base64Data)
+        }
+        reader.onerror = reject
+        reader.readAsDataURL(blob)
+      })
+
+      // Prepare products with absolute URLs
+      const productsWithAbsoluteUrls = products.map(product => ({
+        ...product,
+        imageUrl: `${window.location.origin}${product.imageUrl}`
+      }))
+
+      // Prepare user context for enhanced prompting
+      const userContext = {
+        styleProfile,
+        roomAnalysis: analysisResult,
+        lifestyleTags,
+        roomType,
+        budget
+      }
+
       console.log('[CLIENT] 🛋️ Generating complete room visualization with', products.length, 'products')
       console.log('[CLIENT] 🖼️ Image data being sent to API:', {
-        uploadedFileBase64Available: !!uploadedFileBase64,
-        base64Length: uploadedFileBase64?.length,
+        roomImageBase64Available: !!roomImageBase64,
+        base64Length: roomImageBase64?.length,
         mimeType: uploadedFileMimeType,
         roomImageUrl: uploadedFileUrl
       })
       const requestPayload = {
-        roomImageBase64: uploadedFileBase64,
+        roomImageBase64: roomImageBase64,
         roomImageMimeType: uploadedFileMimeType,
         products: productsWithAbsoluteUrls,
         userContext,
@@ -132,7 +149,7 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
     } finally {
       setIsLoading(false)
     }
-  }, [uploadedFileBase64, uploadedFileMimeType, uploadedFileUrl, products, styleProfile, analysisResult, lifestyleTags, roomType, budget, creationId, onImageGenerated])
+  }, [uploadedFileUrl, uploadedFileMimeType, products, styleProfile, analysisResult, lifestyleTags, roomType, budget, creationId, onImageGenerated])
 
   // Load existing generated image on mount
   useEffect(() => {
@@ -170,7 +187,7 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
   }, [error])
 
   // Don't render if no room photo is available
-  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType || products.length === 0) {
+  if (!uploadedFileUrl || !uploadedFileMimeType || products.length === 0) {
     return null
   }
 

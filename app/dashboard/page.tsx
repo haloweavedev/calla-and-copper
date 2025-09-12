@@ -14,7 +14,6 @@ interface CreationData {
   lifestyleTags: string[]
   styleProfile?: Record<string, unknown>
   originalImageUrl?: string
-  originalImageBase64?: string
   originalImageMimeType?: string
   analysisResult?: Record<string, unknown>
   recommendedProductIds: string[]

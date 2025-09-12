@@ -62,7 +62,7 @@ export function Step3Upload() {
     }
   }), []);
 
-  const { setStep, setData, uploadedFile, style, roomType, budget, lifestyleTags } = useDemoStore()
+  const { setStep, setData, uploadedFile, style, roomType, budget, lifestyleTags, setUploadedFileUrl, setUploadedFileMimeType } = useDemoStore()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null) // State for error message
   const [preview, setPreview] = useState<string | null>(null)
@@ -98,6 +98,10 @@ export function Step3Upload() {
         const result = await getUserUploadedImages()
         if (result.error) {
           console.error('Failed to fetch previous images:', result.error)
+        } else if ('requiresAuth' in result && result.requiresAuth) {
+          console.log('Authentication required, redirecting to login')
+          window.location.href = '/login'
+          return
         } else {
           setPreviousImages(result.uploads)
         }
@@ -255,7 +259,6 @@ export function Step3Upload() {
           console.log('[CLIENT] 📊 Demo store state after new upload:', {
             uploadedFile: !!useDemoStore.getState().uploadedFile,
             uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
-            uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
             uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
           })
           
@@ -272,27 +275,6 @@ export function Step3Upload() {
     }
   }, [setData, compressImage, validateImageOnly])
 
-  const convertUrlToBase64 = useCallback(async (url: string): Promise<string> => {
-    try {
-      const response = await fetch(url)
-      const blob = await response.blob()
-      
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = () => {
-          const base64String = reader.result as string
-          // Remove the data URL prefix to get just the base64 data
-          const base64Data = base64String.split(',')[1]
-          resolve(base64Data)
-        }
-        reader.onerror = reject
-        reader.readAsDataURL(blob)
-      })
-    } catch (error) {
-      console.error('Failed to convert URL to base64:', error)
-      throw error
-    }
-  }, [])
 
   const handleSelectPreviousImage = useCallback(async (upload: UserUpload) => {
     try {
@@ -310,26 +292,20 @@ export function Step3Upload() {
       setData({ uploadedFile: null }) // Clear current file upload
       setError(null)
 
-      // Convert the public URL to base64 and update demo store
-      console.log('[CLIENT] 🔄 Converting gallery image to base64 for AI generation...')
-      const base64Data = await convertUrlToBase64(upload.publicUrl)
-      console.log('[CLIENT] ✅ Base64 conversion complete. Length:', base64Data.length, 'chars')
-      
       // Update demo store with the gallery image data
-      useDemoStore.getState().setUploadedFileUrl(upload.publicUrl)
-      useDemoStore.getState().setUploadedFileData(base64Data, upload.mimeType)
+      setUploadedFileUrl(upload.publicUrl)
+      setUploadedFileMimeType(upload.mimeType)
       
       console.log('[CLIENT] 💾 Gallery image data set in demo store')
       console.log('[CLIENT] 📊 Demo store state after preselect:', {
         uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
-        uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
         uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
       })
     } catch (error) {
       console.error('[CLIENT] ❌ Failed to process gallery image:', error)
       setError('Failed to process selected image. Please try again.')
     }
-  }, [setData, convertUrlToBase64])
+  }, [setData, setUploadedFileUrl, setUploadedFileMimeType])
 
   const handleDeleteUpload = useCallback(async (uploadId: string) => {
     setIsDeletingId(uploadId)
@@ -339,6 +315,12 @@ export function Step3Upload() {
     try {
       const result = await deleteUserUpload(uploadId)
       if (result.error) {
+        // Check if authentication is required
+        if ('requiresAuth' in result && result.requiresAuth) {
+          console.log('Authentication required, redirecting to login')
+          window.location.href = '/login'
+          return
+        }
         setError(result.error)
       } else {
         // Remove from local state
@@ -494,7 +476,6 @@ export function Step3Upload() {
           hasAnalysis: !!result.analysis,
           recommendationsCount: result.recommendations?.length || 0,
           publicUrl: result.publicUrl,
-          base64Length: result.base64String?.length,
           mimeType: result.mimeType,
           error: result.error
         })
@@ -508,6 +489,12 @@ export function Step3Upload() {
       setProgressText("Complete!")
 
       if (result.error) {
+        // Check if authentication is required
+        if ('requiresAuth' in result && result.requiresAuth) {
+          console.log('Authentication required, redirecting to login')
+          window.location.href = '/login'
+          return
+        }
         // Check if it's a validation error with suggestions
         if ('suggestions' in result && result.suggestions) {
           const validationError = `${result.error}\n\n💡 Suggestions: ${result.suggestions}`;
@@ -522,7 +509,6 @@ export function Step3Upload() {
         hasAnalysis: !!result.analysis,
         recommendationsCount: result.recommendations?.length || 0,
         publicUrl: result.publicUrl,
-        base64Available: !!(('base64String' in result ? result.base64String : null) || useDemoStore.getState().uploadedFileBase64),
         mimeType: ('mimeType' in result ? result.mimeType : null) || useDemoStore.getState().uploadedFileMimeType
       })
       
@@ -531,19 +517,15 @@ export function Step3Upload() {
         recommendations: result.recommendations,
         creationId: result.creationId 
       })
-      useDemoStore.getState().setUploadedFileUrl(result.publicUrl!)
+      setUploadedFileUrl(result.publicUrl!)
       
-      if ('base64String' in result && result.base64String && 'mimeType' in result && result.mimeType && 
-          typeof result.base64String === 'string' && typeof result.mimeType === 'string') {
-        console.log('[CLIENT] 💾 Setting base64 data from analysis result')
-        useDemoStore.getState().setUploadedFileData(result.base64String, result.mimeType)
-      } else {
-        console.log('[CLIENT] ⚠️ No base64 data in analysis result, using existing store data')
+      if ('mimeType' in result && result.mimeType && typeof result.mimeType === 'string') {
+        console.log('[CLIENT] 💾 Setting mime type from analysis result')
+        setUploadedFileMimeType(result.mimeType)
       }
       
       console.log('[CLIENT] 🏁 Final demo store state before step 4:', {
         uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
-        uploadedFileBase64Length: useDemoStore.getState().uploadedFileBase64?.length,
         uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType,
         analysisResult: !!useDemoStore.getState().analysisResult,
         recommendations: useDemoStore.getState().recommendations?.length

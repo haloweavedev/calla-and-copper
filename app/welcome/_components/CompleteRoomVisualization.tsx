@@ -23,13 +23,13 @@ interface CompleteRoomVisualizationProps {
 export function CompleteRoomVisualization({ products }: CompleteRoomVisualizationProps) {
   const { 
     uploadedFileUrl, 
-    uploadedFileBase64,
     uploadedFileMimeType,
     styleProfile, 
     analysisResult, 
     lifestyleTags, 
     roomType,
-    budget 
+    budget,
+    convertUrlToBase64
   } = useDemoStore()
   
   const [isLoading, setIsLoading] = useState(false)
@@ -41,22 +41,30 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
     setIsLoading(true)
     setError(null)
 
-    // Prepare products with absolute URLs
-    const productsWithAbsoluteUrls = products.map(product => ({
-      ...product,
-      imageUrl: `${window.location.origin}${product.imageUrl}`
-    }))
-
-    // Prepare user context for enhanced prompting
-    const userContext = {
-      styleProfile,
-      roomAnalysis: analysisResult,
-      lifestyleTags,
-      roomType,
-      budget
-    }
-
     try {
+      if (!uploadedFileUrl) {
+        throw new Error('No uploaded file URL available')
+      }
+
+      // Convert URL to base64 for API call
+      console.log('[CLIENT] Converting URL to base64 for API...')
+      const roomImageBase64 = await convertUrlToBase64(uploadedFileUrl)
+
+      // Prepare products with absolute URLs
+      const productsWithAbsoluteUrls = products.map(product => ({
+        ...product,
+        imageUrl: `${window.location.origin}${product.imageUrl}`
+      }))
+
+      // Prepare user context for enhanced prompting
+      const userContext = {
+        styleProfile,
+        roomAnalysis: analysisResult,
+        lifestyleTags,
+        roomType,
+        budget
+      }
+
       console.log('[CLIENT] Generating complete room visualization with', products.length, 'products')
       const generateResponse = await fetch('/api/visualize/generate-complete-room', {
         method: 'POST',
@@ -64,7 +72,7 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          roomImageBase64: uploadedFileBase64,
+          roomImageBase64: roomImageBase64,
           roomImageMimeType: uploadedFileMimeType,
           products: productsWithAbsoluteUrls,
           userContext,
@@ -96,7 +104,7 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
     } finally {
       setIsLoading(false)
     }
-  }, [uploadedFileBase64, uploadedFileMimeType, products, styleProfile, analysisResult, lifestyleTags, roomType, budget])
+  }, [uploadedFileUrl, uploadedFileMimeType, products, styleProfile, analysisResult, lifestyleTags, roomType, budget, convertUrlToBase64])
 
   // Auto-generate on component mount if we have all the data
   useEffect(() => {
@@ -116,7 +124,7 @@ export function CompleteRoomVisualization({ products }: CompleteRoomVisualizatio
   }, [error])
 
   // Don't render if no room photo is available
-  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType || products.length === 0) {
+  if (!uploadedFileUrl || !uploadedFileMimeType || products.length === 0) {
     return null
   }
 

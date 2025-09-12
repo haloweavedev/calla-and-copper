@@ -11,7 +11,7 @@ interface DashboardGenerationPageProps {
 }
 
 export default function DashboardGenerationPage({ params }: DashboardGenerationPageProps) {
-  const { analysisResult, recommendations, reset, uploadedFileUrl, setData } = useDemoStore()
+  const { analysisResult, recommendations, uploadedFileUrl, setData } = useDemoStore()
   const [creation, setCreation] = useState<Creation | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

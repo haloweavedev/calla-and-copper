@@ -10,7 +10,6 @@ import { auth } from '@/lib/auth'
 import { PrismaClient } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
 import crypto from 'crypto'
 
 interface AnalyzeRoomParams {
@@ -93,6 +92,7 @@ REJECT these types of images:
   }
 }
 
+
 export async function analyzeAndMatch(params: AnalyzeRoomParams) {
   console.log('[SERVER] Received request to analyze room.');
   const prisma = new PrismaClient()
@@ -104,7 +104,8 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     })
 
     if (!session) {
-      redirect('/login')
+      console.log('[SERVER] No session found, returning auth error');
+      return { error: 'Authentication required. Please log in again.', requiresAuth: true };
     }
 
     // 1. Validate image before proceeding with storage
@@ -124,13 +125,10 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     const supabase = createStorageClient();
     console.log('[SERVER] Supabase storage client created.');
 
-    // 2. Convert image to base64 for Gemini usage later
-    const arrayBuffer = await params.image.arrayBuffer();
-    const base64String = Buffer.from(arrayBuffer).toString('base64');
     const mimeType = params.image.type;
-    console.log('[SERVER] Image converted to base64 for Gemini usage.');
+    console.log('[SERVER] Image type:', mimeType);
 
-    // 3. Upload image to Supabase Storage for OpenAI Vision
+    // 2. Upload image to Supabase Storage
     const filePath = `room-uploads/${Date.now()}-${params.image.name}`;
     console.log(`[SERVER] Attempting to upload to Supabase Storage at path: ${filePath}`);
     
@@ -144,7 +142,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     }
     console.log('[SERVER] Image upload successful.');
 
-    // 4. Get public URL of the uploaded image for OpenAI Vision
+    // 3. Get public URL of the uploaded image
     const { data: { publicUrl } } = supabase.storage
       .from('product-assets')
       .getPublicUrl(filePath);
@@ -170,7 +168,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     })
     console.log('[SERVER] Upload record saved to database.');
 
-    // 5. Call OpenAI Vision API for room analysis
+    // 4. Call OpenAI Vision API for room analysis
     const systemPrompt = `You are an expert interior design assistant. Your task is to analyze an image of a user's room in the context of their stated style preferences. Based on ALL the information, provide a structured analysis of the room. Identify key visual elements, materials, lighting conditions, and overall current vibe. Generate a list of descriptive tags that can be used to match products. The user's desired style is the most important factor.`;
     const userPrompt = `User Preferences:\n- Desired Style: ${params.style || 'AI-Powered Discovery (let AI determine best style)'}\n- Room Type: ${params.roomType}\n- Budget: ${params.budget}\n- Lifestyle Needs: ${params.lifestyleTags.join(', ')}\n\nAnalyze the room in the provided image and generate a description and tags.`;
     
@@ -190,7 +188,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     });
     console.log('[SERVER] OpenAI analysis successful:', analysis);
 
-    // 6. Match products from catalog using a scoring system
+    // 5. Match products from catalog using a scoring system
     console.log('[SERVER] Matching products from catalog with scoring system...');
     const scoredProducts = productCatalog.map((product) => {
       let score = 0
@@ -230,7 +228,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
         ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
         : productCatalog.slice(0, 3) // If no style, return top 3 products
 
-    // 7. Save the complete creation session to database
+    // 6. Save the complete creation session to database
     let creationId = crypto.randomUUID();
     try {
       console.log('[SERVER] Saving creation session to database...');
@@ -245,7 +243,6 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
           lifestyleTags: params.lifestyleTags,
           styleProfile: undefined, // Will be added later if needed
           originalImageUrl: publicUrl,
-          originalImageBase64: base64String,
           originalImageMimeType: mimeType,
           analysisResult: analysis,
           recommendedProductIds: finalRecommendations.map(p => p.id.toString()),
@@ -270,7 +267,6 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
       analysis, 
       recommendations: finalRecommendations, 
       publicUrl, 
-      base64String, 
       mimeType, 
       creationId, 
       error: null 
@@ -294,7 +290,8 @@ export async function getUserUploadedImages() {
     })
 
     if (!session) {
-      redirect('/login')
+      console.log('[SERVER] No session found in getUserUploadedImages, returning empty uploads');
+      return { error: null, uploads: [], requiresAuth: true };
     }
 
     // Fetch user's uploaded images, most recent first
@@ -328,7 +325,8 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
     })
 
     if (!session) {
-      redirect('/login')
+      console.log('[SERVER] No session found in analyzeExistingImage, returning auth error');
+      return { error: 'Authentication required. Please log in again.', requiresAuth: true };
     }
 
     // 4. Call OpenAI Vision API with existing image URL
@@ -391,7 +389,7 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
         ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
         : productCatalog.slice(0, 3) // If no style, return top 3 products
 
-    // 6. Save the complete creation session to database
+    // 5. Save the complete creation session to database
     let creationId = crypto.randomUUID();
     try {
       console.log('[SERVER] Saving existing image creation session to database...');
@@ -407,8 +405,7 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
           lifestyleTags: params.lifestyleTags,
           styleProfile: undefined,
           originalImageUrl: params.imageUrl,
-          originalImageBase64: null, // Not available for existing images
-          originalImageMimeType: null,
+          originalImageMimeType: null, // Will be detected from URL if needed
           analysisResult: analysis,
           recommendedProductIds: finalRecommendations.map(p => p.id.toString()),
           recommendationsData: finalRecommendations,
@@ -452,7 +449,8 @@ export async function deleteUserUpload(uploadId: string) {
     })
 
     if (!session) {
-      redirect('/login')
+      console.log('[SERVER] No session found in deleteUserUpload, returning auth error');
+      return { error: 'Authentication required. Please log in again.', requiresAuth: true };
     }
 
     // Verify the upload belongs to the current user before deleting

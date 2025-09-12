@@ -58,7 +58,6 @@ model Creation {
   lifestyleTags         String[]
   styleProfile          Json?
   originalImageUrl      String?
-  originalImageBase64   String?
   originalImageMimeType String?
   analysisResult        Json?
   recommendedProductIds String[]

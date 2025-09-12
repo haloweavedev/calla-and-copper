@@ -15,7 +15,6 @@ type DemoState = {
   lifestyleTags: string[]
   uploadedFile: File | null
   uploadedFileUrl: string | null
-  uploadedFileBase64: string | null
   uploadedFileMimeType: string | null
   analysisResult: { description: string; tags: string[]; colorPalette?: string[] } | null
   recommendations: Array<{
@@ -35,7 +34,8 @@ type DemoActions = {
   setStep: (step: number) => void
   setData: (data: Partial<Omit<DemoState, 'step'>>) => void
   setUploadedFileUrl: (url: string) => void
-  setUploadedFileData: (base64: string, mimeType: string) => void
+  setUploadedFileMimeType: (mimeType: string) => void
+  convertUrlToBase64: (url: string) => Promise<string>
   reset: () => void
 }
 
@@ -48,7 +48,6 @@ const initialState: DemoState = {
   lifestyleTags: [],
   uploadedFile: null,
   uploadedFileUrl: null,
-  uploadedFileBase64: null,
   uploadedFileMimeType: null,
   analysisResult: null,
   recommendations: null,
@@ -62,7 +61,27 @@ export const useDemoStore = create<DemoState & DemoActions>()(
       setStep: (step) => set({ step }),
       setData: (data) => set((state) => ({ ...state, ...data })),
       setUploadedFileUrl: (url) => set({ uploadedFileUrl: url }),
-      setUploadedFileData: (base64: string, mimeType: string) => set({ uploadedFileBase64: base64, uploadedFileMimeType: mimeType }),
+      setUploadedFileMimeType: (mimeType) => set({ uploadedFileMimeType: mimeType }),
+      convertUrlToBase64: async (url: string) => {
+        try {
+          const response = await fetch(url)
+          const blob = await response.blob()
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => {
+              const base64String = reader.result as string
+              // Remove the data URL prefix to get just the base64 data
+              const base64Data = base64String.split(',')[1]
+              resolve(base64Data)
+            }
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+          })
+        } catch (error) {
+          console.error('Failed to convert URL to base64:', error)
+          throw error
+        }
+      },
       reset: () => set(initialState),
     }),
     { name: 'calla-copper-demo-storage' }

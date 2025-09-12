@@ -16,13 +16,13 @@ interface ProductVisualizationProps {
 export function ProductVisualization({ product }: ProductVisualizationProps) {
   const { 
     uploadedFileUrl,
-    uploadedFileBase64,
     uploadedFileMimeType,
     styleProfile,
     analysisResult,
     lifestyleTags,
     roomType,
-    budget
+    budget,
+    convertUrlToBase64
   } = useDemoStore()
   
   const [isLoading, setIsLoading] = useState(false)
@@ -40,7 +40,7 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
   }, [error])
 
   // Don't render if no room photo is available
-  if (!uploadedFileUrl || !uploadedFileBase64 || !uploadedFileMimeType) {
+  if (!uploadedFileUrl || !uploadedFileMimeType) {
     return null
   }
 
@@ -48,19 +48,23 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
     setIsLoading(true)
     setError(null)
 
-    // Construct absolute URL for product image
-    const absoluteProductImageUrl = `${window.location.origin}${product.imageUrl}`
-
-    // Prepare user context for enhanced prompting
-    const userContext = {
-      styleProfile,
-      roomAnalysis: analysisResult,
-      lifestyleTags,
-      roomType,
-      budget
-    }
-
     try {
+      // Convert URL to base64 for API call
+      console.log('[CLIENT] Converting URL to base64 for API...')
+      const roomImageBase64 = await convertUrlToBase64(uploadedFileUrl)
+
+      // Construct absolute URL for product image
+      const absoluteProductImageUrl = `${window.location.origin}${product.imageUrl}`
+
+      // Prepare user context for enhanced prompting
+      const userContext = {
+        styleProfile,
+        roomAnalysis: analysisResult,
+        lifestyleTags,
+        roomType,
+        budget
+      }
+
       // Generate the visualization with context-aware prompting
       console.log('[CLIENT] Calling enhanced generate-image API with user context...')
       const generateResponse = await fetch('/api/visualize/generate-image', {
@@ -69,7 +73,7 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          roomImageBase64: uploadedFileBase64,
+          roomImageBase64: roomImageBase64,
           roomImageMimeType: uploadedFileMimeType,
           productImageUrl: absoluteProductImageUrl,
           productCategory: product.category,
