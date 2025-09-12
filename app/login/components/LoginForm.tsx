@@ -41,11 +41,10 @@ export function LoginForm() {
     try {
       await authClient.signIn.social({
         provider: 'google',
+        callbackURL: '/welcome'
       })
-      router.push('/welcome')
     } catch (error) {
       setError('Failed to sign in with Google')
-    } finally {
       setIsLoading(false)
     }
   }
