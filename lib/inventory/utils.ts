@@ -19,8 +19,8 @@ export function calculateProductScore(
   }
 
   // 2. Room compatibility
-  const roomKey = roomType.toLowerCase().replace(' ', '-') as any
-  if (product.roomCompatibility.includes(roomKey)) {
+  const roomKey = roomType.toLowerCase().replace(' ', '-') as keyof typeof product.roomCompatibility
+  if (product.roomCompatibility.includes(roomKey as any)) {
     score += 10
   }
 
