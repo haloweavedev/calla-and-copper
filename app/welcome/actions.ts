@@ -223,7 +223,7 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
     console.log('[SERVER] Top 5 scored products:', recommendedProducts.slice(0, 5).map((p) => ({ name: p.name, score: p.score })))
 
     const finalRecommendations = recommendedProducts.length > 0
-      ? recommendedProducts.slice(0, 6)
+      ? recommendedProducts.slice(0, 3)
       : params.style 
         ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
         : productCatalog.slice(0, 3) // If no style, return top 3 products
@@ -384,7 +384,7 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
     console.log('[SERVER] Top 5 scored products:', recommendedProducts.slice(0, 5).map((p) => ({ name: p.name, score: p.score })))
 
     const finalRecommendations = recommendedProducts.length > 0
-      ? recommendedProducts.slice(0, 6)
+      ? recommendedProducts.slice(0, 3)
       : params.style 
         ? productCatalog.filter((p) => p.style === params.style).slice(0, 3)
         : productCatalog.slice(0, 3) // If no style, return top 3 products
