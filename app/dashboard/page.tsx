@@ -86,7 +86,7 @@ export default function DashboardPage() {
               <h2 className="text-xl font-semibold text-gray-900">Recent Designs</h2>
               <Link
                 href="/dashboard/history"
-                className="text-brand-gold hover:text-brand-dark-brown font-medium text-sm"
+                className="text-black/80 hover:text-black/60 font-medium text-sm"
               >
                 View All
               </Link>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
             <div className="p-6 flex flex-col items-center justify-center">
               <Image src="/images/empty-box.png" alt="No designs" width={100} height={100} />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No designs yet</h3>
-              <p className="text-gray-600 mb-6">Start creating your first personalized room design!</p>
+              <p className="text-gray-600 mb-6 text-center">Start creating your first personalized room design!</p>
               <Link
                 href="/welcome"
                 className="inline-flex items-center px-6 py-3 bg-brand-gold text-white font-medium rounded-lg hover:bg-brand-dark-brown transition-colors"
@@ -181,7 +181,7 @@ export default function DashboardPage() {
                 <div className="text-center mt-6">
                   <Link
                     href="/dashboard/history"
-                    className="inline-flex items-center px-4 py-2 text-brand-dark-brown hover:text-brand-dark-brown/80 font-medium"
+                    className="inline-flex items-center px-4 py-2 text-black/80 hover:text-black/60 font-medium"
                   >
                     View All {sessions.length} Designs →
                   </Link>
@@ -192,7 +192,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-gradient-to-br from-brand-gold to-brand-warm-brown rounded-lg px-6 py-4 text-white flex flex-row items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold mb-2">Start New Design</h3>
@@ -213,7 +213,7 @@ export default function DashboardPage() {
             </div>
             <Link
               href="/dashboard/history"
-              className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-full hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-full hover:bg-gray-50 transition-colors whitespace-nowrap"
             >
               View History
             </Link>
