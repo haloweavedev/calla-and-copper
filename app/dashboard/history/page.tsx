@@ -94,7 +94,7 @@ export default function HistoryPage() {
   return (
     <div className="w-full p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl uppercase font-medium">Your Creation History</h1>
+        <h1 className="text-3xl font-base">Your Creation History</h1>
         <Link 
           href="/welcome" 
           className="px-4 py-2 bg-brand-gold text-white font-medium rounded-full hover:bg-brand-dark-brown transition-colors"

@@ -29,7 +29,7 @@ export default function ProductsPage() {
       'all': 'All Styles',
       'MODERN': 'Modern Clean',
       'SCANDINAVIAN': 'Warm Minimalist', 
-      'INDUSTRIAL': 'Industrial Chic',
+      'INDUSTRIAL': 'Industrial loft',
       'BOHO': 'Boho Eclectic',
       'VINTAGE': 'Cozy Traditional'
     }

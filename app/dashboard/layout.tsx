@@ -121,8 +121,9 @@ export default function DashboardLayout({
             <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg">
               <button
                 onClick={handleLogout}
-                className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-1"
               >
+                <ArrowLeftStartOnRectangleIcon className="w-5 h-5 mr-2 text-red-500/80" />
                 Logout
               </button>
             </div>
@@ -234,7 +235,7 @@ export default function DashboardLayout({
 
                   {/* Dropdown Menu */}
                   {isDropdownOpen && (
-                    <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg">
+                    <div className="absolute top-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg">
                     <button
                       onClick={() => {
                         handleLogout()

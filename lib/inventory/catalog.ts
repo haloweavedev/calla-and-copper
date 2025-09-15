@@ -530,14 +530,14 @@ export const productCatalog: Product[] = [
     inStock: true
   },
 
-  // NEW INDUSTRIAL CHIC PRODUCTS (28-30)
+  // NEW Industrial loft PRODUCTS (28-30)
   {
     id: 28,
     name: 'Leather Industrial Sofa',
     style: 'INDUSTRIAL',
     category: 'seating',
     subcategory: 'sofas',
-    description: 'Industrial chic sofa with distressed brown leather and black metal frame.',
+    description: 'Industrial loft sofa with distressed brown leather and black metal frame.',
     materials: ['leather', 'metal'],
     styleAttributes: ['rustic'],
     colors: ['brown', 'dark-tone'],
@@ -556,7 +556,7 @@ export const productCatalog: Product[] = [
     style: 'INDUSTRIAL',
     category: 'tables',
     subcategory: 'side-tables',
-    description: 'Industrial chic side table with black iron pipe base and reclaimed wood top.',
+    description: 'Industrial loft side table with black iron pipe base and reclaimed wood top.',
     materials: ['metal', 'wood'],
     styleAttributes: ['rustic'],
     colors: ['dark-tone', 'brown'],
@@ -575,7 +575,7 @@ export const productCatalog: Product[] = [
     style: 'INDUSTRIAL',
     category: 'lighting',
     subcategory: 'table-lamps',
-    description: 'Industrial chic desk lamp with black metal arm, Edison bulb, and adjustable joint.',
+    description: 'Industrial loft desk lamp with black metal arm, Edison bulb, and adjustable joint.',
     materials: ['metal'],
     styleAttributes: ['rustic'],
     colors: ['black', 'dark-tone'],
