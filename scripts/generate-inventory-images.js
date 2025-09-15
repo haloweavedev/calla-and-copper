@@ -99,27 +99,27 @@ const newInventoryItems = [
     prompt: 'Warm minimalist round mirror, light oak wood frame, simple Scandinavian design, pure white background, studio lighting, furniture catalog photography, realistic wood and glass, 4K resolution'
   },
 
-  // INDUSTRIAL CHIC (3 items)
+  // Industrial loft (3 items)
   {
     style: 'INDUSTRIAL',
     category: 'seating',
     subcategory: 'sofas',
     name: 'Leather Industrial Sofa',
-    prompt: 'Industrial chic sofa, distressed brown leather, black metal frame, urban loft style, pure white background, studio lighting, furniture catalog photography, realistic aged leather texture, 4K resolution'
+    prompt: 'Industrial loft sofa, distressed brown leather, black metal frame, urban loft style, pure white background, studio lighting, furniture catalog photography, realistic aged leather texture, 4K resolution'
   },
   {
     style: 'INDUSTRIAL',
     category: 'tables',
     subcategory: 'side-tables',
     name: 'Pipe Side Table',
-    prompt: 'Industrial chic side table, black iron pipe base, reclaimed wood top, urban raw design, pure white background, studio lighting, furniture catalog photography, realistic metal and wood textures, 4K resolution'
+    prompt: 'Industrial loft side table, black iron pipe base, reclaimed wood top, urban raw design, pure white background, studio lighting, furniture catalog photography, realistic metal and wood textures, 4K resolution'
   },
   {
     style: 'INDUSTRIAL',
     category: 'lighting',
     subcategory: 'table-lamps',
     name: 'Edison Desk Lamp',
-    prompt: 'Industrial chic desk lamp, black metal arm, Edison bulb, adjustable joint, urban workshop style, pure white background, studio lighting, furniture catalog photography, realistic metal texture, 4K resolution'
+    prompt: 'Industrial loft desk lamp, black metal arm, Edison bulb, adjustable joint, urban workshop style, pure white background, studio lighting, furniture catalog photography, realistic metal texture, 4K resolution'
   }
 ]
 

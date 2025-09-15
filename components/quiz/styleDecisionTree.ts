@@ -28,7 +28,7 @@ const styleDecisionTree: StyleDecisionTree = {
     imageSrc: "/style-quiz/warm-minimalist.png"
   },
 
-  "Industrial Chic": {
+  "Industrial loft": {
     description: "Raw, edgy, metropolitan style with urban appeal",
     keywords: ["urban", "edgy", "metropolitan"],
     imageSrc: "/style-quiz/industrial-chic.png"

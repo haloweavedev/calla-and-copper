@@ -24,7 +24,7 @@ export function Step1Style() {
         'Cozy Traditional': 'VINTAGE',
         'Boho Eclectic': 'BOHO',
         'Warm Minimalist': 'SCANDINAVIAN',
-        'Industrial Chic': 'INDUSTRIAL'
+        'Industrial loft': 'INDUSTRIAL'
       }
       
       const foundationStyle = styleProfile.styleHierarchy.foundation

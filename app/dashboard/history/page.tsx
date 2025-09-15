@@ -94,7 +94,7 @@ export default function HistoryPage() {
   return (
     <div className="w-full p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl uppercase font-medium">Your Creation History</h1>
+        <h1 className="text-3xl font-base">Your Creation History</h1>
         <Link 
           href="/welcome" 
           className="px-4 py-2 bg-brand-gold text-white font-medium rounded-full hover:bg-brand-dark-brown transition-colors"
@@ -104,12 +104,8 @@ export default function HistoryPage() {
       </div>
 
       {sessions.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <div className="text-gray-600 mb-4">
-            <svg className="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
+        <div className="text-center py-6 bg-gray-50 rounded-lg flex flex-col items-center justify-center">
+          <Image src="/images/empty-folder.png" alt="No designs" width={80} height={80} />
           <h3 className="text-lg font-medium text-gray-800 mb-2">No creations yet</h3>
           <p className="text-gray-600 mb-6">Start creating your first personalized room design!</p>
           <Link 

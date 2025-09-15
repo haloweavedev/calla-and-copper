@@ -35,7 +35,7 @@ export default function WelcomePage() {
   return (
     <>
     <Header />
-    <DebugAuth />
+    {/* <DebugAuth /> */}
     <div className={`w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8`}>
       <div className="w-full">
         {renderStep()}
