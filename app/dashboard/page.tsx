@@ -57,16 +57,18 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-gray-50 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-64 mb-6"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-white rounded-lg h-64 shadow-sm"></div>
-              ))}
-            </div>
-          </div>
+      <div className="p-6 flex items-center justify-center min-h-screen">
+        <div className="text-center py-12">
+          <video
+            src="/logo-loading.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-46 h-46 object-contain opacity-90"
+            aria-label="Loading animation"
+          />
+          <div className="animate-pulse text-gray-600">Loading your dashboard...</div>
         </div>
       </div>
     )
@@ -92,8 +94,8 @@ export default function DashboardPage() {
           </div>
 
           {sessions.length === 0 ? (
-            <div className="py-12">
-              <PhotoIcon className="w-16 h-16 text-gray-400 mb-4" />
+            <div className="p-6 flex flex-col items-center justify-center">
+              <Image src="/images/empty-box.png" alt="No designs" width={100} height={100} />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No designs yet</h3>
               <p className="text-gray-600 mb-6">Start creating your first personalized room design!</p>
               <Link
@@ -179,7 +181,7 @@ export default function DashboardPage() {
                 <div className="text-center mt-6">
                   <Link
                     href="/dashboard/history"
-                    className="inline-flex items-center px-4 py-2 text-brand-gold hover:text-brand-dark-brown font-medium"
+                    className="inline-flex items-center px-4 py-2 text-brand-dark-brown hover:text-brand-dark-brown/80 font-medium"
                   >
                     View All {sessions.length} Designs →
                   </Link>
@@ -191,23 +193,27 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-gradient-to-br from-brand-gold to-brand-warm-brown rounded-lg p-6 text-white">
-            <h3 className="text-lg font-semibold mb-2">Start New Design</h3>
-            <p className="text-brand-cream mb-4">Upload your room photo and get personalized recommendations</p>
+          <div className="bg-gradient-to-br from-brand-gold to-brand-warm-brown rounded-lg px-6 py-4 text-white flex flex-row items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Start New Design</h3>
+              <p className="text-brand-cream mb-4 text-sm">Upload your space, get product recommendations</p>
+            </div>
             <Link
               href="/welcome"
-              className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-lg hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-full hover:bg-gray-50 transition-colors whitespace-nowrap"
             >
               Get Started
             </Link>
           </div>
           
-          <div className="bg-gradient-to-br from-brand-forest to-brand-dark-brown rounded-lg p-6 text-white">
-            <h3 className="text-lg font-semibold mb-2">Browse History</h3>
-            <p className="text-gray-200 mb-4">View all your previous designs and visualizations</p>
+          <div className="bg-gradient-to-br from-brand-forest to-brand-dark-brown rounded-lg p-6 text-white flex flex-row items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Browse History</h3>
+              <p className="text-gray-200 mb-4 text-sm">View all your previous designs and visualizations</p>
+            </div>
             <Link
               href="/dashboard/history"
-              className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-lg hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-full hover:bg-gray-50 transition-colors"
             >
               View History
             </Link>

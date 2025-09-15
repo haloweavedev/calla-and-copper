@@ -55,7 +55,7 @@ export default function ProductsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-brand-dark-brown mb-2">Product Catalog</h1>
+          <h1 className="text-3xl font-base text-brand-dark-brown mb-2">Product Catalog</h1>
           <p className="text-brand-warm-brown">Browse our complete collection of furniture and decor items</p>
           <div className="mt-4 text-sm text-gray-600">
             Showing {filteredProducts.length} of {productCatalog.length} products
@@ -63,7 +63,7 @@ export default function ProductsPage() {
         </div>
 
         {/* Search and Filters */}
-        <div className="mb-8 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
@@ -71,7 +71,7 @@ export default function ProductsPage() {
               <input
                 type="text"
                 placeholder="Search products..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-gold focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-brand-forest focus:ring-.5 focus:ring-brand-forest focus:ring-opacity-50 focus:outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -81,7 +81,7 @@ export default function ProductsPage() {
             <div className="relative">
               <FunnelIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <select
-                className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-gold focus:border-transparent appearance-none bg-white"
+                className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-.5 focus:ring-brand-forest focus:ring-opacity-50 focus:border-brand-forest focus:outline-none appearance-none bg-white"
                 value={selectedStyle}
                 onChange={(e) => setSelectedStyle(e.target.value as ProductStyle | 'all')}
               >
@@ -96,7 +96,7 @@ export default function ProductsPage() {
             {/* Category Filter */}
             <div className="relative">
               <select
-                className="pl-4 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-gold focus:border-transparent appearance-none bg-white"
+                className="pl-4 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-.5 focus:ring-brand-forest focus:ring-opacity-50 focus:border-brand-forest focus:outline-none appearance-none bg-white"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value as ProductCategory | 'all')}
               >
@@ -137,10 +137,6 @@ export default function ProductsPage() {
                       }}
                       onLoad={() => console.log('Image loaded successfully:', product.imageUrl)}
                     />
-                    {/* Debug info */}
-                    <div className="absolute bottom-0 left-0 bg-black/70 text-white text-xs p-1 opacity-50">
-                      {product.imageUrl}
-                    </div>
                     {!product.inStock && (
                       <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1">
                         Out of Stock
@@ -163,11 +159,11 @@ export default function ProductsPage() {
                     
                     {/* Style and Materials Info */}
                     <div className="mt-2">
-                      <span className="inline-block px-2 py-1 bg-white text-brand-dark-brown text-xs uppercase font-light mb-1 mr-1">
+                      <span className="inline-block px-2 py-1 bg-white text-brand-dark-brown text-xs uppercase font-light mb-1 mr-1 rounded-sm">
                         {getStyleLabel(product.style)}
                       </span>
                       {product.materials.slice(0, 2).map((material) => (
-                        <span key={material} className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs uppercase font-light mb-1 mr-1">
+                        <span key={material} className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs uppercase font-light mb-1 mr-1 rounded-sm">
                           {material}
                         </span>
                       ))}
