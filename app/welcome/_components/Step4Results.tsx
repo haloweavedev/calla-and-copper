@@ -33,7 +33,7 @@ export function Step4Results() {
 
   return (
     <div className="text-center">
-      <div className="text-center py-12">
+      <div className="text-center py-12 flex flex-col items-center justify-center gap-4">
         <video
           src="/logo-loading.mp4"
           autoPlay

@@ -40,7 +40,13 @@ export function Header() {
     <nav className="px-4 sm:px-8 py-4 flex justify-between items-center w-full relative shadow-md">
       {/* Logo */}
       <Link href="/" className="text-xl font-bold text-gray-800" onClick={closeMenu}>
-        <Image src="/images/cnc-logo-dark.png" alt="Calla & Copper" width={80} height={80} />
+        <Image 
+          src="/images/cnc-logo-dark.png" 
+          alt="Calla & Copper" 
+          width={80} 
+          height={80}
+          className="w-15 h-15 md:w-20 md:h-20"
+        />
       </Link>
 
       {/* Desktop Menu */}

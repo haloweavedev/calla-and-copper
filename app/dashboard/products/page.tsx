@@ -55,7 +55,7 @@ export default function ProductsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-base text-brand-dark-brown mb-2">Product Catalog</h1>
+          <h1 className="text-lg md:text-3xl font-medium md:font-base mb-2">Product Catalog</h1>
           <p className="text-brand-warm-brown">Browse our complete collection of furniture and decor items</p>
           <div className="mt-4 text-sm text-gray-600">
             Showing {filteredProducts.length} of {productCatalog.length} products

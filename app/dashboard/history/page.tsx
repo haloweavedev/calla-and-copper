@@ -77,7 +77,7 @@ export default function HistoryPage() {
   if (error) {
     return (
       <div className="p-6 min-h-scren">
-        <h1 className="text-3xl text-center lg:text-left">Your Creation History</h1>
+        <h1 className="text-xl md:text-3xl text-center lg:text-left">Your Creation History</h1>
         <div className="text-center py-12">
           <p className="text-red-600 mb-4">{error}</p>
           <button 
@@ -94,7 +94,7 @@ export default function HistoryPage() {
   return (
     <div className="w-full p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-base">Your Creation History</h1>
+        <h1 className="text-lg md:text-3xl font-medium md:font-base">Your Creation History</h1>
         <Link 
           href="/welcome" 
           className="px-4 py-2 bg-brand-gold text-white font-medium rounded-full hover:bg-brand-dark-brown transition-colors"
