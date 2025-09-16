@@ -101,11 +101,18 @@ export function ProductVisualization({ product }: ProductVisualizationProps) {
   return (
     <>
       <button
-        className="fixed bottom-8 left-8 bg-gray-800 text-white font-medium py-3 px-6 hover:bg-gray-700 transition-all z-40 flex items-center justify-center"
+        className="w-full px-6 py-4 border-2 border-black bg-white text-black font-bold text-lg hover:bg-gray-100 flex items-center justify-center gap-2 cursor-pointer"
         onClick={handleVisualize}
-        disabled={isLoading}
+        disabled={isLoading || !uploadedFileUrl || !uploadedFileMimeType}
       >
-        <EyeIcon className="w-4 h-4 mr-2" />
+        {isLoading ? (
+          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        ) : (
+          <EyeIcon className="w-4 h-4 mr-2" />
+        )}
         {isLoading ? 'Visualizing...' : 'Visualize in My Room'}
       </button>
 

@@ -32,7 +32,7 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
       setLoading(true)
       const response = await fetch(`/api/creations/${resolvedParams.id}`)
       if (!response.ok) {
-        throw new Error('Creation not found')
+        throw new Error('There was an error creating your design.')
       }
       const creationData = await response.json()
       console.log('[DASHBOARD] Creation data received:', {
@@ -86,14 +86,16 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
 
   if (error || !creation) {
     return (
-      <div className="w-full min-h-screen bg-white text-black flex flex-col p-4 sm:p-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-red-600">Creation Not Found</h1>
-          <p className="mb-4">{error || 'The requested creation could not be found.'}</p>
-          <Link href="/welcome" className="px-6 py-2 font-medium bg-black text-white hover:bg-gray-800 transition-colors">
-            Start New Analysis
-          </Link>
-        </div>
+      <div className="p-6 flex flex-col items-center justify-center">
+        <Image src="/images/broken-image.png" alt="Not found" width={100} height={100} className="opacity-70" />
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Creation Not Found</h3>
+        <p className="text-gray-600 mb-6 text-center">{error || 'Please try again.'}</p>
+        <Link
+          href="/welcome"
+          className="inline-flex items-center px-6 py-3 bg-brand-gold text-white font-medium rounded-lg hover:bg-brand-dark-brown transition-colors"
+        >
+          Start New Analysis
+        </Link>
       </div>
     )
   }
@@ -157,10 +159,6 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
             </div>
           ))}
         </div>
-        {/* Do we need this button? */}
-        {/* <div className="text-center mt-12">
-          <button onClick={reset} className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">Start Over</button>
-        </div> */}
       </div>
   )
 }

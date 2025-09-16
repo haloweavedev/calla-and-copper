@@ -13,6 +13,7 @@ export default function DemoProductPage() {
   const productId = Number(params.id)
   const [isARVisible, setIsARVisible] = useState(false)
 
+
   const product = productCatalog.find((p) => p.id === productId)
 
   if (!product) {
@@ -52,14 +53,16 @@ export default function DemoProductPage() {
                 </div>
               </div>
               <div className="mt-auto pt-8 space-y-4">
-                <button
+                {/* <button
                   onClick={() => setIsARVisible(true)}
                   className="w-full px-6 py-4 border-2 border-black bg-white text-black font-bold text-lg hover:bg-gray-100 flex items-center justify-center gap-2"
                 >
                   <Image src="/images/vr-icon.png" alt="AR" width={30} height={30} />
                   <span>View in your Room</span>
-                </button>
-                <button className="w-full px-6 py-4 border-2 border-black/90 bg-black/90 text-white font-bold text-lg hover:bg-brand-forest cursor-pointer">
+                </button> */}
+                <ProductVisualization product={{ imageUrl: product.imageUrl, category: product.category, name: product.name }} />
+
+                <button className="w-full px-6 py-4 border-2 border-black/90 bg-black/90 text-white font-bold text-lg hover:bg-brand-gold hover:border-brand-gold cursor-pointer">
                   Add to Cart
                 </button>
               </div>
@@ -81,8 +84,6 @@ export default function DemoProductPage() {
           </div>
         </div>
       )}
-      
-      <ProductVisualization product={{ imageUrl: product.imageUrl, category: product.category, name: product.name }} />
     </>
   )
 }
