@@ -6,7 +6,8 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useSession } from '@/lib/auth-client'
 import { authClient } from '@/lib/auth-client'
-import { ChevronDownIcon, ClockIcon, HomeIcon, PlusIcon, CubeIcon, Bars3Icon, XMarkIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, ClockIcon, HomeIcon, PlusIcon, CubeIcon, Bars3Icon, XMarkIcon, ArrowLeftStartOnRectangleIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline'
+import { FeedbackModal } from '@/app/components/FeedbackModal'
 
 export default function DashboardLayout({
   children,
@@ -15,6 +16,7 @@ export default function DashboardLayout({
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
   const { data: session } = useSession()
   const pathname = usePathname()
 
@@ -78,19 +80,19 @@ export default function DashboardLayout({
             Products
           </Link>
           
-          <Link
-            href="/dashboard/history"
-            className={`flex items-center px-2 py-2 rounded-sm transition-colors font-medium ${
-              pathname === '/dashboard/history' 
-                ? 'text-black/80 bg-gray-100' 
-                : 'text-black/40 hover:bg-gray-100'
-            }`}
-          >
-            <ClockIcon className="w-5 h-5 mr-3" />
-            History
-          </Link>
-        </nav>
-      </div>
+            <Link
+              href="/dashboard/history"
+              className={`flex items-center px-2 py-2 rounded-sm transition-colors font-medium ${
+                pathname === '/dashboard/history' 
+                  ? 'text-black/80 bg-gray-100' 
+                  : 'text-black/40 hover:bg-gray-100'
+              }`}
+            >
+              <ClockIcon className="w-5 h-5 mr-3" />
+              History
+            </Link>
+          </nav>
+        </div>
 
       {/* Create New Design Button */}
       <div className="p-4">
@@ -120,8 +122,15 @@ export default function DashboardLayout({
           {isDropdownOpen && (
             <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg">
               <button
+                onClick={() => setIsFeedbackModalOpen(true)}
+                className="w-full px-4 py-2 text-left text-sm text-black/60 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-1 whitespace-nowrap"
+              >
+                <ChatBubbleLeftRightIcon className="w-5 h-5 mr-2 text-blue-500/80" />
+                Share Feedback
+              </button>
+              <button
                 onClick={handleLogout}
-                className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-1"
+                className="w-full px-4 py-2 text-left text-sm text-black/60 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-1"
               >
                 <ArrowLeftStartOnRectangleIcon className="w-5 h-5 mr-2 text-red-500/80" />
                 Logout
@@ -236,16 +245,23 @@ export default function DashboardLayout({
                   {/* Dropdown Menu */}
                   {isDropdownOpen && (
                     <div className="absolute top-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg">
-                    <button
-                      onClick={() => {
-                        handleLogout()
-                        setIsMobileMenuOpen(false)
-                      }}
-                      className="flex items-center px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
-                    >
-                      <ArrowLeftStartOnRectangleIcon className="w-5 h-5 mr-2 text-red-500/80" />
-                      <span className='text-sm text-red-500/80 font-medium'>Logout</span>
-                    </button>
+                      <button
+                        onClick={() => setIsFeedbackModalOpen(true)}
+                        className="flex items-center px-3 py-2 text-left text-sm text-black/60 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
+                      >
+                        <ChatBubbleLeftRightIcon className="w-5 h-5 mr-2 text-blue-500/80" />
+                        Share Feedback
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleLogout()
+                          setIsMobileMenuOpen(false)
+                        }}
+                        className="flex items-center px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                      >
+                        <ArrowLeftStartOnRectangleIcon className="w-5 h-5 mr-2 text-red-500/80" />
+                        <span className='text-sm text-red-500/80 font-medium'>Logout</span>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -310,6 +326,12 @@ export default function DashboardLayout({
       </div>
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav />
+      
+      {/* Feedback Modal */}
+      <FeedbackModal 
+        isOpen={isFeedbackModalOpen} 
+        onClose={() => setIsFeedbackModalOpen(false)} 
+      />
     </div>
   )
 }

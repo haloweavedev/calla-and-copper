@@ -83,7 +83,7 @@ export default function DashboardPage() {
         <div className="bg-white rounded-lg shadow-sm">
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
-              <h2 className="text-3xl font-base">Recent Designs</h2>
+              <h2 className="text-lg md:text-3xl font-medium md:font-base">Recent Designs</h2>
               <Link
                 href="/dashboard/history"
                 className="text-black/80 hover:text-black/60 font-medium text-sm"

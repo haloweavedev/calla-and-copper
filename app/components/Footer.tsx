@@ -1,8 +1,13 @@
+'use client'
+
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import { PhoneIcon, EnvelopeIcon, MapPinIcon } from "@heroicons/react/24/solid";
+import { FeedbackModal } from "./FeedbackModal";
 
 export default function Footer() {
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     return (
         <div className="p-4 w-full">
         <footer id="footer-section" className="bg-brand-dark-brown pt-12 px-12 flex flex-col items-center w-full rounded-md">
@@ -56,6 +61,12 @@ export default function Footer() {
                     </div>
                     <div className="flex flex-col items-start gap-4 text-white">
                         <span className="text-white/80 uppercase font-light">company</span>
+                        <button 
+                            onClick={() => setIsFeedbackModalOpen(true)}
+                            className="text-white text-sm font-light tracking-wide mb-0 md:mb-4 hover:text-white/80 transition-colors text-left"
+                        >
+                            Share Feedback
+                        </button>
                         <Link href="/privacy-policy" className="text-white text-sm font-light tracking-wide mb-0 md:mb-4">
                         Privacy Policy
                         </Link>
@@ -79,7 +90,11 @@ export default function Footer() {
                 </p>
             </div>
         </footer>
+        {/* Feedback Modal */}
+        <FeedbackModal 
+            isOpen={isFeedbackModalOpen} 
+            onClose={() => setIsFeedbackModalOpen(false)} 
+        />
         </div>
-
     )
 }
