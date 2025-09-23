@@ -10,7 +10,7 @@ import { Header } from '@/app/components/Header'
 
 export default function DemoProductPage() {
   const params = useParams()
-  const productId = Number(params.id)
+  const productId = params.id as string
   const [isARVisible, setIsARVisible] = useState(false)
 
 

@@ -87,7 +87,7 @@ export type EnvironmentTag =
   | 'open-plan'
 
 export type Product = {
-  id: number
+  id: string
   name: string
   style: ProductStyle
   category: ProductCategory

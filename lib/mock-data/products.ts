@@ -1,5 +1,5 @@
 export type Product = {
-  id: number
+  id: string
   name: string
   style: 'SCANDINAVIAN' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE'
   category: string
@@ -9,10 +9,26 @@ export type Product = {
   imageUrl: string
 }
 
+// Helper function to generate unique IDs
+let idCounter = 1
+export const generateProductId = (): string => {
+  return `product_${idCounter++}`
+}
+
+// Helper function to add a new product to the catalog
+export const addProduct = (product: Omit<Product, 'id'>): Product => {
+  const newProduct: Product = {
+    ...product,
+    id: generateProductId()
+  }
+  productCatalog.push(newProduct)
+  return newProduct
+}
+
 export const productCatalog: Product[] = [
   // Scandinavian
   {
-    id: 1,
+    id: generateProductId(),
     name: 'Asgeir Oak Chair',
     style: 'SCANDINAVIAN',
     category: 'chairs',
@@ -23,7 +39,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/scandi-chair.png',
   },
   {
-    id: 7,
+    id: generateProductId(),
     name: 'Fjord Linen Pillow',
     style: 'SCANDINAVIAN',
     category: 'pillows',
@@ -34,7 +50,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/scandi-pillow.png',
   },
   {
-    id: 8,
+    id: generateProductId(),
     name: 'Hygge Wool Rug',
     style: 'SCANDINAVIAN',
     category: 'rugs',
@@ -47,7 +63,7 @@ export const productCatalog: Product[] = [
 
   // Industrial
   {
-    id: 2,
+    id: generateProductId(),
     name: 'Artisan Coffee Table',
     style: 'INDUSTRIAL',
     category: 'Tables',
@@ -58,7 +74,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/industrial-table-2.png',
   },
   {
-    id: 6,
+    id: generateProductId(),
     name: 'Edison Cage Pendant Light',
     style: 'INDUSTRIAL',
     category: 'Lighting',
@@ -69,7 +85,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/industrial-light.png',
   },
   {
-    id: 9,
+    id: generateProductId(),
     name: 'Riveted Iron Bookshelf',
     style: 'INDUSTRIAL',
     category: 'Storage',
@@ -82,7 +98,7 @@ export const productCatalog: Product[] = [
 
   // Boho
   {
-    id: 3,
+    id: generateProductId(),
     name: 'Woven Macrame Wall Art',
     style: 'BOHO',
     category: 'Decor',
@@ -93,7 +109,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/boho-macrame.png',
   },
   {
-    id: 10,
+    id: generateProductId(),
     name: 'Rattan Peacock Chair',
     style: 'BOHO',
     category: 'Chairs',
@@ -104,7 +120,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/boho-chair.png',
   },
   {
-    id: 13,
+    id: generateProductId(),
     name: 'Jute Area Rug',
     style: 'BOHO',
     category: 'Rugs',
@@ -117,7 +133,7 @@ export const productCatalog: Product[] = [
 
   // Modern
   {
-    id: 4,
+    id: generateProductId(),
     name: 'Gloss White Sideboard',
     style: 'MODERN',
     category: 'Storage',
@@ -128,7 +144,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/modern-sideboard.png',
   },
   {
-    id: 11,
+    id: generateProductId(),
     name: 'Abstract Chrome Floor Lamp',
     style: 'MODERN',
     category: 'Lighting',
@@ -139,7 +155,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/modern-lamp.png',
   },
   {
-    id: 14,
+    id: generateProductId(),
     name: 'Low-Profile Modular Sofa',
     style: 'MODERN',
     category: 'Sofas',
@@ -152,7 +168,7 @@ export const productCatalog: Product[] = [
 
   // Vintage
   {
-    id: 5,
+    id: generateProductId(),
     name: 'Emerald Velvet Sofa',
     style: 'VINTAGE',
     category: 'Sofas',
@@ -163,7 +179,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/vintage-sofa.png',
   },
   {
-    id: 12,
+    id: generateProductId(),
     name: 'Ornate Gilt Mirror',
     style: 'VINTAGE',
     category: 'Decor',
@@ -174,7 +190,7 @@ export const productCatalog: Product[] = [
     imageUrl: '/images/products/vintage-mirror.png',
   },
   {
-    id: 15,
+    id: generateProductId(),
     name: 'Walnut Record Console',
     style: 'VINTAGE',
     category: 'Storage',
