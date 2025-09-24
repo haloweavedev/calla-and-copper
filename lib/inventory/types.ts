@@ -86,28 +86,74 @@ export type EnvironmentTag =
   | 'high-ceiling' 
   | 'open-plan'
 
+// New types for enhanced product matching
+export type PlacementPriority = 'primary' | 'secondary' | 'accent'
+export type SpaceRequirement = 'small' | 'medium' | 'large'
+export type RoomZone = 'seating' | 'storage' | 'lighting' | 'decorative' | 'functional'
+export type FurniturePriority = 'essential' | 'recommended' | 'optional'
+
+export type RoomCompatibility = {
+  isCompatible: boolean
+  priority: FurniturePriority
+  placementContext: string[]
+  replacementFor: string[]
+}
+
+export type SpatialContext = {
+  placementPriority: PlacementPriority
+  spaceRequirement: SpaceRequirement
+  roomZones: RoomZone[]
+}
+
+export type StyleCoherence = {
+  dominantStyle: ProductStyle
+  secondaryStyles: ProductStyle[]
+  colorHarmony: ColorTag[]
+  materialHarmony: MaterialTag[]
+}
+
 export type Product = {
+  // Basic Info
   id: string
   name: string
   style: ProductStyle
   category: ProductCategory
   subcategory: ProductSubcategory
   description: string
+  price: number
+  imageUrl: string
+  inStock: boolean
+  
+  // Physical Properties
+  dimensions: {
+    width: number    // in inches
+    height: number   // in inches  
+    depth: number    // in inches
+  }
+  weight?: number    // in pounds
+  
+  // Style & Aesthetic Tags
   materials: MaterialTag[]
   styleAttributes: StyleTag[]
   colors: ColorTag[]
   functionality: FunctionalTag[]
-  roomCompatibility: RoomTag[]
   environmentTags: EnvironmentTag[]
-  price: number
-  imageUrl: string
-  dimensions?: {
-    width: number
-    height: number
-    depth: number
+  
+  // Room Compatibility (Enhanced)
+  roomCompatibility: {
+    'Living Room': RoomCompatibility
+    'Bedroom': RoomCompatibility
+    'Bathroom': RoomCompatibility
+    'Kitchen': RoomCompatibility
+    'Home Office': RoomCompatibility
+    'Dining Room': RoomCompatibility
   }
-  weight?: number
-  inStock: boolean
+  
+  // Spatial Intelligence
+  spatialContext: SpatialContext
+  
+  // Style Coherence (for AI matching)
+  styleCoherence: StyleCoherence
 }
 
 export interface ProductFilter {
