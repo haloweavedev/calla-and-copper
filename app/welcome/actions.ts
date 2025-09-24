@@ -5,7 +5,7 @@ import { openai } from '@ai-sdk/openai'
 import { generateObject } from 'ai'
 import { z } from 'zod'
 import type { StyleSelection, RoomType, Budget } from '@/lib/store/demo-store'
-import { productCatalog, getRecommendations } from '@/lib/inventory'
+import { productCatalog, getRecommendations, getEnhancedRecommendations } from '@/lib/inventory'
 import { auth } from '@/lib/auth'
 import { PrismaClient } from '@prisma/client'
 import { randomUUID } from 'crypto'
@@ -190,16 +190,21 @@ export async function analyzeAndMatch(params: AnalyzeRoomParams) {
 
     // 5. Get personalized recommendations using enhanced inventory system
     console.log('[SERVER] Getting personalized recommendations using enhanced inventory system...');
-    const rawRecommendations = getRecommendations(
+    const { allRecommendations, forTransformation } = getEnhancedRecommendations(
       params.style, 
       params.roomType, 
       analysis.tags, 
       params.lifestyleTags,
-      3
+      {
+        minScoreThreshold: 8,  // Only good matches
+        forRoomTransformation: true
+      }
     )
     
+    console.log(`[SERVER] Found ${allRecommendations.length} total recommendations, using top ${forTransformation.length} for transformation`)
+    
     // Transform Product objects to match demo store interface
-    const finalRecommendations = rawRecommendations.map(product => ({
+    const finalRecommendations = forTransformation.map(product => ({
       id: product.id,
       name: product.name,
       style: product.style,
@@ -341,16 +346,21 @@ export async function analyzeExistingImage(params: Omit<AnalyzeRoomParams, 'imag
 
     // 6. Get personalized recommendations using enhanced inventory system
     console.log('[SERVER] Getting personalized recommendations using enhanced inventory system...');
-    const rawRecommendations = getRecommendations(
+    const { allRecommendations, forTransformation } = getEnhancedRecommendations(
       params.style, 
       params.roomType, 
       analysis.tags, 
       params.lifestyleTags,
-      3
+      {
+        minScoreThreshold: 8,  // Only good matches
+        forRoomTransformation: true
+      }
     )
     
+    console.log(`[SERVER] Found ${allRecommendations.length} total recommendations, using top ${forTransformation.length} for transformation`)
+    
     // Transform Product objects to match demo store interface
-    const finalRecommendations = rawRecommendations.map(product => ({
+    const finalRecommendations = forTransformation.map(product => ({
       id: product.id,
       name: product.name,
       style: product.style,

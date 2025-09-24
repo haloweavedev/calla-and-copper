@@ -18,7 +18,7 @@ type DemoState = {
   uploadedFileMimeType: string | null
   analysisResult: { description: string; tags: string[]; colorPalette?: string[] } | null
   recommendations: Array<{
-    id: number
+    id: string
     name: string
     style: string
     category?: string

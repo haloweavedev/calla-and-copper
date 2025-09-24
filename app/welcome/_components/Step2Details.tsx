@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { StyleProfile, StyleOption } from '@/components/quiz'
 import { StyleCard } from '@/components/cards'
 import { styleDecisionTree } from '@/components/quiz/styleDecisionTree'
+import { getLifestyleSections } from '@/lib/constants/lifestyle-tags'
 
 // Desktop/Tablet Room Type Button Grid Component
 interface RoomTypeButtonGridProps {
@@ -13,7 +14,7 @@ interface RoomTypeButtonGridProps {
   onRoomTypeSelect: (type: RoomType) => void
 }
 
-function RoomTypeButtonGrid({ primarySpaces, secondarySpaces, selectedRoomType, onRoomTypeSelect }: RoomTypeButtonGridProps) {
+function RoomTypeButtonGrid({ primarySpaces, selectedRoomType, onRoomTypeSelect }: RoomTypeButtonGridProps) {
   return (
     <>
       {/* Primary Spaces */}
@@ -37,7 +38,7 @@ function RoomTypeButtonGrid({ primarySpaces, secondarySpaces, selectedRoomType, 
       </div>
 
       {/* Secondary Spaces */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <h4 className="text-sm font-medium text-black/60 mb-3 text-left">Secondary Spaces</h4>
         <div className="flex flex-wrap gap-2">
           {secondarySpaces.map((type) => (
@@ -54,7 +55,7 @@ function RoomTypeButtonGrid({ primarySpaces, secondarySpaces, selectedRoomType, 
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
     </>
   )
 }
@@ -97,7 +98,8 @@ function RoomTypeDropdown({ primarySpaces, secondarySpaces, selectedRoomType, on
   )
 }
 
-const primarySpaces: RoomType[] = ['Living Room', 'Bedroom', 'Home Office', 'Kitchen']
+const primarySpaces: RoomType[] = ['Living Room']
+// const primarySpaces: RoomType[] = ['Living Room', 'Bedroom', 'Home Office', 'Kitchen']
 const secondarySpaces: RoomType[] = ['Dining Area', 'Bathroom', 'Kid\'s Room', 'Patio/Deck']
 const budgetOptions = [
   {
@@ -125,24 +127,7 @@ const budgetOptions = [
     description: 'Premium pieces and complete transformation'
   }
 ]
-const lifestyleSections = [
-  {
-    title: 'Living Situation',
-    tags: ['Pet-friendly', 'Kid-friendly', 'Work from home', 'Frequent entertainer']
-  },
-  {
-    title: 'Space & Practical',
-    tags: ['Small space living', 'Storage seeker', 'Natural light lover', 'Plant parent']
-  },
-  {
-    title: 'Lifestyle Preferences',
-    tags: ['Minimalist', 'Cozy homebody', 'Tech enthusiast', 'Book lover', 'Fitness focused']
-  },
-  {
-    title: 'Values & Approach',
-    tags: ['Budget-conscious', 'Eco-conscious', 'Quality investor']
-  }
-]
+// Lifestyle sections will be generated dynamically based on room type
 
 // Helper function to get StyleOption from stylePath (single level now)
 function getSelectedStyleOption(styleProfile: StyleProfile | null): StyleOption | null {
@@ -207,6 +192,9 @@ function LifestyleSection({ title, tags, selectedTags, onTagToggle }: LifestyleS
 export function Step2Details() {
 
   const { setStep, setData, roomType, budget, lifestyleTags, styleProfile } = useDemoStore()
+  
+  // Get lifestyle sections based on selected room type
+  const lifestyleSections = getLifestyleSections(roomType || undefined) as Array<{ title: string; tags: string[] }>
 
   const handleTagToggle = (tag: string) => {
     const newTags = lifestyleTags.includes(tag)

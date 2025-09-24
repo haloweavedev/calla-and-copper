@@ -1,9 +1,25 @@
 import { Product } from './types'
 
+// Helper function to generate unique IDs
+let idCounter = 1
+export const generateProductId = (): string => {
+  return `product_${idCounter++}`
+}
+
+// Helper function to add a new product to the catalog
+export const addProduct = (product: Omit<Product, 'id'>): Product => {
+  const newProduct: Product = {
+    ...product,
+    id: generateProductId()
+  }
+  productCatalog.push(newProduct)
+  return newProduct
+}
+
 export const productCatalog: Product[] = [
   // SCANDINAVIAN SEATING
   {
-    id: 1,
+    id: generateProductId(),
     name: 'Asgeir Oak Chair',
     style: 'SCANDINAVIAN',
     category: 'seating',
@@ -23,7 +39,7 @@ export const productCatalog: Product[] = [
 
   // SCANDINAVIAN TEXTILES
   {
-    id: 7,
+    id: generateProductId(),
     name: 'Fjord Linen Pillow',
     style: 'SCANDINAVIAN',
     category: 'textiles',
@@ -41,7 +57,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 8,
+    id: generateProductId(),
     name: 'Hygge Wool Rug',
     style: 'SCANDINAVIAN',
     category: 'textiles',
@@ -61,7 +77,7 @@ export const productCatalog: Product[] = [
 
   // INDUSTRIAL TABLES
   {
-    id: 2,
+    id: generateProductId(),
     name: 'Artisan Coffee Table',
     style: 'INDUSTRIAL',
     category: 'tables',
@@ -81,7 +97,7 @@ export const productCatalog: Product[] = [
 
   // INDUSTRIAL LIGHTING
   {
-    id: 6,
+    id: generateProductId(),
     name: 'Edison Cage Pendant Light',
     style: 'INDUSTRIAL',
     category: 'lighting',
@@ -101,7 +117,7 @@ export const productCatalog: Product[] = [
 
   // INDUSTRIAL STORAGE
   {
-    id: 9,
+    id: generateProductId(),
     name: 'Riveted Iron Bookshelf',
     style: 'INDUSTRIAL',
     category: 'storage',
@@ -121,7 +137,7 @@ export const productCatalog: Product[] = [
 
   // BOHO DECOR
   {
-    id: 3,
+    id: generateProductId(),
     name: 'Woven Macrame Wall Art',
     style: 'BOHO',
     category: 'decor',
@@ -141,7 +157,7 @@ export const productCatalog: Product[] = [
 
   // BOHO SEATING
   {
-    id: 10,
+    id: generateProductId(),
     name: 'Rattan Peacock Chair',
     style: 'BOHO',
     category: 'seating',
@@ -161,7 +177,7 @@ export const productCatalog: Product[] = [
 
   // BOHO TEXTILES
   {
-    id: 13,
+    id: generateProductId(),
     name: 'Jute Area Rug',
     style: 'BOHO',
     category: 'textiles',
@@ -181,7 +197,7 @@ export const productCatalog: Product[] = [
 
   // MODERN STORAGE
   {
-    id: 4,
+    id: generateProductId(),
     name: 'Gloss White Sideboard',
     style: 'MODERN',
     category: 'storage',
@@ -201,7 +217,7 @@ export const productCatalog: Product[] = [
 
   // MODERN LIGHTING
   {
-    id: 11,
+    id: generateProductId(),
     name: 'Abstract Chrome Floor Lamp',
     style: 'MODERN',
     category: 'lighting',
@@ -221,7 +237,7 @@ export const productCatalog: Product[] = [
 
   // MODERN SEATING
   {
-    id: 14,
+    id: generateProductId(),
     name: 'Low-Profile Modular Sofa',
     style: 'MODERN',
     category: 'seating',
@@ -241,7 +257,7 @@ export const productCatalog: Product[] = [
 
   // VINTAGE SEATING
   {
-    id: 5,
+    id: generateProductId(),
     name: 'Emerald Velvet Sofa',
     style: 'VINTAGE',
     category: 'seating',
@@ -261,7 +277,7 @@ export const productCatalog: Product[] = [
 
   // VINTAGE DECOR
   {
-    id: 12,
+    id: generateProductId(),
     name: 'Ornate Gilt Mirror',
     style: 'VINTAGE',
     category: 'decor',
@@ -281,7 +297,7 @@ export const productCatalog: Product[] = [
 
   // VINTAGE STORAGE
   {
-    id: 15,
+    id: generateProductId(),
     name: 'Walnut Record Console',
     style: 'VINTAGE',
     category: 'storage',
@@ -301,7 +317,7 @@ export const productCatalog: Product[] = [
 
   // NEW MODERN CLEAN PRODUCTS (16-20)
   {
-    id: 16,
+    id: generateProductId(),
     name: 'Linear White Dining Table',
     style: 'MODERN',
     category: 'tables',
@@ -320,7 +336,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 17,
+    id: generateProductId(),
     name: 'Geometric Accent Bench',
     style: 'MODERN',
     category: 'seating',
@@ -339,7 +355,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 18,
+    id: generateProductId(),
     name: 'Sphere Table Lamp',
     style: 'MODERN',
     category: 'lighting',
@@ -358,7 +374,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 19,
+    id: generateProductId(),
     name: 'Ceramic Planter Set',
     style: 'MODERN',
     category: 'decor',
@@ -377,7 +393,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 20,
+    id: generateProductId(),
     name: 'Float Nightstand',
     style: 'MODERN',
     category: 'storage',
@@ -397,7 +413,7 @@ export const productCatalog: Product[] = [
 
   // NEW COZY TRADITIONAL PRODUCTS (21-23)
   {
-    id: 21,
+    id: generateProductId(),
     name: 'Wingback Reading Chair',
     style: 'VINTAGE',
     category: 'seating',
@@ -416,7 +432,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 22,
+    id: generateProductId(),
     name: 'Antique Side Table',
     style: 'VINTAGE',
     category: 'tables',
@@ -435,7 +451,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 23,
+    id: generateProductId(),
     name: 'Traditional Floor Lamp',
     style: 'VINTAGE',
     category: 'lighting',
@@ -455,7 +471,7 @@ export const productCatalog: Product[] = [
 
   // NEW WARM MINIMALIST PRODUCTS (24-27)
   {
-    id: 24,
+    id: generateProductId(),
     name: 'Natural Oak Bed Frame',
     style: 'SCANDINAVIAN',
     category: 'beds',
@@ -474,7 +490,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 25,
+    id: generateProductId(),
     name: 'Linen Panel Curtains',
     style: 'SCANDINAVIAN',
     category: 'textiles',
@@ -493,7 +509,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 26,
+    id: generateProductId(),
     name: 'Oak Chest Drawers',
     style: 'SCANDINAVIAN',
     category: 'storage',
@@ -512,7 +528,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 27,
+    id: generateProductId(),
     name: 'Round Oak Mirror',
     style: 'SCANDINAVIAN',
     category: 'decor',
@@ -532,7 +548,7 @@ export const productCatalog: Product[] = [
 
   // NEW Industrial loft PRODUCTS (28-30)
   {
-    id: 28,
+    id: generateProductId(),
     name: 'Leather Industrial Sofa',
     style: 'INDUSTRIAL',
     category: 'seating',
@@ -551,7 +567,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 29,
+    id: generateProductId(),
     name: 'Pipe Side Table',
     style: 'INDUSTRIAL',
     category: 'tables',
@@ -570,7 +586,7 @@ export const productCatalog: Product[] = [
   },
 
   {
-    id: 30,
+    id: generateProductId(),
     name: 'Edison Desk Lamp',
     style: 'INDUSTRIAL',
     category: 'lighting',
