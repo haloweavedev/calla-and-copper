@@ -1,6 +1,6 @@
 'use client'
 import { useParams, notFound } from 'next/navigation'
-import { productCatalog } from '@/lib/mock-data/products'
+import { productCatalog } from '@/lib/inventory/mock-catalog'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -10,7 +10,7 @@ import { Header } from '@/app/components/Header'
 
 export default function DemoProductPage() {
   const params = useParams()
-  const productId = Number(params.id)
+  const productId = params.id as string
   const [isARVisible, setIsARVisible] = useState(false)
 
 
@@ -26,7 +26,7 @@ export default function DemoProductPage() {
       <div className={`w-full min-h-screen bg-white text-black flex flex-col items-center py-4 sm:py-8 px-8`}>
         <div className="w-full max-w-4xl">
           <div className="mb-8">
-            <Link href="/welcome" className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">
+            <Link href="/room-designer" className="px-6 py-2 font-medium transition-all duration-200 bg-white text-black/80 border-2 border-black/80 hover:bg-black/80 hover:text-white cursor-pointer">
               &larr; Back to Demo
             </Link>
           </div>
@@ -47,8 +47,14 @@ export default function DemoProductPage() {
                 <h3 className="font-bold">Style & Tags:</h3>
                 <div className="flex flex-wrap gap-2 mt-2">
                   <span className="px-3 py-1 border-2 border-brand-warm-brown bg-brand-warm-brown text-white font-bold text-sm">{product.style}</span>
-                  {product.tags.map((tag) => (
+                  {product.styleAttributes.map((tag) => (
                     <span key={tag} className="px-3 py-1 border-2 border-gray-100 bg-gray-100 font-bold text-sm">{tag}</span>
+                  ))}
+                  {product.materials.map((tag) => (
+                    <span key={tag} className="px-3 py-1 border-2 border-blue-100 bg-blue-100 font-bold text-sm">{tag}</span>
+                  ))}
+                  {product.colors.map((tag) => (
+                    <span key={tag} className="px-3 py-1 border-2 border-green-100 bg-green-100 font-bold text-sm">{tag}</span>
                   ))}
                 </div>
               </div>

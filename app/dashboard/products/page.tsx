@@ -29,9 +29,11 @@ export default function ProductsPage() {
       'all': 'All Styles',
       'MODERN': 'Modern Clean',
       'SCANDINAVIAN': 'Warm Minimalist', 
-      'INDUSTRIAL': 'Industrial loft',
+      'INDUSTRIAL': 'Industrial Loft',
       'BOHO': 'Boho Eclectic',
-      'VINTAGE': 'Cozy Traditional'
+      'VINTAGE': 'Cozy Traditional',
+      'CONTEMPORARY': 'Contemporary',
+      'TRADITIONAL': 'Traditional'
     }
     return labels[style]
   }

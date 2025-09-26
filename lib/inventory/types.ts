@@ -1,4 +1,4 @@
-export type ProductStyle = 'SCANDINAVIAN' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE'
+export type ProductStyle = 'SCANDINAVIAN' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE' | 'CONTEMPORARY' | 'TRADITIONAL'
 
 export type ProductCategory = 
   | 'seating'
@@ -52,6 +52,11 @@ export type StyleTag =
   | 'elegant' 
   | 'casual' 
   | 'formal'
+  | 'contemporary'
+  | 'eclectic'
+  | 'natural'
+  | 'urban'
+  | 'edgy'
 
 export type ColorTag = 
   | 'light-tone' 
@@ -69,6 +74,7 @@ export type FunctionalTag =
   | 'lighting' 
   | 'decorative' 
   | 'multi-functional'
+  | 'functional'
 
 export type RoomTag = 
   | 'living-room' 
@@ -86,28 +92,69 @@ export type EnvironmentTag =
   | 'high-ceiling' 
   | 'open-plan'
 
+// Enhanced types for MVP improvements
+export type FurniturePriority = 'essential' | 'recommended' | 'optional'
+
+export type RoomCompatibility = {
+  isCompatible: boolean
+  priority: FurniturePriority
+  placementContext: string[]
+  replacementFor: string[]
+}
+
+export type SpatialContext = {
+  placementPriority: 'primary' | 'secondary' | 'accent'
+  spaceRequirement: 'small' | 'medium' | 'large'
+  roomZones: string[]
+}
+
+export type StyleCoherence = {
+  dominantStyle: ProductStyle
+  secondaryStyles: ProductStyle[]
+  colorHarmony: ColorTag[]
+  materialHarmony: MaterialTag[]
+}
+
 export type Product = {
-  id: number
+  id: string
   name: string
   style: ProductStyle
   category: ProductCategory
   subcategory: ProductSubcategory
   description: string
-  materials: MaterialTag[]
-  styleAttributes: StyleTag[]
-  colors: ColorTag[]
-  functionality: FunctionalTag[]
-  roomCompatibility: RoomTag[]
-  environmentTags: EnvironmentTag[]
   price: number
   imageUrl: string
+  inStock: boolean
   dimensions?: {
     width: number
     height: number
     depth: number
   }
   weight?: number
-  inStock: boolean
+  materials: MaterialTag[]
+  styleAttributes: StyleTag[]
+  colors: ColorTag[]
+  functionality: FunctionalTag[]
+  environmentTags: EnvironmentTag[]
+  
+  // Enhanced room compatibility (MVP improvement)
+  roomCompatibility: {
+    'Living Room': RoomCompatibility
+    'Bedroom': RoomCompatibility
+    'Kitchen': RoomCompatibility
+    'Home Office': RoomCompatibility
+    'Dining Room': RoomCompatibility
+    'Bathroom': RoomCompatibility
+  }
+  
+  // Spatial intelligence
+  spatialContext: SpatialContext
+  
+  // Style coherence for AI matching
+  styleCoherence: StyleCoherence
+  
+  // Lifestyle tags for enhanced matching
+  lifestyleTags?: string[]
 }
 
 export interface ProductFilter {
