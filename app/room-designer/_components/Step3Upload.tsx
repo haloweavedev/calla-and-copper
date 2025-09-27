@@ -151,23 +151,23 @@ export function Step3Upload() {
           convertTypes: ['image/png', 'image/webp'], // Convert PNG/WebP to JPEG
           success: (compressedFile) => {
             const compressedSize = compressedFile.size
-            console.log('[COMPRESSION] Attempt - Quality:', quality, 'MaxWidth:', maxWidth)
-            console.log('[COMPRESSION] Original size:', (file.size / 1024 / 1024).toFixed(2), 'MB')
-            console.log('[COMPRESSION] Compressed size:', (compressedSize / 1024 / 1024).toFixed(2), 'MB')
+            // console.log('[COMPRESSION] Attempt - Quality:', quality, 'MaxWidth:', maxWidth)
+            // console.log('[COMPRESSION] Original size:', (file.size / 1024 / 1024).toFixed(2), 'MB')
+            // console.log('[COMPRESSION] Compressed size:', (compressedSize / 1024 / 1024).toFixed(2), 'MB')
             
             // If still too large, try more aggressive compression
             if (compressedSize > targetSizeBytes && quality > 0.3) {
               const newQuality = Math.max(0.3, quality - 0.2)
               const newMaxWidth = Math.max(800, maxWidth - 200)
-              console.log('[COMPRESSION] Still too large, retrying with quality:', newQuality, 'maxWidth:', newMaxWidth)
+              // console.log('[COMPRESSION] Still too large, retrying with quality:', newQuality, 'maxWidth:', newMaxWidth)
               tryCompress(newQuality, newMaxWidth)
             } else {
-              console.log('[COMPRESSION] Final compressed size:', (compressedSize / 1024 / 1024).toFixed(2), 'MB')
+              // console.log('[COMPRESSION] Final compressed size:', (compressedSize / 1024 / 1024).toFixed(2), 'MB')
               resolve(compressedFile as File)
             }
           },
           error: (error) => {
-            console.error('[COMPRESSION] Error:', error)
+            // console.error('[COMPRESSION] Error:', error)
             reject(error)
           },
         })
@@ -179,14 +179,14 @@ export function Step3Upload() {
   }, [])
 
   const validateImageOnly = useCallback(async (file: File) => {
-    console.log('[CLIENT] 🔍 Starting image validation only')
+    // console.log('[CLIENT] 🔍 Starting image validation only')
     setIsValidating(true)
     setValidationResult(null)
     setShowValidationToast(false)
 
     try {
       const result = await validateRoomImage(file)
-      console.log('[CLIENT] ✅ Validation result:', result)
+      // console.log('[CLIENT] ✅ Validation result:', result)
       
       setValidationResult({
         isValid: result.isValid,
@@ -203,7 +203,7 @@ export function Step3Upload() {
       }
       
     } catch (error) {
-      console.error('[CLIENT] ❌ Validation error:', error)
+      // console.error('[CLIENT] ❌ Validation error:', error)
       setValidationResult({
         isValid: false,
         reason: 'Unable to validate image. Please try again.',
@@ -223,7 +223,7 @@ export function Step3Upload() {
       setCompressionProgress(0)
 
       try {
-        console.log('[CLIENT] 📤 NEW UPLOAD FLOW - Starting')
+        // console.log('[CLIENT] 📤 NEW UPLOAD FLOW - Starting')
         console.log('[CLIENT] 📋 Original file details:', {
           name: file.name,
           size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
@@ -242,7 +242,7 @@ export function Step3Upload() {
         }, 100)
 
         const compressedFile = await compressImage(file)
-        console.log('[CLIENT] ✅ Compression complete. New size:', `${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`)
+        // console.log('[CLIENT] ✅ Compression complete. New size:', `${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`)
         
         clearInterval(progressInterval)
         setCompressionProgress(100)
@@ -255,19 +255,19 @@ export function Step3Upload() {
           setIsCompressing(false)
           setCompressionProgress(0)
           
-          console.log('[CLIENT] 💾 New upload data set in demo store')
-          console.log('[CLIENT] 📊 Demo store state after new upload:', {
-            uploadedFile: !!useDemoStore.getState().uploadedFile,
-            uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
-            uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
-          })
+          // console.log('[CLIENT] 💾 New upload data set in demo store')
+          // console.log('[CLIENT] 📊 Demo store state after new upload:', {
+          //   uploadedFile: !!useDemoStore.getState().uploadedFile,
+          //   uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+          //   uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
+          // })
           
           // Automatically validate the uploaded image
           await validateImageOnly(compressedFile)
         }, 300)
 
       } catch (error) {
-        console.error('[CLIENT] ❌ Compression failed:', error)
+        // console.error('[CLIENT] ❌ Compression failed:', error)
         setError('Failed to compress image. Please try again.')
         setIsCompressing(false)
         setCompressionProgress(0)
@@ -278,14 +278,14 @@ export function Step3Upload() {
 
   const handleSelectPreviousImage = useCallback(async (upload: UserUpload) => {
     try {
-      console.log('[CLIENT] 🖼️ PRESELECTED IMAGE FLOW - Starting')
-      console.log('[CLIENT] 📋 Upload details:', {
-        id: upload.id,
-        fileName: upload.fileName,
-        publicUrl: upload.publicUrl,
-        mimeType: upload.mimeType,
-        fileSize: upload.fileSize
-      })
+      // console.log('[CLIENT] 🖼️ PRESELECTED IMAGE FLOW - Starting')
+      // console.log('[CLIENT] 📋 Upload details:', {
+      //   id: upload.id,
+      //   fileName: upload.fileName,
+      //   publicUrl: upload.publicUrl,
+      //   mimeType: upload.mimeType,
+      //   fileSize: upload.fileSize
+      // })
       
       setSelectedImageUrl(upload.publicUrl)
       setPreview(upload.publicUrl)
@@ -296,14 +296,14 @@ export function Step3Upload() {
       setUploadedFileUrl(upload.publicUrl)
       setUploadedFileMimeType(upload.mimeType)
       
-      console.log('[CLIENT] 💾 Gallery image data set in demo store')
-      console.log('[CLIENT] 📊 Demo store state after preselect:', {
-        uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
-        uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
-      })
+      // console.log('[CLIENT] 💾 Gallery image data set in demo store')
+      // console.log('[CLIENT] 📊 Demo store state after preselect:', {
+      //   uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+      //   uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType
+      // })
     } catch (error) {
-      console.error('[CLIENT] ❌ Failed to process gallery image:', error)
-      setError('Failed to process selected image. Please try again.')
+      // console.error('[CLIENT] ❌ Failed to process gallery image:', error)
+      setError(`Failed to process selected image. Please try again. ${error}`)
     }
   }, [setData, setUploadedFileUrl, setUploadedFileMimeType])
 
@@ -317,7 +317,7 @@ export function Step3Upload() {
       if (result.error) {
         // Check if authentication is required
         if ('requiresAuth' in result && result.requiresAuth) {
-          console.log('Authentication required, redirecting to login')
+          // console.log('Authentication required, redirecting to login')
           window.location.href = '/login'
           return
         }
@@ -334,8 +334,8 @@ export function Step3Upload() {
         }
       }
     } catch (error) {
-      console.error('Error deleting upload:', error)
-      setError('Failed to delete image. Please try again.')
+      // console.error('Error deleting upload:', error)
+      setError(`Failed to delete image. Please try again. ${error}`)
     } finally {
       setIsDeletingId(null)
     }
@@ -382,7 +382,7 @@ export function Step3Upload() {
     setError(null)
     setCurrentProgress(0)
     setProgressText("")
-    console.log('[CLIENT] Starting analysis...')
+    // console.log('[CLIENT] Starting analysis...')
 
     try {
       // Start with initial stage
@@ -392,14 +392,14 @@ export function Step3Upload() {
       let result;
 
       if (selectedImageUrl) {
-        console.log('[CLIENT] 🔍 PRESELECTED IMAGE ANALYSIS - Starting')
-        console.log('[CLIENT] 📋 Analysis params:', {
-          imageUrl: selectedImageUrl,
-          style: style,
-          roomType: roomType || 'Living Room',
-          budget: budget || '$1,500-4,000',
-          lifestyleTags: lifestyleTags
-        })
+        // console.log('[CLIENT] 🔍 PRESELECTED IMAGE ANALYSIS - Starting')
+        // console.log('[CLIENT] 📋 Analysis params:', {
+        //   imageUrl: selectedImageUrl,
+        //   style: style,
+        //   roomType: roomType || 'Living Room',
+        //   budget: budget || '$1,500-4,000',
+        //   lifestyleTags: lifestyleTags
+        // })
         
         // Analyze existing image
         const progressTimeline = [
@@ -435,15 +435,15 @@ export function Step3Upload() {
         // Clear all timeouts
         progressTimeouts.forEach(timeout => clearTimeout(timeout))
       } else {
-        console.log('[CLIENT] 🆕 NEW UPLOAD ANALYSIS - Starting')
-        console.log('[CLIENT] 📋 Analysis params:', {
-          imageFile: uploadedFile?.name,
-          imageSize: uploadedFile?.size ? `${(uploadedFile.size / 1024 / 1024).toFixed(2)} MB` : 'unknown',
-          style: style,
-          roomType: roomType || 'Living Room',
-          budget: budget || '$1,500-4,000',
-          lifestyleTags: lifestyleTags
-        })
+        // console.log('[CLIENT] 🆕 NEW UPLOAD ANALYSIS - Starting')
+        // console.log('[CLIENT] 📋 Analysis params:', {
+        //   imageFile: uploadedFile?.name,
+        //   imageSize: uploadedFile?.size ? `${(uploadedFile.size / 1024 / 1024).toFixed(2)} MB` : 'unknown',
+        //   style: style,
+        //   roomType: roomType || 'Living Room',
+        //   budget: budget || '$1,500-4,000',
+        //   lifestyleTags: lifestyleTags
+        // })
         
         // Upload and analyze new image
         const progressTimeline = [
@@ -472,13 +472,13 @@ export function Step3Upload() {
           lifestyleTags,
         })
         
-        console.log('[CLIENT] ✅ NEW UPLOAD ANALYSIS - Complete:', {
-          hasAnalysis: !!result.analysis,
-          recommendationsCount: result.recommendations?.length || 0,
-          publicUrl: result.publicUrl,
-          mimeType: result.mimeType,
-          error: result.error
-        })
+        // console.log('[CLIENT] ✅ NEW UPLOAD ANALYSIS - Complete:', {
+        //   hasAnalysis: !!result.analysis,
+        //   recommendationsCount: result.recommendations?.length || 0,
+        //   publicUrl: result.publicUrl,
+        //   mimeType: result.mimeType,
+        //   error: result.error
+        // })
 
         // Clear all timeouts
         progressTimeouts.forEach(timeout => clearTimeout(timeout))
@@ -504,13 +504,13 @@ export function Step3Upload() {
         }
       }
 
-      console.log('[CLIENT] ✅ Analysis successful. Setting data and moving to step 4.')
-      console.log('[CLIENT] 📊 Final data being set:', {
-        hasAnalysis: !!result.analysis,
-        recommendationsCount: result.recommendations?.length || 0,
-        publicUrl: result.publicUrl,
-        mimeType: ('mimeType' in result ? result.mimeType : null) || useDemoStore.getState().uploadedFileMimeType
-      })
+      // console.log('[CLIENT] ✅ Analysis successful. Setting data and moving to step 4.')
+      // console.log('[CLIENT] 📊 Final data being set:', {
+      //   hasAnalysis: !!result.analysis,
+      //   recommendationsCount: result.recommendations?.length || 0,
+      //   publicUrl: result.publicUrl,
+      //   mimeType: ('mimeType' in result ? result.mimeType : null) || useDemoStore.getState().uploadedFileMimeType
+      // })
       
       setData({ 
         analysisResult: result.analysis, 
@@ -520,16 +520,16 @@ export function Step3Upload() {
       setUploadedFileUrl(result.publicUrl!)
       
       if ('mimeType' in result && result.mimeType && typeof result.mimeType === 'string') {
-        console.log('[CLIENT] 💾 Setting mime type from analysis result')
+        // console.log('[CLIENT] 💾 Setting mime type from analysis result')
         setUploadedFileMimeType(result.mimeType)
       }
       
-      console.log('[CLIENT] 🏁 Final demo store state before step 4:', {
-        uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
-        uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType,
-        analysisResult: !!useDemoStore.getState().analysisResult,
-        recommendations: useDemoStore.getState().recommendations?.length
-      })
+      // console.log('[CLIENT] 🏁 Final demo store state before step 4:', {
+      //   uploadedFileUrl: useDemoStore.getState().uploadedFileUrl,
+      //   uploadedFileMimeType: useDemoStore.getState().uploadedFileMimeType,
+      //   analysisResult: !!useDemoStore.getState().analysisResult,
+      //   recommendations: useDemoStore.getState().recommendations?.length
+      // })
       
       setStep(4)
 

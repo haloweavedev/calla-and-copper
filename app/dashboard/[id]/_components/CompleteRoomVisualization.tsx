@@ -246,7 +246,7 @@ export function CompleteRoomVisualization({ products, creationId, existingGenera
                 priority
                 unoptimized={generatedImage.startsWith('data:')}
                 style={{ maxWidth: '100%', height: 'auto' }}
-                onLoad={() => console.log('[CLIENT] Image loaded successfully')}
+                // onLoad={() => console.log('[CLIENT] Image loaded successfully')}
                 onError={(e) => console.error('[CLIENT] Image load error:', e)}
               />
             </div>

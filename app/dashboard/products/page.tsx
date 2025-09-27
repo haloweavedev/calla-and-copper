@@ -137,7 +137,7 @@ export default function ProductsPage() {
                         const img = e.target as HTMLImageElement
                         img.src = '/images/placeholder.png'
                       }}
-                      onLoad={() => console.log('Image loaded successfully:', product.imageUrl)}
+                      // onLoad={() => console.log('Image loaded successfully:', product.imageUrl)}
                     />
                     {!product.inStock && (
                       <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1">
