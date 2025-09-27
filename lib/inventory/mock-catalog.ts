@@ -4390,74 +4390,8 @@ export const productCatalog: Product[] = [
     },
     "lifestyleTags": ["Organization focused", "Book lover", "Traditional elegance", "Home library"]
   },
-  {
-  "id": "boho-eclectic-chair-001",
-  "name": "Casablanca Rattan Desk Chair",
-  "style": "BOHO",
-  "category": "seating",
-  "subcategory": "office-chairs",
-  "description": "A comfortable desk chair with handwoven rattan back, cream cushioned seat, and natural wood swivel base, bringing global bohemian charm to creative workspaces.",
-  "price": 420,
-  "imageUrl": "/images/products/boho-eclectic/home-office/casablanca-rattan-desk-chair.png",
-  "inStock": true,
-  "dimensions": {
-    "width": 24,
-    "height": 36,
-    "depth": 24
-  },
-  "weight": 28,
-  "materials": ["rattan", "fabric", "wood"],
-  "styleAttributes": ["casual", "cozy", "eclectic"],
-  "colors": ["neutral", "brown", "beige"],
-  "functionality": ["seating", "decorative"],
-  "environmentTags": ["natural-light", "small-space", "large-space"],
-  "roomCompatibility": {
-    "Living Room": {
-      "isCompatible": false,
-      "priority": "optional",
-      "placementContext": [],
-      "replacementFor": []
-    },
-    "Bedroom": {
-      "isCompatible": false,
-      "priority": "optional",
-      "placementContext": [],
-      "replacementFor": []
-    },
-    "Bathroom": {
-      "isCompatible": false,
-      "priority": "optional",
-      "placementContext": [],
-      "replacementFor": []
-    },
-    "Home Office": {
-      "isCompatible": true,
-      "priority": "essential",
-      "placementContext": ["center"],
-      "replacementFor": ["office-chair", "desk-chair", "accent-chair"]
-    },
-    "Dining Area": {
-      "isCompatible": false,
-      "priority": "optional",
-      "placementContext": [],
-      "replacementFor": []
-    }
-  },
-  "spatialContext": {
-    "placementPriority": "primary",
-    "spaceRequirement": "medium",
-    "roomZones": ["seating", "functional"]
-  },
-  "styleCoherence": {
-    "dominantStyle": "BOHO",
-    "secondaryStyles": ["VINTAGE", "MODERN"],
-    "colorHarmony": ["neutral", "brown", "beige"],
-    "materialHarmony": ["rattan", "wood", "fabric"]
-  },
-  "lifestyleTags": ["Work from home", "Natural living", "Global traveler", "Comfort seeker"]
-},
   ///////////////////////////////
-  // BOHO ECLECTIC - HOME OFFICE PRODUCTS
+  // WARM MINIMALIST - HOME OFFICE PRODUCTS
   ///////////////////////////////
   {
     "id": "warm-minimalist-desk-001",
