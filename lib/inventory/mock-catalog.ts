@@ -3987,5 +3987,674 @@ export const productCatalog: Product[] = [
       "materialHarmony": ["metal", "glass", "wood"]
     },
     "lifestyleTags": ["Urban living", "Industrial aesthetic", "Raw materials", "Metropolitan style"]
+  },
+  ///////////////////////////////
+  // MODERN CLEAN - HOME OFFICE PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "modern-clean-desk-001",
+    "name": "Eames Inspired Walnut Executive Desk",
+    "style": "MODERN",
+    "category": "tables",
+    "subcategory": "desks",
+    "description": "A sophisticated executive desk with rich walnut wood top, hairpin steel legs, and integrated drawers, embodying classic mid-century modern office design with timeless appeal.",
+    "price": 1380,
+    "imageUrl": "/images/products/modern-clean/home-office/eames-walnut-executive-desk.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 60,
+      "height": 30,
+      "depth": 30
+    },
+    "weight": 85,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["sleek", "elegant", "contemporary"],
+    "colors": ["brown", "neutral"],
+    "functionality": ["multi-functional", "storage"],
+    "environmentTags": ["natural-light", "open-plan", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center", "wall"],
+        "replacementFor": ["desk", "work-table", "executive-desk"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "large",
+      "roomZones": ["functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["VINTAGE", "MINIMALIST"],
+      "colorHarmony": ["brown", "neutral", "beige"],
+      "materialHarmony": ["wood", "metal", "leather"]
+    },
+    "lifestyleTags": ["Work from home", "Mid-century enthusiast", "Executive style", "Design appreciation"]
+  },
+  {
+    "id": "modern-clean-chair-001",
+    "name": "Nelson Executive Leather Chair",
+    "style": "MODERN",
+    "category": "seating",
+    "subcategory": "office-chairs",
+    "description": "A classic executive swivel chair with cognac leather upholstery, molded walnut shell, and polished aluminum base, capturing iconic mid-century modern office elegance.",
+    "price": 780,
+    "imageUrl": "/images/products/modern-clean/home-office/nelson-executive-leather-chair.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 26,
+      "height": 42,
+      "depth": 26
+    },
+    "weight": 48,
+    "materials": ["leather", "wood", "metal"],
+    "styleAttributes": ["sleek", "elegant", "contemporary"],
+    "colors": ["brown", "neutral"],
+    "functionality": ["seating", "multi-functional"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center"],
+        "replacementFor": ["office-chair", "desk-chair", "executive-chair"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "medium",
+      "roomZones": ["seating", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["VINTAGE", "MINIMALIST"],
+      "colorHarmony": ["brown", "neutral", "beige"],
+      "materialHarmony": ["leather", "wood", "metal"]
+    },
+    "lifestyleTags": ["Work from home", "Executive comfort", "Mid-century style", "Leather appreciation"]
+  },
+  {
+    "id": "modern-clean-storage-001",
+    "name": "Knoll Inspired Walnut Credenza",
+    "style": "MODERN",
+    "category": "storage",
+    "subcategory": "cabinets",
+    "description": "A sleek walnut credenza with sliding doors, brass hardware, and interior filing system, embodying sophisticated mid-century modern office storage with executive appeal.",
+    "price": 980,
+    "imageUrl": "/images/products/modern-clean/home-office/knoll-walnut-credenza.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 60,
+      "height": 30,
+      "depth": 18
+    },
+    "weight": 95,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["sleek", "elegant", "contemporary"],
+    "colors": ["brown", "neutral"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["credenza", "storage", "office-storage"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "large",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["VINTAGE", "MINIMALIST"],
+      "colorHarmony": ["brown", "neutral", "beige"],
+      "materialHarmony": ["wood", "metal", "leather"]
+    },
+    "lifestyleTags": ["Organization focused", "Work from home", "Executive style", "Mid-century appreciation"]
+  },
+  ///////////////////////////////
+  // COZY TRADITIONAL - HOME OFFICE PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "cozy-traditional-desk-001",
+    "name": "Windsor Mahogany Executive Desk",
+    "style": "VINTAGE",
+    "category": "tables",
+    "subcategory": "desks",
+    "description": "A stately executive desk crafted from solid mahogany with leather inlay top, ornate brass hardware, and seven drawers for traditional office elegance and functionality.",
+    "price": 1680,
+    "imageUrl": "/images/products/cozy-traditional/home-office/windsor-mahogany-executive-desk.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 66,
+      "height": 30,
+      "depth": 36
+    },
+    "weight": 145,
+    "materials": ["wood", "leather", "metal"],
+    "styleAttributes": ["elegant", "formal", "cozy"],
+    "colors": ["dark-tone", "brown"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["low-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center", "wall"],
+        "replacementFor": ["desk", "executive-desk", "writing-desk"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "large",
+      "roomZones": ["functional", "storage"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["TRADITIONAL"],
+      "colorHarmony": ["dark-tone", "brown", "beige"],
+      "materialHarmony": ["wood", "leather", "metal"]
+    },
+    "lifestyleTags": ["Work from home", "Traditional elegance", "Executive style", "Formal workspace"]
+  },
+  {
+    "id": "cozy-traditional-chair-001",
+    "name": "Regency Tufted Executive Chair",
+    "style": "VINTAGE",
+    "category": "seating",
+    "subcategory": "office-chairs",
+    "description": "A distinguished executive chair with deep button-tufted burgundy leather, high back design, and mahogany wood accents for timeless traditional office comfort.",
+    "price": 850,
+    "imageUrl": "/images/products/cozy-traditional/home-office/regency-tufted-executive-chair.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 28,
+      "height": 48,
+      "depth": 30
+    },
+    "weight": 65,
+    "materials": ["leather", "wood"],
+    "styleAttributes": ["elegant", "formal", "cozy"],
+    "colors": ["dark-tone", "brown"],
+    "functionality": ["seating", "multi-functional"],
+    "environmentTags": ["low-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center"],
+        "replacementFor": ["office-chair", "executive-chair", "desk-chair"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "medium",
+      "roomZones": ["seating", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["TRADITIONAL"],
+      "colorHarmony": ["dark-tone", "brown", "beige"],
+      "materialHarmony": ["leather", "wood", "metal"]
+    },
+    "lifestyleTags": ["Work from home", "Executive comfort", "Traditional elegance", "Luxury seeker"]
+  },
+  {
+    "id": "cozy-traditional-storage-001",
+    "name": "Ashford Mahogany Bookcase",
+    "style": "VINTAGE",
+    "category": "storage",
+    "subcategory": "bookcases",
+    "description": "An impressive traditional bookcase in rich mahogany with adjustable shelves, crown molding details, and antiqued brass hardware for elegant office library storage.",
+    "price": 1180,
+    "imageUrl": "/images/products/cozy-traditional/home-office/ashford-mahogany-bookcase.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 42,
+      "height": 84,
+      "depth": 14
+    },
+    "weight": 125,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["elegant", "formal", "cozy"],
+    "colors": ["dark-tone", "brown"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["low-light", "large-space", "high-ceiling"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["bookcase", "storage", "office-storage"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "large",
+      "roomZones": ["storage", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["TRADITIONAL"],
+      "colorHarmony": ["dark-tone", "brown", "beige"],
+      "materialHarmony": ["wood", "leather", "metal"]
+    },
+    "lifestyleTags": ["Organization focused", "Book lover", "Traditional elegance", "Home library"]
+  },
+  {
+  "id": "boho-eclectic-chair-001",
+  "name": "Casablanca Rattan Desk Chair",
+  "style": "BOHO",
+  "category": "seating",
+  "subcategory": "office-chairs",
+  "description": "A comfortable desk chair with handwoven rattan back, cream cushioned seat, and natural wood swivel base, bringing global bohemian charm to creative workspaces.",
+  "price": 420,
+  "imageUrl": "/images/products/boho-eclectic/home-office/casablanca-rattan-desk-chair.png",
+  "inStock": true,
+  "dimensions": {
+    "width": 24,
+    "height": 36,
+    "depth": 24
+  },
+  "weight": 28,
+  "materials": ["rattan", "fabric", "wood"],
+  "styleAttributes": ["casual", "cozy", "eclectic"],
+  "colors": ["neutral", "brown", "beige"],
+  "functionality": ["seating", "decorative"],
+  "environmentTags": ["natural-light", "small-space", "large-space"],
+  "roomCompatibility": {
+    "Living Room": {
+      "isCompatible": false,
+      "priority": "optional",
+      "placementContext": [],
+      "replacementFor": []
+    },
+    "Bedroom": {
+      "isCompatible": false,
+      "priority": "optional",
+      "placementContext": [],
+      "replacementFor": []
+    },
+    "Bathroom": {
+      "isCompatible": false,
+      "priority": "optional",
+      "placementContext": [],
+      "replacementFor": []
+    },
+    "Home Office": {
+      "isCompatible": true,
+      "priority": "essential",
+      "placementContext": ["center"],
+      "replacementFor": ["office-chair", "desk-chair", "accent-chair"]
+    },
+    "Dining Area": {
+      "isCompatible": false,
+      "priority": "optional",
+      "placementContext": [],
+      "replacementFor": []
+    }
+  },
+  "spatialContext": {
+    "placementPriority": "primary",
+    "spaceRequirement": "medium",
+    "roomZones": ["seating", "functional"]
+  },
+  "styleCoherence": {
+    "dominantStyle": "BOHO",
+    "secondaryStyles": ["VINTAGE", "MODERN"],
+    "colorHarmony": ["neutral", "brown", "beige"],
+    "materialHarmony": ["rattan", "wood", "fabric"]
+  },
+  "lifestyleTags": ["Work from home", "Natural living", "Global traveler", "Comfort seeker"]
+},
+  ///////////////////////////////
+  // BOHO ECLECTIC - HOME OFFICE PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "warm-minimalist-desk-001",
+    "name": "Flow Curved Edge Oak Desk",
+    "style": "MINIMALIST",
+    "category": "tables",
+    "subcategory": "desks",
+    "description": "A sculptural desk in natural white oak with organic curved edges and flowing form, featuring integrated cable management and embodying organic modern design for inspiring workspaces.",
+    "price": 1180,
+    "imageUrl": "/images/products/warm-minimalist/home-office/flow-curved-edge-oak-desk.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 60,
+      "height": 30,
+      "depth": 32
+    },
+    "weight": 95,
+    "materials": ["wood"],
+    "styleAttributes": ["minimal", "natural", "cozy"],
+    "colors": ["light-tone", "beige", "neutral"],
+    "functionality": ["multi-functional"],
+    "environmentTags": ["natural-light", "small-space", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center", "wall"],
+        "replacementFor": ["desk", "curved-desk", "organic-desk"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "large",
+      "roomZones": ["functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MINIMALIST",
+      "secondaryStyles": ["MODERN", "BOHO"],
+      "colorHarmony": ["light-tone", "beige", "neutral"],
+      "materialHarmony": ["wood", "fabric", "ceramic"]
+    },
+    "lifestyleTags": ["Work from home", "Organic modern", "Natural living", "Sculptural design"]
+  },
+  {
+    "id": "warm-minimalist-chair-001",
+    "name": "Soma Molded Oak Chair",
+    "style": "MINIMALIST",
+    "category": "seating",
+    "subcategory": "office-chairs",
+    "description": "A sculptural desk chair with molded white oak plywood seat and back, featuring organic curves and swivel base, embodying organic modern principles with comfortable elegance.",
+    "price": 580,
+    "imageUrl": "/images/products/warm-minimalist/home-office/soma-molded-oak-chair.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 24,
+      "height": 32,
+      "depth": 24
+    },
+    "weight": 22,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["minimal", "natural", "elegant"],
+    "colors": ["light-tone", "beige", "neutral"],
+    "functionality": ["seating", "multi-functional"],
+    "environmentTags": ["natural-light", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center"],
+        "replacementFor": ["office-chair", "desk-chair", "swivel-chair"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "medium",
+      "roomZones": ["seating", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MINIMALIST",
+      "secondaryStyles": ["MODERN", "BOHO"],
+      "colorHarmony": ["light-tone", "beige", "neutral"],
+      "materialHarmony": ["wood", "metal", "fabric"]
+    },
+    "lifestyleTags": ["Work from home", "Organic modern", "Sculptural design", "Comfort seeker"]
+  },
+  {
+    "id": "warm-minimalist-storage-001",
+    "name": "Wave Curved Oak Bookshelf",
+    "style": "MINIMALIST",
+    "category": "storage",
+    "subcategory": "bookcases",
+    "description": "A sculptural bookshelf in white oak with flowing curved shelves and organic form, creating beautiful shadows and embodying organic modern design for artistic office storage.",
+    "price": 780,
+    "imageUrl": "/images/products/warm-minimalist/home-office/wave-curved-oak-bookshelf.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 36,
+      "height": 72,
+      "depth": 12
+    },
+    "weight": 65,
+    "materials": ["wood"],
+    "styleAttributes": ["minimal", "natural", "elegant"],
+    "colors": ["light-tone", "beige", "neutral"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["bookshelf", "storage", "curved-shelving"]
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "medium",
+      "roomZones": ["storage", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MINIMALIST",
+      "secondaryStyles": ["MODERN", "BOHO"],
+      "colorHarmony": ["light-tone", "beige", "neutral"],
+      "materialHarmony": ["wood", "fabric", "ceramic"]
+    },
+    "lifestyleTags": ["Organization focused", "Organic modern", "Sculptural design", "Book lover"]
   }
 ]
