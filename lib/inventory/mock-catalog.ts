@@ -64,19 +64,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -136,19 +130,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
         "replacementFor": ["side-table"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -208,19 +196,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["corner", "wall"],
         "replacementFor": ["desk-lamp", "task-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["corner"],
@@ -281,19 +263,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
         "replacementFor": ["office-rug"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["center"],
@@ -356,19 +332,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["wall"],
         "replacementFor": ["office-seating"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -428,19 +398,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
         "replacementFor": ["side-table"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -500,19 +464,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["corner", "wall"],
         "replacementFor": ["desk-lamp", "task-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["corner"],
@@ -572,19 +530,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
         "replacementFor": ["office-rug"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["center"],
@@ -647,19 +599,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -719,19 +665,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
         "replacementFor": ["side-table"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -791,19 +731,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["corner"],
         "replacementFor": ["accent-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["corner"],
@@ -863,19 +797,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["center"],
         "replacementFor": ["office-rug"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["center"],
@@ -938,19 +866,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -1010,19 +932,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
         "replacementFor": ["side-table"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -1082,19 +998,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["corner", "wall"],
         "replacementFor": ["task-lighting", "accent-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["corner"],
@@ -1154,19 +1064,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["center"],
         "replacementFor": ["office-rug"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
@@ -1229,19 +1133,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["wall"],
         "replacementFor": ["office-seating"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -1301,19 +1199,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
         "replacementFor": ["side-table"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -1373,19 +1265,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["corner", "wall"],
         "replacementFor": ["task-lighting", "accent-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["corner"],
@@ -1445,19 +1331,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["center"],
         "replacementFor": ["office-rug"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "optional",
         "placementContext": ["center"],
@@ -1524,19 +1404,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "essential",
         "placementContext": ["center"],
@@ -1596,19 +1470,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["center"],
@@ -1671,19 +1539,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "essential",
         "placementContext": ["center"],
@@ -1743,19 +1605,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "essential",
         "placementContext": ["center"],
@@ -1818,19 +1674,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "essential",
         "placementContext": ["center"],
@@ -1890,19 +1740,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "essential",
         "placementContext": ["center"],
@@ -1965,19 +1809,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "essential",
         "placementContext": ["center"],
@@ -2037,19 +1875,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "essential",
         "placementContext": ["center"],
@@ -2112,19 +1944,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": true,
         "priority": "essential",
         "placementContext": ["center"],
@@ -2191,19 +2017,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2263,19 +2083,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2335,19 +2149,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2407,19 +2215,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["wall"],
         "replacementFor": ["desk-lamp", "task-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2482,19 +2284,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2554,19 +2350,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2626,19 +2416,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2698,19 +2482,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["wall"],
         "replacementFor": ["desk-lamp", "task-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2773,19 +2551,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2845,19 +2617,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2917,19 +2683,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -2989,19 +2749,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["wall"],
         "replacementFor": ["accent-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -3064,19 +2818,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -3136,19 +2884,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -3208,19 +2950,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -3280,19 +3016,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["wall"],
         "replacementFor": ["accent-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -3355,19 +3085,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -3427,19 +3151,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -3499,19 +3217,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
         "replacementFor": []
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],
@@ -3571,19 +3283,13 @@ export const productCatalog: Product[] = [
         "placementContext": [],
         "replacementFor": []
       },
-      "Kitchen": {
-        "isCompatible": false,
-        "priority": "optional",
-        "placementContext": [],
-        "replacementFor": []
-      },
       "Home Office": {
         "isCompatible": true,
         "priority": "recommended",
         "placementContext": ["wall"],
         "replacementFor": ["desk-lamp", "task-lighting"]
       },
-      "Dining Room": {
+      "Dining Area": {
         "isCompatible": false,
         "priority": "optional",
         "placementContext": [],

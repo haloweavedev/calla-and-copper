@@ -24,16 +24,16 @@ const roomTypes = [
     roomDetail: 'A productive workspace that fits your lifestyle'
   },
   {
-    id: 'kitchen',
-    roomTitle: 'Kitchen',
-    imageSrc: '/landing/space-kitchen.png',
-    roomDetail: 'The heart of your home where meals and memories are made'
-  },
-  {
-    id: 'dining-room',
-    roomTitle: 'Dining Room',
+    id: 'dining-area',
+    roomTitle: 'Dining Area',
     imageSrc: '/landing/space-dining-room.png',
     roomDetail: 'A welcoming space for shared meals and conversations'
+  },
+  {
+    id: 'bathroom',
+    roomTitle: 'Bathroom',
+    imageSrc: '/landing/space-studio.png',
+    roomDetail: 'A functional and serene space for daily routines'
   }
 ]
 

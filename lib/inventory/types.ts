@@ -32,7 +32,7 @@ export type ProductSubcategory =
   | 'bed-frames'
   | 'nightstands'
 
-export type RoomType = 'Living Room' | 'Bedroom' | 'Kitchen' | 'Home Office' | 'Dining Room' | 'Dining Area' | 'Guest Room' | 'Bathroom' | 'Kid\'s Room' | 'Entryway/Foyer' | 'Patio/Deck' | 'Master/Primary Suite'
+export type RoomType = 'Living Room' | 'Bedroom' | 'Dining Area' | 'Home Office' | 'Bathroom'
 
 // Enhanced tag system for better matching
 export type MaterialTag = 
@@ -142,9 +142,8 @@ export type Product = {
   roomCompatibility: {
     'Living Room': RoomCompatibility
     'Bedroom': RoomCompatibility
-    'Kitchen': RoomCompatibility
+    'Dining Area': RoomCompatibility
     'Home Office': RoomCompatibility
-    'Dining Room': RoomCompatibility
     'Bathroom': RoomCompatibility
   }
   

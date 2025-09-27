@@ -11,12 +11,11 @@ enum Style {
 }
 
 enum RoomType {
-  LIVING_ROOM = 'LIVING_ROOM',
-  BEDROOM = 'BEDROOM',
-  STUDIO = 'STUDIO',
-  OFFICE = 'OFFICE',
-  DINING_ROOM = 'DINING_ROOM',
-  KITCHEN = 'KITCHEN'
+  LIVING_ROOM = 'Living Room',
+  BEDROOM = 'Bedroom',
+  DINING_AREA = 'Dining Area',
+  HOME_OFFICE = 'Home Office',
+  BATHROOM = 'Bathroom'
 }
 
 enum Budget {
