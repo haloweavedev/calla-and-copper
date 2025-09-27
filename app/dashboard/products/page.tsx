@@ -21,21 +21,21 @@ export default function ProductsPage() {
     return matchesSearch && matchesStyle && matchesCategory
   })
 
-  const styles: (ProductStyle | 'all')[] = ['all', 'MODERN', 'SCANDINAVIAN', 'INDUSTRIAL', 'BOHO', 'VINTAGE']
-  const categories: (ProductCategory | 'all')[] = ['all', 'seating', 'tables', 'storage', 'lighting', 'textiles', 'decor', 'beds']
+  const styles: (ProductStyle | 'all')[] = ['all', 'MODERN', 'MINIMALIST', 'INDUSTRIAL', 'BOHO', 'VINTAGE']
+  const categories: (ProductCategory | 'all')[] = ['all', 'seating', 'tables', 'storage', 'lighting', 'textiles', 'decor', 'bed sets']
 
   const getStyleLabel = (style: ProductStyle | 'all') => {
     const labels = {
       'all': 'All Styles',
       'MODERN': 'Modern Clean',
-      'SCANDINAVIAN': 'Warm Minimalist', 
+      'MINIMALIST': 'Warm Minimalist', 
       'INDUSTRIAL': 'Industrial Loft',
       'BOHO': 'Boho Eclectic',
       'VINTAGE': 'Cozy Traditional',
       'CONTEMPORARY': 'Contemporary',
       'TRADITIONAL': 'Traditional'
     }
-    return labels[style]
+    return labels[style] || 'Unknown Style'
   }
 
   const getCategoryLabel = (category: ProductCategory | 'all') => {
@@ -47,9 +47,9 @@ export default function ProductsPage() {
       'lighting': 'Lighting',
       'textiles': 'Textiles',
       'decor': 'Decor',
-      'beds': 'Beds'
+      'bed sets': 'Bed Sets'
     }
-    return labels[category]
+    return labels[category] || 'Unknown Category'
   }
 
   return (

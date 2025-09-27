@@ -2,12 +2,11 @@ import { create } from 'zustand'
 
 // Define enum types manually until Prisma client is generated
 enum Style {
-  SCANDINAVIAN = 'SCANDINAVIAN',
+  MINIMALIST = 'MINIMALIST',
   INDUSTRIAL = 'INDUSTRIAL',
   BOHO = 'BOHO',
   MODERN = 'MODERN',
   JAPANDI = 'JAPANDI',
-  MINIMALIST = 'MINIMALIST',
   ECLECTIC = 'ECLECTIC'
 }
 

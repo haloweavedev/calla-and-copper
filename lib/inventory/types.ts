@@ -1,18 +1,19 @@
-export type ProductStyle = 'SCANDINAVIAN' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE' | 'CONTEMPORARY' | 'TRADITIONAL'
+export type ProductStyle = 'MINIMALIST' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE' | 'CONTEMPORARY' | 'TRADITIONAL'
 
 export type ProductCategory = 
+  | 'bed sets'
   | 'seating'
   | 'tables' 
   | 'storage'
   | 'lighting'
   | 'textiles'
   | 'decor'
-  | 'beds'
 
 export type ProductSubcategory = 
   | 'chairs'
   | 'sofas'
   | 'benches'
+  | 'bed-sets'
   | 'coffee-tables'
   | 'dining-tables'
   | 'side-tables'

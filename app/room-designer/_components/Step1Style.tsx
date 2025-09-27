@@ -23,7 +23,7 @@ export function Step1Style() {
         'Modern Clean': 'MODERN',
         'Cozy Traditional': 'VINTAGE',
         'Boho Eclectic': 'BOHO',
-        'Warm Minimalist': 'SCANDINAVIAN',
+        'Warm Minimalist': 'MINIMALIST',
         'Industrial loft': 'INDUSTRIAL'
       }
       

@@ -90,7 +90,7 @@ export const productCatalog: Product[] = [
     },
     "styleCoherence": {
       "dominantStyle": "MODERN",
-      "secondaryStyles": ["SCANDINAVIAN", "CONTEMPORARY"],
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
       "colorHarmony": ["neutral", "white", "gray", "black"],
       "materialHarmony": ["metal", "fabric", "glass"]
     },
@@ -162,7 +162,7 @@ export const productCatalog: Product[] = [
     },
     "styleCoherence": {
       "dominantStyle": "MODERN",
-      "secondaryStyles": ["SCANDINAVIAN", "CONTEMPORARY"],
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
       "colorHarmony": ["neutral", "white", "light-tone"],
       "materialHarmony": ["glass", "metal", "fabric"]
     },
@@ -234,7 +234,7 @@ export const productCatalog: Product[] = [
     },
     "styleCoherence": {
       "dominantStyle": "MODERN",
-      "secondaryStyles": ["SCANDINAVIAN", "CONTEMPORARY"],
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
       "colorHarmony": ["neutral", "white", "light-tone"],
       "materialHarmony": ["metal", "marble", "glass"]
     },
@@ -307,7 +307,7 @@ export const productCatalog: Product[] = [
     },
     "styleCoherence": {
       "dominantStyle": "MODERN",
-      "secondaryStyles": ["SCANDINAVIAN", "CONTEMPORARY"],
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
       "colorHarmony": ["neutral", "beige", "gray", "light-tone"],
       "materialHarmony": ["fabric", "metal", "glass"]
     },
@@ -673,7 +673,7 @@ export const productCatalog: Product[] = [
     },
     "styleCoherence": {
       "dominantStyle": "BOHO",
-      "secondaryStyles": ["MODERN", "SCANDINAVIAN"],
+      "secondaryStyles": ["MODERN", "MINIMALIST"],
       "colorHarmony": ["neutral", "brown", "beige", "dark-tone"],
       "materialHarmony": ["rattan", "fabric", "wood"]
     },
@@ -901,7 +901,7 @@ export const productCatalog: Product[] = [
   {
     "id": "warm-minimalist-sofa-001",
     "name": "Zen Curved Boucle Sectional",
-    "style": "SCANDINAVIAN",
+    "style": "MINIMALIST",
     "category": "seating",
     "subcategory": "sofas",
     "description": "A gracefully curved sectional in soft cream boucle fabric with organic rounded edges and natural oak legs, embodying serene minimalist comfort.",
@@ -963,7 +963,7 @@ export const productCatalog: Product[] = [
       "roomZones": ["seating"]
     },
     "styleCoherence": {
-      "dominantStyle": "SCANDINAVIAN",
+      "dominantStyle": "MINIMALIST",
       "secondaryStyles": ["MODERN", "BOHO"],
       "colorHarmony": ["light-tone", "neutral", "beige", "white"],
       "materialHarmony": ["fabric", "wood", "rattan"]
@@ -973,7 +973,7 @@ export const productCatalog: Product[] = [
   {
     "id": "warm-minimalist-table-001",
     "name": "Harmony Oval Oak Coffee Table",
-    "style": "SCANDINAVIAN",
+    "style": "MINIMALIST",
     "category": "tables",
     "subcategory": "coffee-tables",
     "description": "An elegant oval coffee table crafted from solid white oak with gentle rounded edges and a smooth natural finish that celebrates the wood's organic grain patterns.",
@@ -1035,7 +1035,7 @@ export const productCatalog: Product[] = [
       "roomZones": ["seating", "functional"]
     },
     "styleCoherence": {
-      "dominantStyle": "SCANDINAVIAN",
+      "dominantStyle": "MINIMALIST",
       "secondaryStyles": ["MODERN", "BOHO"],
       "colorHarmony": ["light-tone", "beige", "neutral"],
       "materialHarmony": ["wood", "fabric", "rattan"]
@@ -1045,7 +1045,7 @@ export const productCatalog: Product[] = [
   {
     "id": "warm-minimalist-lamp-001",
     "name": "Serenity Paper Floor Lamp",
-    "style": "SCANDINAVIAN",
+    "style": "MINIMALIST",
     "category": "lighting",
     "subcategory": "floor-lamps",
     "description": "A serene floor lamp with handcrafted paper shade and natural ash wood base, creating soft diffused lighting perfect for peaceful minimalist spaces.",
@@ -1107,7 +1107,7 @@ export const productCatalog: Product[] = [
       "roomZones": ["lighting", "decorative"]
     },
     "styleCoherence": {
-      "dominantStyle": "SCANDINAVIAN",
+      "dominantStyle": "MINIMALIST",
       "secondaryStyles": ["MODERN", "BOHO"],
       "colorHarmony": ["light-tone", "neutral", "white", "beige"],
       "materialHarmony": ["wood", "fabric", "rattan"]
@@ -1117,7 +1117,7 @@ export const productCatalog: Product[] = [
   {
     "id": "warm-minimalist-rug-002",
     "name": "Hygge Plush Shag Area Rug",
-    "style": "SCANDINAVIAN",
+    "style": "MINIMALIST",
     "category": "textiles",
     "subcategory": "rugs",
     "description": "A luxuriously soft high-pile shag rug in warm cream tones, bringing cozy texture and tactile comfort to minimalist spaces while maintaining serene neutrality.",
@@ -1179,7 +1179,7 @@ export const productCatalog: Product[] = [
       "roomZones": ["decorative", "seating"]
     },
     "styleCoherence": {
-      "dominantStyle": "SCANDINAVIAN",
+      "dominantStyle": "MINIMALIST",
       "secondaryStyles": ["MODERN", "BOHO"],
       "colorHarmony": ["light-tone", "neutral", "beige", "white"],
       "materialHarmony": ["fabric", "wood", "rattan"]
@@ -1550,7 +1550,7 @@ export const productCatalog: Product[] = [
     },
     "styleCoherence": {
       "dominantStyle": "MODERN",
-      "secondaryStyles": ["SCANDINAVIAN", "CONTEMPORARY"],
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
       "colorHarmony": ["neutral", "white", "light-tone"],
       "materialHarmony": ["glass", "metal", "fabric"]
     },
@@ -1622,7 +1622,7 @@ export const productCatalog: Product[] = [
     },
     "styleCoherence": {
       "dominantStyle": "MODERN",
-      "secondaryStyles": ["SCANDINAVIAN", "CONTEMPORARY"],
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
       "colorHarmony": ["neutral", "white", "light-tone"],
       "materialHarmony": ["metal", "glass", "fabric"]
     },
@@ -1928,7 +1928,7 @@ export const productCatalog: Product[] = [
   {
     "id": "warm-minimalist-table-002",
     "name": "Zen White Oak Dining Table",
-    "style": "SCANDINAVIAN",
+    "style": "MINIMALIST",
     "category": "tables",
     "subcategory": "dining-tables",
     "description": "A serene rectangular dining table crafted from solid white oak with gentle rounded edges and a natural matte finish, embodying Japandi minimalism and organic warmth.",
@@ -1990,7 +1990,7 @@ export const productCatalog: Product[] = [
       "roomZones": ["functional"]
     },
     "styleCoherence": {
-      "dominantStyle": "SCANDINAVIAN",
+      "dominantStyle": "MINIMALIST",
       "secondaryStyles": ["MODERN", "BOHO"],
       "colorHarmony": ["light-tone", "beige", "neutral"],
       "materialHarmony": ["wood", "fabric", "rattan"]
@@ -2000,7 +2000,7 @@ export const productCatalog: Product[] = [
   {
     "id": "warm-minimalist-light-001",
     "name": "Akari Organic Paper Pendant Light",
-    "style": "SCANDINAVIAN",
+    "style": "MINIMALIST",
     "category": "lighting",
     "subcategory": "pendant-lights",
     "description": "A sculptural pendant light with handcrafted white paper shade in organic teardrop form and natural ash wood accent, creating soft diffused lighting for serene dining spaces.",
@@ -2062,7 +2062,7 @@ export const productCatalog: Product[] = [
       "roomZones": ["lighting", "decorative"]
     },
     "styleCoherence": {
-      "dominantStyle": "SCANDINAVIAN",
+      "dominantStyle": "MINIMALIST",
       "secondaryStyles": ["MODERN", "BOHO"],
       "colorHarmony": ["light-tone", "neutral", "white", "beige"],
       "materialHarmony": ["fabric", "wood", "rattan"]
@@ -2143,5 +2143,1464 @@ export const productCatalog: Product[] = [
       "materialHarmony": ["wood", "metal", "leather"]
     },
     "lifestyleTags": ["Urban living", "Industrial aesthetic", "Loft dwelling", "Bold entertaining"]
+  },
+  ///////////////////////////////
+  // BEDROOM PRODUCTS
+  ///////////////////////////////
+
+  ///////////////////////////////
+  // MODERN CLEAN - BEDROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "modern-clean-bedding-001",
+    "name": "Milan Platform Bed Set",
+    "style": "MODERN",
+    "category": "bed sets",
+    "subcategory": "bed-sets",
+    "description": "A sleek platform bed set with low-profile walnut frame, premium white cotton bedding, and geometric accent pillows, embodying contemporary minimalist bedroom design.",
+    "price": 1680,
+    "imageUrl": "/images/products/modern-clean/bedroom/milan-platform-bed-set.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 84,
+      "height": 36,
+      "depth": 90
+    },
+    "weight": 145,
+    "materials": ["wood", "fabric"],
+    "styleAttributes": ["sleek", "minimal", "contemporary"],
+    "colors": ["neutral", "white", "light-tone"],
+    "functionality": ["seating", "storage"],
+    "environmentTags": ["natural-light", "small-space", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center", "wall"],
+        "replacementFor": ["bed", "bedding-set", "platform-bed"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "large",
+      "roomZones": ["seating"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
+      "colorHarmony": ["neutral", "white", "light-tone"],
+      "materialHarmony": ["wood", "fabric", "metal"]
+    },
+    "lifestyleTags": ["Minimalist", "Modern living", "Clean aesthetic", "Quality sleep"]
+  },
+  {
+    "id": "modern-clean-nightstand-001",
+    "name": "Axis Floating Nightstand",
+    "style": "MODERN",
+    "category": "storage",
+    "subcategory": "nightstands",
+    "description": "A sleek wall-mounted nightstand with hidden mounting system, single drawer with soft-close mechanism, and integrated wireless charging pad for modern convenience.",
+    "price": 285,
+    "imageUrl": "/images/products/modern-clean/bedroom/axis-floating-nightstand.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 24,
+      "height": 6,
+      "depth": 16
+    },
+    "weight": 18,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["sleek", "minimal", "contemporary"],
+    "colors": ["neutral", "light-tone"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["small-space", "natural-light"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["nightstand", "bedside-table"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
+      "colorHarmony": ["neutral", "white", "light-tone"],
+      "materialHarmony": ["wood", "metal", "fabric"]
+    },
+    "lifestyleTags": ["Tech enthusiast", "Small space living", "Minimalist", "Modern convenience"]
+  },
+  {
+    "id": "modern-clean-dresser-001",
+    "name": "Prism Low Profile Dresser",
+    "style": "MODERN",
+    "category": "storage",
+    "subcategory": "dressers",
+    "description": "A sophisticated low-profile dresser with six soft-close drawers, walnut wood finish, and brushed steel hairpin legs, combining ample storage with contemporary elegance.",
+    "price": 950,
+    "imageUrl": "/images/products/modern-clean/bedroom/prism-low-profile-dresser.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 60,
+      "height": 30,
+      "depth": 18
+    },
+    "weight": 95,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["sleek", "minimal", "elegant"],
+    "colors": ["neutral", "light-tone"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["dresser", "chest", "storage"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "medium",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
+      "colorHarmony": ["neutral", "light-tone", "white"],
+      "materialHarmony": ["wood", "metal", "fabric"]
+    },
+    "lifestyleTags": ["Storage seeker", "Minimalist", "Modern living", "Organization focused"]
+  },
+  {
+    "id": "modern-clean-bedside-lamp-001",
+    "name": "Nexus Bedside Lamp",
+    "style": "MODERN",
+    "category": "lighting",
+    "subcategory": "table-lamps",
+    "description": "A sleek adjustable bedside lamp with brushed steel arm, LED reading light, and touch-sensitive dimming controls for personalized bedroom lighting.",
+    "price": 165,
+    "imageUrl": "/images/products/modern-clean/bedroom/nexus-bedside-lamp.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 8,
+      "height": 18,
+      "depth": 12
+    },
+    "weight": 6,
+    "materials": ["metal"],
+    "styleAttributes": ["sleek", "minimal", "contemporary"],
+    "colors": ["neutral", "light-tone"],
+    "functionality": ["lighting", "multi-functional"],
+    "environmentTags": ["small-space", "natural-light"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["bedside-lamp", "reading-light", "table-lamp"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["desk-lamp", "task-lighting"]
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["lighting", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["MINIMALIST", "CONTEMPORARY"],
+      "colorHarmony": ["neutral", "light-tone", "white"],
+      "materialHarmony": ["metal", "wood", "fabric"]
+    },
+    "lifestyleTags": ["Tech enthusiast", "Night reader", "Modern convenience", "Adjustable lighting"]
+  },
+  ///////////////////////////////
+  // COZY TRADITIONAL - BEDROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "cozy-traditional-bedding-001",
+    "name": "Hampton Upholstered Bedding Set",
+    "style": "VINTAGE",
+    "category": "bed sets",
+    "subcategory": "bed-sets",
+    "description": "A refined upholstered panel bed set with linen-gray fabric headboard, weathered oak frame, and soft neutral bedding with subtle pattern mixing for transitional elegance.",
+    "price": 1850,
+    "imageUrl": "/images/products/cozy-traditional/bedroom/hampton-upholstered-bedding-set.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 88,
+      "height": 58,
+      "depth": 90
+    },
+    "weight": 165,
+    "materials": ["wood", "fabric"],
+    "styleAttributes": ["elegant", "cozy", "casual"],
+    "colors": ["neutral", "beige", "light-tone"],
+    "functionality": ["seating", "decorative"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center", "wall"],
+        "replacementFor": ["bed", "bedding-set", "upholstered-bed"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "large",
+      "roomZones": ["seating", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["MODERN", "MINIMALIST"],
+      "colorHarmony": ["neutral", "beige", "light-tone"],
+      "materialHarmony": ["wood", "fabric", "metal"]
+    },
+    "lifestyleTags": ["Transitional style", "Comfort seeker", "Relaxed elegance", "Neutral palette lover"]
+  },
+  {
+    "id": "cozy-traditional-nightstand-001",
+    "name": "Savannah Two-Tone Nightstand",
+    "style": "VINTAGE",
+    "category": "storage",
+    "subcategory": "nightstands",
+    "description": "A charming two-drawer nightstand featuring weathered oak top with soft white painted base, brushed nickel hardware, and open shelf storage for transitional bedroom styling.",
+    "price": 365,
+    "imageUrl": "/images/products/cozy-traditional/bedroom/savannah-two-tone-nightstand.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 26,
+      "height": 28,
+      "depth": 18
+    },
+    "weight": 42,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["elegant", "cozy", "casual"],
+    "colors": ["neutral", "white", "light-tone"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["natural-light", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["nightstand", "bedside-table"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["MODERN", "MINIMALIST"],
+      "colorHarmony": ["neutral", "white", "light-tone"],
+      "materialHarmony": ["wood", "metal", "fabric"]
+    },
+    "lifestyleTags": ["Transitional style", "Storage seeker", "Casual elegance", "Mixed materials lover"]
+  },
+  {
+    "id": "cozy-traditional-dresser-001",
+    "name": "Coastal Weathered Oak Dresser",
+    "style": "VINTAGE",
+    "category": "storage",
+    "subcategory": "dressers",
+    "description": "A sophisticated six-drawer dresser with weathered oak top, soft white painted base, and brushed nickel pulls, embodying relaxed transitional elegance with ample storage.",
+    "price": 1180,
+    "imageUrl": "/images/products/cozy-traditional/bedroom/coastal-weathered-oak-dresser.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 66,
+      "height": 36,
+      "depth": 20
+    },
+    "weight": 125,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["elegant", "cozy", "casual"],
+    "colors": ["neutral", "white", "light-tone"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["dresser", "chest", "storage"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "medium",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["MODERN", "MINIMALIST"],
+      "colorHarmony": ["neutral", "white", "light-tone"],
+      "materialHarmony": ["wood", "metal", "fabric"]
+    },
+    "lifestyleTags": ["Storage seeker", "Transitional style", "Organization focused", "Casual elegance"]
+  },
+  {
+    "id": "cozy-traditional-bedside-lamp-001",
+    "name": "Chatham Ceramic Table Lamp",
+    "style": "VINTAGE",
+    "category": "lighting",
+    "subcategory": "table-lamps",
+    "description": "A sophisticated ceramic table lamp with soft blue-gray glazed base, classic urn shape, and white linen drum shade for gentle transitional bedroom lighting.",
+    "price": 175,
+    "imageUrl": "/images/products/cozy-traditional/bedroom/chatham-ceramic-table-lamp.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 10,
+      "height": 24,
+      "depth": 10
+    },
+    "weight": 8,
+    "materials": ["ceramic", "fabric"],
+    "styleAttributes": ["elegant", "cozy", "casual"],
+    "colors": ["neutral", "light-tone", "beige"],
+    "functionality": ["lighting", "decorative"],
+    "environmentTags": ["natural-light", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["bedside-lamp", "table-lamp", "reading-light"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["desk-lamp", "task-lighting"]
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["lighting", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["MODERN", "MINIMALIST"],
+      "colorHarmony": ["neutral", "light-tone", "beige"],
+      "materialHarmony": ["ceramic", "fabric", "wood"]
+    },
+    "lifestyleTags": ["Transitional style", "Soft lighting lover", "Casual elegance", "Bedside reading"]
+  },
+  ///////////////////////////////
+  // BOHO ECLECTIC - BEDROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "boho-eclectic-bedding-001",
+    "name": "Casablanca Rattan Bedding Set",
+    "style": "BOHO",
+    "category": "bed sets",
+    "subcategory": "bed-sets",
+    "description": "A beautiful platform bed set with handwoven rattan headboard, natural wood frame, and globally-inspired textiles in warm terracotta and cream tones with tribal patterns.",
+    "price": 1450,
+    "imageUrl": "/images/products/boho-eclectic/bedroom/casablanca-rattan-bedding-set.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 86,
+      "height": 48,
+      "depth": 90
+    },
+    "weight": 95,
+    "materials": ["rattan", "wood", "fabric"],
+    "styleAttributes": ["casual", "eclectic", "cozy"],
+    "colors": ["neutral", "brown", "beige"],
+    "functionality": ["seating", "decorative"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center", "wall"],
+        "replacementFor": ["bed", "bedding-set", "platform-bed"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "large",
+      "roomZones": ["seating", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "BOHO",
+      "secondaryStyles": ["MODERN", "VINTAGE"],
+      "colorHarmony": ["neutral", "brown", "beige"],
+      "materialHarmony": ["rattan", "wood", "fabric"]
+    },
+    "lifestyleTags": ["Global traveler", "Bohemian lifestyle", "Natural living", "Artistic expression"]
+  },
+  {
+    "id": "boho-eclectic-nightstand-001",
+    "name": "Jaipur Carved Wood Nightstand",
+    "style": "BOHO",
+    "category": "storage",
+    "subcategory": "nightstands",
+    "description": "An artisan-crafted nightstand featuring hand-carved mango wood with intricate mandala patterns, warm honey finish, and single drawer with brass pull for global bohemian style.",
+    "price": 320,
+    "imageUrl": "/images/products/boho-eclectic/bedroom/jaipur-carved-wood-nightstand.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 20,
+      "height": 24,
+      "depth": 16
+    },
+    "weight": 28,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["casual", "eclectic", "rustic"],
+    "colors": ["brown", "neutral"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["natural-light", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["nightstand", "bedside-table"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "BOHO",
+      "secondaryStyles": ["VINTAGE", "MODERN"],
+      "colorHarmony": ["brown", "neutral", "beige"],
+      "materialHarmony": ["wood", "rattan", "metal"]
+    },
+    "lifestyleTags": ["Handcrafted appreciation", "Global traveler", "Artistic expression", "Eco-conscious"]
+  },
+  {
+    "id": "boho-eclectic-dresser-001",
+    "name": "Nomad Reclaimed Wood Chest",
+    "style": "BOHO",
+    "category": "storage",
+    "subcategory": "dressers",
+    "description": "A unique five-drawer chest crafted from reclaimed teak with natural patina, mixed wood tones, and vintage brass hardware, celebrating sustainable global craftsmanship.",
+    "price": 980,
+    "imageUrl": "/images/products/boho-eclectic/bedroom/nomad-reclaimed-wood-chest.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 54,
+      "height": 42,
+      "depth": 20
+    },
+    "weight": 105,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["casual", "rustic", "eclectic"],
+    "colors": ["brown", "neutral", "dark-tone"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["dresser", "chest", "storage"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "medium",
+      "roomZones": ["storage", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "BOHO",
+      "secondaryStyles": ["VINTAGE", "MODERN"],
+      "colorHarmony": ["brown", "neutral", "dark-tone"],
+      "materialHarmony": ["wood", "rattan", "metal"]
+    },
+    "lifestyleTags": ["Eco-conscious", "Global traveler", "Storage seeker", "Sustainable living"]
+  },
+  {
+    "id": "boho-eclectic-bedside-lamp-001",
+    "name": "Bali Woven Table Lamp",
+    "style": "BOHO",
+    "category": "lighting",
+    "subcategory": "table-lamps",
+    "description": "A charming table lamp with handwoven rattan basket base and natural linen shade, creating warm filtered lighting and authentic global bohemian bedroom ambiance.",
+    "price": 145,
+    "imageUrl": "/images/products/boho-eclectic/bedroom/bali-woven-table-lamp.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 12,
+      "height": 22,
+      "depth": 12
+    },
+    "weight": 5,
+    "materials": ["rattan", "fabric"],
+    "styleAttributes": ["casual", "cozy", "eclectic"],
+    "colors": ["neutral", "brown", "beige"],
+    "functionality": ["lighting", "decorative"],
+    "environmentTags": ["natural-light", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["bedside-lamp", "table-lamp", "reading-light"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["accent-lighting"]
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["lighting", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "BOHO",
+      "secondaryStyles": ["MODERN", "VINTAGE"],
+      "colorHarmony": ["neutral", "brown", "beige"],
+      "materialHarmony": ["rattan", "fabric", "wood"]
+    },
+    "lifestyleTags": ["Global traveler", "Natural living", "Handcrafted appreciation", "Warm lighting lover"]
+  },
+  ///////////////////////////////
+  // WARM MINIMALIST - BEDROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "warm-minimalist-bedding-001",
+    "name": "Zen Japanese Platform Bedding Set",
+    "style": "MINIMALIST",
+    "category": "bed sets",
+    "subcategory": "bed-sets",
+    "description": "A serene low-profile platform bed set with natural white oak frame, soft linen bedding in warm beige tones, and minimalist Japanese-inspired design for peaceful sleep.",
+    "price": 1380,
+    "imageUrl": "/images/products/warm-minimalist/bedroom/zen-japanese-platform-bedding-set.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 84,
+      "height": 32,
+      "depth": 88
+    },
+    "weight": 85,
+    "materials": ["wood", "fabric"],
+    "styleAttributes": ["minimal", "natural", "cozy"],
+    "colors": ["light-tone", "beige", "neutral"],
+    "functionality": ["seating", "storage"],
+    "environmentTags": ["natural-light", "small-space", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center", "wall"],
+        "replacementFor": ["bed", "bedding-set", "platform-bed"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "large",
+      "roomZones": ["seating"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MINIMALIST",
+      "secondaryStyles": ["MODERN", "BOHO"],
+      "colorHarmony": ["light-tone", "beige", "neutral", "white"],
+      "materialHarmony": ["wood", "fabric", "rattan"]
+    },
+    "lifestyleTags": ["Minimalist", "Natural living", "Mindful sleeping", "Japandi style"]
+  },
+  {
+    "id": "warm-minimalist-nightstand-001",
+    "name": "Muji Floating Oak Nightstand",
+    "style": "MINIMALIST",
+    "category": "storage",
+    "subcategory": "nightstands",
+    "description": "A minimal floating nightstand in solid white oak with hidden mounting, single soft-close drawer, and clean geometric lines for uncluttered Japandi bedroom spaces.",
+    "price": 245,
+    "imageUrl": "/images/products/warm-minimalist/bedroom/muji-floating-oak-nightstand.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 20,
+      "height": 6,
+      "depth": 14
+    },
+    "weight": 12,
+    "materials": ["wood"],
+    "styleAttributes": ["minimal", "natural", "cozy"],
+    "colors": ["light-tone", "beige", "neutral"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["small-space", "natural-light"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["nightstand", "bedside-table"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MINIMALIST",
+      "secondaryStyles": ["MODERN", "BOHO"],
+      "colorHarmony": ["light-tone", "beige", "neutral"],
+      "materialHarmony": ["wood", "fabric", "rattan"]
+    },
+    "lifestyleTags": ["Minimalist", "Small space living", "Clean aesthetic", "Japandi style"]
+  },
+  {
+    "id": "warm-minimalist-dresser-001",
+    "name": "Hygge Low Oak Console Dresser",
+    "style": "MINIMALIST",
+    "category": "storage",
+    "subcategory": "dressers",
+    "description": "A sophisticated low-profile dresser in solid white oak with four soft-close drawers, tapered legs, and natural matte finish embodying Nordic hygge minimalism.",
+    "price": 850,
+    "imageUrl": "/images/products/warm-minimalist/bedroom/hygge-low-oak-console-dresser.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 60,
+      "height": 28,
+      "depth": 18
+    },
+    "weight": 78,
+    "materials": ["wood"],
+    "styleAttributes": ["minimal", "natural", "cozy"],
+    "colors": ["light-tone", "beige", "neutral"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["natural-light", "small-space", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["dresser", "chest", "storage"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "medium",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MINIMALIST",
+      "secondaryStyles": ["MODERN", "BOHO"],
+      "colorHarmony": ["light-tone", "beige", "neutral"],
+      "materialHarmony": ["wood", "fabric", "rattan"]
+    },
+    "lifestyleTags": ["Minimalist", "Storage seeker", "Natural living", "Nordic hygge"]
+  },
+  {
+    "id": "warm-minimalist-bedside-lamp-001",
+    "name": "Wabi Ceramic Bedside Lamp",
+    "style": "MINIMALIST",
+    "category": "lighting",
+    "subcategory": "table-lamps",
+    "description": "A serene ceramic table lamp with organic pebble-shaped base in warm cream glaze and natural linen shade, creating soft ambient lighting for peaceful bedrooms.",
+    "price": 125,
+    "imageUrl": "/images/products/warm-minimalist/bedroom/wabi-ceramic-bedside-lamp.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 8,
+      "height": 16,
+      "depth": 8
+    },
+    "weight": 4,
+    "materials": ["ceramic", "fabric"],
+    "styleAttributes": ["minimal", "cozy", "natural"],
+    "colors": ["light-tone", "neutral", "beige"],
+    "functionality": ["lighting", "decorative"],
+    "environmentTags": ["natural-light", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["bedside-lamp", "table-lamp", "reading-light"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["accent-lighting"]
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["lighting", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MINIMALIST",
+      "secondaryStyles": ["MODERN", "BOHO"],
+      "colorHarmony": ["light-tone", "neutral", "beige"],
+      "materialHarmony": ["ceramic", "fabric", "wood"]
+    },
+    "lifestyleTags": ["Minimalist", "Soft lighting lover", "Natural living", "Mindful sleeping"]
+  },
+  ///////////////////////////////
+  // INDUSTRIAL LOFT - BEDROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "industrial-loft-bedding-001",
+    "name": "Brooklyn Steel Frame Platform Bedding Set",
+    "style": "INDUSTRIAL",
+    "category": "bed sets",
+    "subcategory": "bed-sets",
+    "description": "A commanding platform bed set with exposed black steel frame, reclaimed wood headboard, and charcoal linen bedding, embodying raw urban loft sophistication.",
+    "price": 1620,
+    "imageUrl": "/images/products/industrial-loft/bedroom/brooklyn-steel-frame-platform-bedding-set.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 86,
+      "height": 44,
+      "depth": 90
+    },
+    "weight": 125,
+    "materials": ["metal", "wood", "fabric"],
+    "styleAttributes": ["urban", "edgy", "minimal"],
+    "colors": ["dark-tone", "black", "gray"],
+    "functionality": ["seating", "storage"],
+    "environmentTags": ["high-ceiling", "large-space", "open-plan"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["center", "wall"],
+        "replacementFor": ["bed", "bedding-set", "platform-bed"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "large",
+      "roomZones": ["seating"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "INDUSTRIAL",
+      "secondaryStyles": ["MODERN", "VINTAGE"],
+      "colorHarmony": ["dark-tone", "black", "gray"],
+      "materialHarmony": ["metal", "wood", "leather"]
+    },
+    "lifestyleTags": ["Urban living", "Industrial aesthetic", "Loft dwelling", "Raw materials"]
+  },
+  {
+    "id": "industrial-loft-nightstand-001",
+    "name": "Foundry Steel & Wood Nightstand",
+    "style": "INDUSTRIAL",
+    "category": "storage",
+    "subcategory": "nightstands",
+    "description": "A rugged nightstand with thick reclaimed wood top and black iron pipe base, featuring industrial joints and raw urban character for authentic loft bedrooms.",
+    "price": 285,
+    "imageUrl": "/images/products/industrial-loft/bedroom/foundry-steel-wood-nightstand.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 20,
+      "height": 24,
+      "depth": 16
+    },
+    "weight": 32,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["urban", "edgy", "rustic"],
+    "colors": ["dark-tone", "brown", "black"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["high-ceiling", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["nightstand", "bedside-table"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "INDUSTRIAL",
+      "secondaryStyles": ["MODERN", "VINTAGE"],
+      "colorHarmony": ["dark-tone", "brown", "black"],
+      "materialHarmony": ["wood", "metal", "leather"]
+    },
+    "lifestyleTags": ["Urban living", "Raw materials", "Industrial aesthetic", "Storage seeker"]
+  },
+  {
+    "id": "industrial-loft-dresser-001",
+    "name": "Metro Steel Pipe Dresser",
+    "style": "INDUSTRIAL",
+    "category": "storage",
+    "subcategory": "dressers",
+    "description": "A bold six-drawer dresser featuring reclaimed wood drawers with black steel pipe frame construction, industrial hardware, and raw metropolitan character.",
+    "price": 1180,
+    "imageUrl": "/images/products/industrial-loft/bedroom/metro-steel-pipe-dresser.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 60,
+      "height": 36,
+      "depth": 20
+    },
+    "weight": 145,
+    "materials": ["wood", "metal"],
+    "styleAttributes": ["urban", "edgy", "rustic"],
+    "colors": ["dark-tone", "brown", "black"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["high-ceiling", "large-space", "open-plan"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["dresser", "chest", "storage"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "large",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "INDUSTRIAL",
+      "secondaryStyles": ["MODERN", "VINTAGE"],
+      "colorHarmony": ["dark-tone", "brown", "black"],
+      "materialHarmony": ["wood", "metal", "leather"]
+    },
+    "lifestyleTags": ["Storage seeker", "Urban living", "Industrial aesthetic", "Raw materials"]
+  },
+  {
+    "id": "industrial-loft-bedside-lamp-001",
+    "name": "Forge Edison Clamp Bedside Lamp",
+    "style": "INDUSTRIAL",
+    "category": "lighting",
+    "subcategory": "table-lamps",
+    "description": "A versatile clamp-on bedside lamp with adjustable black iron arm, exposed Edison bulb, and industrial-grade construction for raw urban bedroom lighting.",
+    "price": 135,
+    "imageUrl": "/images/products/industrial-loft/bedroom/forge-edison-clamp-bedside-lamp.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 6,
+      "height": 20,
+      "depth": 12
+    },
+    "weight": 8,
+    "materials": ["metal"],
+    "styleAttributes": ["urban", "edgy", "minimal"],
+    "colors": ["dark-tone", "black"],
+    "functionality": ["lighting", "multi-functional"],
+    "environmentTags": ["high-ceiling", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["bedside-lamp", "reading-light", "task-lamp"]
+      },
+      "Bathroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Kitchen": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Home Office": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["desk-lamp", "task-lighting"]
+      },
+      "Dining Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["lighting", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "INDUSTRIAL",
+      "secondaryStyles": ["MODERN", "VINTAGE"],
+      "colorHarmony": ["dark-tone", "black", "gray"],
+      "materialHarmony": ["metal", "wood", "leather"]
+    },
+    "lifestyleTags": ["Urban living", "Task lighting", "Industrial aesthetic", "Space saving"]
   }
 ]
