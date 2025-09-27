@@ -91,7 +91,7 @@ export default function DashboardGenerationPage({ params }: DashboardGenerationP
         <h3 className="text-lg font-medium text-gray-900 mb-2">Creation Not Found</h3>
         <p className="text-gray-600 mb-6 text-center">{error || 'Please try again.'}</p>
         <Link
-          href="/welcome"
+          href="/room-designer"
           className="inline-flex items-center px-6 py-3 bg-brand-gold text-white font-medium rounded-lg hover:bg-brand-dark-brown transition-colors"
         >
           Start New Analysis

@@ -96,7 +96,7 @@ export default function HistoryPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-lg md:text-3xl font-medium md:font-base">Your Creation History</h1>
         <Link 
-          href="/welcome" 
+          href="/room-designer" 
           className="px-4 py-2 bg-brand-gold text-white font-medium rounded-full hover:bg-brand-dark-brown transition-colors"
         >
           Create New Design
@@ -109,7 +109,7 @@ export default function HistoryPage() {
           <h3 className="text-lg font-medium text-gray-800 mb-2">No creations yet</h3>
           <p className="text-gray-600 mb-6">Start creating your first personalized room design!</p>
           <Link 
-            href="/welcome" 
+            href="/room-designer" 
             className="px-6 py-3 bg-brand-gold text-white font-medium rounded-lg hover:bg-brand-dark-brown transition-colors"
           >
             Get Started

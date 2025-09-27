@@ -19,9 +19,15 @@ export function calculateProductScore(
   }
 
   // 2. Room compatibility
-  const roomKey = roomType.toLowerCase().replace(' ', '-')
-  if (product.roomCompatibility.includes(roomKey as never)) {
+  const roomCompatibility = product.roomCompatibility[roomType as keyof typeof product.roomCompatibility]
+  if (roomCompatibility && roomCompatibility.isCompatible) {
     score += 10
+    // Bonus for essential items
+    if (roomCompatibility.priority === 'essential') {
+      score += 5
+    } else if (roomCompatibility.priority === 'recommended') {
+      score += 3
+    }
   }
 
   // 3. AI tag matching (materials, colors, style attributes)
@@ -39,6 +45,14 @@ export function calculateProductScore(
   score += matchingTags.length * 3
 
   // 4. Lifestyle compatibility
+  if (product.lifestyleTags && lifestyleTags.length > 0) {
+    const matchingLifestyle = lifestyleTags.filter(tag => 
+      product.lifestyleTags!.includes(tag)
+    )
+    score += matchingLifestyle.length * 3
+  }
+  
+  // Legacy lifestyle matching for environment tags
   const lifestyleScore = lifestyleTags.reduce((acc, tag) => {
     if (tag === 'small-space' && product.environmentTags.includes('small-space')) return acc + 2
     if (tag === 'natural-light' && product.environmentTags.includes('natural-light')) return acc + 2

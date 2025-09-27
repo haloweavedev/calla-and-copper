@@ -97,8 +97,8 @@ function RoomTypeDropdown({ primarySpaces, secondarySpaces, selectedRoomType, on
   )
 }
 
-const primarySpaces: RoomType[] = ['Living Room', 'Bedroom', 'Home Office', 'Kitchen']
-const secondarySpaces: RoomType[] = ['Dining Area', 'Bathroom', 'Kid\'s Room', 'Patio/Deck']
+const primarySpaces: RoomType[] = ['Living Room', 'Bedroom', 'Dining Area']
+const secondarySpaces: RoomType[] = ['Home Office', 'Bathroom']
 const budgetOptions = [
   {
     value: '$500-1,500' as Budget,

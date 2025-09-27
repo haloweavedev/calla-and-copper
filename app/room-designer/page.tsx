@@ -10,7 +10,7 @@ import { Step2Details } from './_components/Step2Details'
 import { Step3Upload } from './_components/Step3Upload'
 import { Step4Results } from './_components/Step4Results'
 
-export default function WelcomePage() {
+export default function RoomDesignerPage() {
   const { step, reset } = useDemoStore()
 
   useEffect(() => {

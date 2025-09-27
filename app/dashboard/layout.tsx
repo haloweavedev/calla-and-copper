@@ -97,7 +97,7 @@ export default function DashboardLayout({
       {/* Create New Design Button */}
       <div className="p-4">
         <Link
-          href="/welcome"
+          href="/room-designer"
           className="flex items-center justify-start px-1 hover:bg-brand-gold/1x0 px-4 py-2 rounded-sm" 
         >
           <PlusIcon className="w-6 h-6 mr-2 bg-brand-gold p-1 rounded-full text-white" />
@@ -220,7 +220,7 @@ export default function DashboardLayout({
             {/* Create New Design Button */}
             <div className="mt-4 pt-4 border-t border-gray-200">
               <Link
-                href="/welcome"
+                href="/room-designer"
                 className="flex items-center px-3 py-2 rounded-md hover:bg-brand-gold/10 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

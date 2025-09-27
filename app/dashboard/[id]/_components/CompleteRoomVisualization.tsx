@@ -6,7 +6,7 @@ import { useDemoStore } from '@/lib/store/demo-store'
 import { SparklesIcon, EyeIcon } from '@heroicons/react/24/solid'
 
 interface Product {
-  id: number
+  id: string
   name: string
   style: string
   category?: string

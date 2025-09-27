@@ -25,7 +25,7 @@ export function LoginForm() {
       if (error) {
         setError(error.message || 'An error occurred')
       } else {
-        router.push('/welcome')
+        router.push('/room-designer')
       }
     } catch {
       setError('An unexpected error occurred')
@@ -41,7 +41,7 @@ export function LoginForm() {
     try {
       await authClient.signIn.social({
         provider: 'google',
-        callbackURL: '/welcome'
+        callbackURL: '/room-designer'
       })
     } catch (error) {
       setError('Failed to sign in with Google')

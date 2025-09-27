@@ -2,8 +2,8 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { StyleProfile } from '@/components/quiz/types'
 
-export type StyleSelection = 'SCANDINAVIAN' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE'
-export type RoomType = 'Living Room' | 'Bedroom' | 'Home Office' | 'Kitchen' | 'Dining Room' | 'Dining Area' | 'Guest Room' | 'Bathroom' | 'Kid\'s Room' | 'Entryway/Foyer' | 'Patio/Deck' | 'Master/Primary Suite'
+export type StyleSelection = 'MINIMALIST' | 'INDUSTRIAL' | 'BOHO' | 'MODERN' | 'VINTAGE'
+export type RoomType = 'Living Room' | 'Bedroom' | 'Dining Area' | 'Home Office' | 'Bathroom'
 export type Budget = '$500-1,500' | '$1,500-4,000' | '$4,000-8,000' | '$8,000+'
 
 type DemoState = {
@@ -18,7 +18,7 @@ type DemoState = {
   uploadedFileMimeType: string | null
   analysisResult: { description: string; tags: string[]; colorPalette?: string[] } | null
   recommendations: Array<{
-    id: number
+    id: string
     name: string
     style: string
     category?: string

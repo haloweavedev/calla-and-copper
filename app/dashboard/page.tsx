@@ -99,7 +99,7 @@ export default function DashboardPage() {
               <h3 className="text-lg font-medium text-gray-900 mb-2">No designs yet</h3>
               <p className="text-gray-600 mb-6 text-center">Start creating your first personalized room design!</p>
               <Link
-                href="/welcome"
+                href="/room-designer"
                 className="inline-flex items-center px-6 py-3 bg-brand-gold text-white font-medium rounded-lg hover:bg-brand-dark-brown transition-colors"
               >
                 <PlusIcon className="w-5 h-5 mr-2" />
@@ -199,7 +199,7 @@ export default function DashboardPage() {
               <p className="text-brand-cream mb-4 text-sm">Upload your space, get product recommendations</p>
             </div>
             <Link
-              href="/welcome"
+              href="/room-designer"
               className="inline-flex items-center px-4 py-2 bg-white text-brand-dark-brown font-medium rounded-full hover:bg-gray-50 transition-colors whitespace-nowrap"
             >
               Get Started

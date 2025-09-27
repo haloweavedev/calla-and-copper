@@ -34,7 +34,7 @@ export function RegisterForm() {
       if (error) {
         setError(error.message || 'An error occurred')
       } else {
-        router.push('/welcome')
+        router.push('/room-designer')
       }
     } catch {
       setError('An unexpected error occurred')
