@@ -3308,5 +3308,684 @@ export const productCatalog: Product[] = [
       "materialHarmony": ["metal", "wood", "leather"]
     },
     "lifestyleTags": ["Urban living", "Task lighting", "Industrial aesthetic", "Space saving"]
+  },
+  ///////////////////////////////
+  // BATHROOM PRODUCTS
+  ///////////////////////////////
+
+  ///////////////////////////////
+  // MODERN CLEAN - BATHROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "modern-clean-vanity-001",
+    "name": "Malibu Floating Walnut Vanity",
+    "style": "MODERN",
+    "category": "storage",
+    "subcategory": "vanities",
+    "description": "A sleek floating vanity in warm walnut with integrated white ceramic sink, soft-close drawers, and California modern styling for sophisticated bathroom spaces.",
+    "price": 1280,
+    "imageUrl": "/images/products/modern-clean/bathroom/malibu-floating-walnut-vanity.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 48,
+      "height": 20,
+      "depth": 22
+    },
+    "weight": 85,
+    "materials": ["wood", "ceramic"],
+    "styleAttributes": ["sleek", "minimal", "contemporary"],
+    "colors": ["neutral", "brown", "white"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["natural-light", "small-space", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["vanity", "sink", "bathroom-storage"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "medium",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["MODERN", "MINIMALIST"],
+      "colorHarmony": ["neutral", "brown", "white", "light-tone"],
+      "materialHarmony": ["wood", "ceramic", "metal"]
+    },
+    "lifestyleTags": ["Modern living", "California style", "Clean aesthetic", "Natural materials"]
+  },
+  {
+    "id": "modern-clean-mirror-001",
+    "name": "Laguna Round Brass Mirror",
+    "style": "MODERN",
+    "category": "decor",
+    "subcategory": "mirrors",
+    "description": "A sophisticated round mirror with brushed brass frame and beveled edge, embodying California modern elegance with warm metallic accents for stylish bathrooms.",
+    "price": 285,
+    "imageUrl": "/images/products/modern-clean/bathroom/laguna-round-brass-mirror.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 32,
+      "height": 32,
+      "depth": 2
+    },
+    "weight": 15,
+    "materials": ["glass", "metal"],
+    "styleAttributes": ["sleek", "elegant", "contemporary"],
+    "colors": ["neutral", "light-tone"],
+    "functionality": ["decorative", "multi-functional"],
+    "environmentTags": ["natural-light", "small-space", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["mirror", "bathroom-mirror", "vanity-mirror"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "small",
+      "roomZones": ["decorative", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["MODERN", "MINIMALIST"],
+      "colorHarmony": ["neutral", "light-tone", "brown"],
+      "materialHarmony": ["glass", "metal", "wood"]
+    },
+    "lifestyleTags": ["Modern living", "California style", "Elegant details", "Natural light lover"]
+  },
+  {
+    "id": "modern-clean-cabinet-001",
+    "name": "Venice Wall-Mounted Storage Cabinet",
+    "style": "MODERN",
+    "category": "storage",
+    "subcategory": "cabinets",
+    "description": "A streamlined wall-mounted storage cabinet in walnut with frosted glass doors, providing discreet bathroom storage with California modern sophistication.",
+    "price": 420,
+    "imageUrl": "/images/products/modern-clean/bathroom/venice-wall-mounted-storage-cabinet.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 24,
+      "height": 30,
+      "depth": 8
+    },
+    "weight": 25,
+    "materials": ["wood", "glass"],
+    "styleAttributes": ["sleek", "minimal", "contemporary"],
+    "colors": ["neutral", "brown"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["small-space", "natural-light"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["wall"],
+        "replacementFor": ["storage-cabinet", "medicine-cabinet", "wall-cabinet"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MODERN",
+      "secondaryStyles": ["MODERN", "TRADITIONAL"],
+      "colorHarmony": ["neutral", "brown", "light-tone"],
+      "materialHarmony": ["wood", "glass", "metal"]
+    },
+    "lifestyleTags": ["Storage seeker", "Small space living", "Modern living", "Organization focused"]
+  },
+  ///////////////////////////////
+  // COZY TRADITIONAL - BATHROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "cozy-traditional-vanity-001",
+    "name": "Hampton Two-Tone Shaker Vanity",
+    "style": "VINTAGE",
+    "category": "storage",
+    "subcategory": "vanities",
+    "description": "A sophisticated single vanity with weathered oak top, soft white painted base, and clean shaker-style doors with brushed nickel hardware for relaxed traditional elegance.",
+    "price": 1280,
+    "imageUrl": "/images/products/cozy-traditional/bathroom/hampton-two-tone-shaker-vanity.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 48,
+      "height": 34,
+      "depth": 22
+    },
+    "weight": 95,
+    "materials": ["wood", "ceramic"],
+    "styleAttributes": ["elegant", "cozy", "casual"],
+    "colors": ["neutral", "white", "light-tone"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["vanity", "bathroom-vanity", "bathroom-storage"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "medium",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["MODERN", "MINIMALIST"],
+      "colorHarmony": ["neutral", "white", "light-tone"],
+      "materialHarmony": ["wood", "ceramic", "metal"]
+    },
+    "lifestyleTags": ["Transitional style", "Casual elegance", "Mixed materials lover", "Clean aesthetic"]
+  },
+  {
+    "id": "cozy-traditional-cabinet-001",
+    "name": "Savannah Open Shelf Tower",
+    "style": "VINTAGE",
+    "category": "storage",
+    "subcategory": "cabinets",
+    "description": "A charming tall storage tower with weathered oak shelves and soft white painted frame, featuring open shelving and cabinet storage for relaxed traditional bathroom organization.",
+    "price": 485,
+    "imageUrl": "/images/products/cozy-traditional/bathroom/savannah-open-shelf-tower.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 20,
+      "height": 68,
+      "depth": 16
+    },
+    "weight": 55,
+    "materials": ["wood"],
+    "styleAttributes": ["elegant", "cozy", "casual"],
+    "colors": ["neutral", "white", "light-tone"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["natural-light", "small-space", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["corner", "wall"],
+        "replacementFor": ["storage-tower", "linen-cabinet", "bathroom-storage"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "VINTAGE",
+      "secondaryStyles": ["MODERN", "TRADITIONAL"],
+      "colorHarmony": ["neutral", "white", "light-tone"],
+      "materialHarmony": ["wood", "ceramic", "metal"]
+    },
+    "lifestyleTags": ["Storage seeker", "Transitional style", "Organization focused", "Casual elegance"]
+  },
+  ///////////////////////////////
+  // BOHO ECLECTIC - BATHROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "boho-eclectic-vanity-001",
+    "name": "Marrakech Reclaimed Wood Vanity",
+    "style": "BOHO",
+    "category": "storage",
+    "subcategory": "vanities",
+    "description": "A unique vanity crafted from reclaimed teak with natural live edges, featuring a ceramic vessel sink and open shelf storage for authentic global bathroom style.",
+    "price": 1180,
+    "imageUrl": "/images/products/boho-eclectic/bathroom/marrakech-reclaimed-wood-vanity.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 48,
+      "height": 34,
+      "depth": 20
+    },
+    "weight": 75,
+    "materials": ["wood", "ceramic"],
+    "styleAttributes": ["casual", "eclectic", "rustic"],
+    "colors": ["brown", "neutral", "beige"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["natural-light", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["vanity", "bathroom-vanity", "vessel-sink-vanity"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "medium",
+      "roomZones": ["storage", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "BOHO",
+      "secondaryStyles": ["VINTAGE", "MODERN"],
+      "colorHarmony": ["brown", "neutral", "beige"],
+      "materialHarmony": ["wood", "ceramic", "rattan"]
+    },
+    "lifestyleTags": ["Eco-conscious", "Global traveler", "Natural living", "Sustainable materials"]
+  },
+  {
+    "id": "boho-eclectic-mirror-001",
+    "name": "Bali Rattan Sunburst Mirror",
+    "style": "BOHO",
+    "category": "decor",
+    "subcategory": "mirrors",
+    "description": "A striking round mirror with handwoven rattan sunburst frame in natural finish, bringing global artisan craftsmanship and bohemian flair to bathroom spaces.",
+    "price": 285,
+    "imageUrl": "/images/products/boho-eclectic/bathroom/bali-rattan-sunburst-mirror.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 36,
+      "height": 36,
+      "depth": 4
+    },
+    "weight": 8,
+    "materials": ["rattan", "glass"],
+    "styleAttributes": ["casual", "eclectic", "cozy"],
+    "colors": ["neutral", "brown", "beige"],
+    "functionality": ["decorative", "multi-functional"],
+    "environmentTags": ["natural-light", "small-space", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["mirror", "bathroom-mirror", "decorative-mirror"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "medium",
+      "roomZones": ["decorative", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "BOHO",
+      "secondaryStyles": ["VINTAGE", "MODERN"],
+      "colorHarmony": ["neutral", "brown", "beige"],
+      "materialHarmony": ["rattan", "wood", "fabric"]
+    },
+    "lifestyleTags": ["Global traveler", "Handcrafted appreciation", "Natural living", "Artistic expression"]
+  },
+  {
+    "id": "boho-eclectic-cabinet-001",
+    "name": "Casablanca Woven Storage Tower",
+    "style": "BOHO",
+    "category": "storage",
+    "subcategory": "cabinets",
+    "description": "A unique storage tower with natural wood frame and removable woven seagrass baskets, offering flexible bohemian bathroom organization with global texture.",
+    "price": 380,
+    "imageUrl": "/images/products/boho-eclectic/bathroom/casablanca-woven-storage-tower.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 18,
+      "height": 60,
+      "depth": 14
+    },
+    "weight": 32,
+    "materials": ["wood", "rattan"],
+    "styleAttributes": ["casual", "eclectic", "cozy"],
+    "colors": ["neutral", "brown", "beige"],
+    "functionality": ["storage", "multi-functional"],
+    "environmentTags": ["natural-light", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["corner", "wall"],
+        "replacementFor": ["storage-tower", "basket-storage", "bathroom-storage"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "BOHO",
+      "secondaryStyles": ["VINTAGE", "MODERN"],
+      "colorHarmony": ["neutral", "brown", "beige"],
+      "materialHarmony": ["wood", "rattan", "fabric"]
+    },
+    "lifestyleTags": ["Organization focused", "Natural living", "Global traveler", "Flexible storage"]
+  },
+  ///////////////////////////////
+  // WARM MINIMALIST - BATHROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "warm-minimalist-cabinet-001",
+    "name": "Hygge Ladder Storage Shelf",
+    "style": "MINIMALIST",
+    "category": "storage",
+    "subcategory": "cabinets",
+    "description": "A minimal ladder-style storage shelf in white oak with three open shelves, embodying Nordic hygge principles with clean lines and natural warmth for serene bathroom organization.",
+    "price": 285,
+    "imageUrl": "/images/products/warm-minimalist/bathroom/hygge-ladder-storage-shelf.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 18,
+      "height": 60,
+      "depth": 12
+    },
+    "weight": 22,
+    "materials": ["wood"],
+    "styleAttributes": ["minimal", "natural", "cozy"],
+    "colors": ["light-tone", "beige", "neutral"],
+    "functionality": ["storage", "decorative"],
+    "environmentTags": ["natural-light", "small-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "recommended",
+        "placementContext": ["corner", "wall"],
+        "replacementFor": ["storage-shelf", "ladder-shelf", "bathroom-storage"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "secondary",
+      "spaceRequirement": "small",
+      "roomZones": ["storage", "decorative"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "MINIMALIST",
+      "secondaryStyles": ["MODERN", "BOHO"],
+      "colorHarmony": ["light-tone", "beige", "neutral"],
+      "materialHarmony": ["wood", "ceramic", "fabric"]
+    },
+    "lifestyleTags": ["Minimalist", "Storage seeker", "Nordic hygge", "Small space living"]
+  },
+  ///////////////////////////////
+  // INDUSTRIAL LOFT - BATHROOM PRODUCTS
+  ///////////////////////////////
+  {
+    "id": "industrial-loft-mirror-001",
+    "name": "Foundry Steel Frame Mirror",
+    "style": "INDUSTRIAL",
+    "category": "decor",
+    "subcategory": "mirrors",
+    "description": "A commanding rectangular mirror with heavy black steel frame and exposed corner joints, bringing authentic industrial warehouse character to urban loft bathrooms.",
+    "price": 320,
+    "imageUrl": "/images/products/industrial-loft/bathroom/foundry-steel-frame-mirror.png",
+    "inStock": true,
+    "dimensions": {
+      "width": 30,
+      "height": 40,
+      "depth": 2
+    },
+    "weight": 25,
+    "materials": ["metal", "glass"],
+    "styleAttributes": ["urban", "edgy", "minimal"],
+    "colors": ["dark-tone", "black"],
+    "functionality": ["decorative", "multi-functional"],
+    "environmentTags": ["high-ceiling", "large-space"],
+    "roomCompatibility": {
+      "Living Room": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bedroom": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Bathroom": {
+        "isCompatible": true,
+        "priority": "essential",
+        "placementContext": ["wall"],
+        "replacementFor": ["mirror", "bathroom-mirror", "industrial-mirror"]
+      },
+      "Home Office": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      },
+      "Dining Area": {
+        "isCompatible": false,
+        "priority": "optional",
+        "placementContext": [],
+        "replacementFor": []
+      }
+    },
+    "spatialContext": {
+      "placementPriority": "primary",
+      "spaceRequirement": "medium",
+      "roomZones": ["decorative", "functional"]
+    },
+    "styleCoherence": {
+      "dominantStyle": "INDUSTRIAL",
+      "secondaryStyles": ["MODERN", "VINTAGE"],
+      "colorHarmony": ["dark-tone", "black", "gray"],
+      "materialHarmony": ["metal", "glass", "wood"]
+    },
+    "lifestyleTags": ["Urban living", "Industrial aesthetic", "Raw materials", "Metropolitan style"]
   }
 ]

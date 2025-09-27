@@ -31,6 +31,7 @@ export type ProductSubcategory =
   | 'plants'
   | 'bed-frames'
   | 'nightstands'
+  | 'vanities'
 
 export type RoomType = 'Living Room' | 'Bedroom' | 'Dining Area' | 'Home Office' | 'Bathroom'
 
