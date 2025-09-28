@@ -32,7 +32,7 @@ const roomTypes = [
   {
     id: 'bathroom',
     roomTitle: 'Bathroom',
-    imageSrc: '/landing/space-studio.png',
+    imageSrc: '/landing/space-bathroom.png',
     roomDetail: 'A functional and serene space for daily routines'
   }
 ]
