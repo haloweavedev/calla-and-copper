@@ -76,7 +76,7 @@ export default function Footer() {
                     </div>
                     <div className="flex flex-col items-start gap-4 text-white">
                         <span className="text-white/80 uppercase font-light">contact</span>
-                        <a className="text-white text-sm font-light tracking-wide mb-0 md:mb-4 flex items-center gap-2"><EnvelopeIcon className="w-4 h-4" /> contact@callacopper.com</a>
+                        <a href="mailto:contact@callacopper.com" className="text-white text-sm font-light tracking-wide mb-0 md:mb-4 flex items-center gap-2"><EnvelopeIcon className="w-4 h-4" /> contact@callacopper.com</a>
                         <span className="text-white text-sm font-light tracking-wide mb-0 md:mb-4 flex items-center gap-2"><PhoneIcon className="w-4 h-4" /> +1 (615) 810-9313</span>
                         <span className="text-white text-sm font-light tracking-wide mb-0 md:mb-4 flex items-center gap-2"><MapPinIcon className="w-4 h-4" /> 1821 North Naperville Rd Naperville, IL 6055513</span>
                     </div>
